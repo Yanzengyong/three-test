@@ -1,5 +1,6 @@
 import React from 'react'
-import { directive } from '@babel/types';
+import './index.scss'
+// import { directive } from '@babel/types'
 
 // const MainPage = () => {
 // 	return (
@@ -19,11 +20,11 @@ import { directive } from '@babel/types';
 
 // export default Main
 function a () {
-  return (
-    <div>
-      <p>hello asdasdsd</p>
-    </div>
-  )
+	return (
+		<div className='aaa'>
+			<p>hello asdasdsd</p>
+		</div>
+	)
 }
 
 export default a
