@@ -12,6 +12,7 @@ function APage () {
 			type: 'TEST_ADD_COUNT',
 			num: 3
 		})
+		console.log(count)
 	}
 	const sub = () => {
 		dispatch({

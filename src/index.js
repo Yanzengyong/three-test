@@ -2,11 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Routes from './routes'
 import * as serviceWorker from './serviceWorker'
-import { createStore } from 'redux'
 import { StoreContext } from 'redux-react-hook'
-import reducer from './reducers'
-
-const store = createStore(reducer)
+import store from './store'
 
 ReactDOM.render(
 	<StoreContext.Provider value={store}>
