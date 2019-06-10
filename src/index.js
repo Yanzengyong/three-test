@@ -7,7 +7,7 @@ import { StoreContext } from 'redux-react-hook'
 import reducer from './reducers'
 
 const store = createStore(reducer)
-console.log(store)
+
 ReactDOM.render(
 	<StoreContext.Provider value={store}>
 		<Routes />
