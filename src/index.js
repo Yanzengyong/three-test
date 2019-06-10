@@ -2,8 +2,17 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Routes from './routes'
 import * as serviceWorker from './serviceWorker'
+import { createStore } from 'redux'
+import { StoreContext } from 'redux-react-hook'
+import reducer from './reducers'
 
-ReactDOM.render(<Routes />, document.getElementById('root'))
+const store = createStore(reducer)
+console.log(store)
+ReactDOM.render(
+	<StoreContext.Provider value={store}>
+		<Routes />
+	</StoreContext.Provider>,
+	document.getElementById('root'))
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

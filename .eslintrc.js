@@ -46,8 +46,5 @@ module.exports = {
 		'react/jsx-key': 0,
 		'react/jsx-no-target-blank': [1, { 'enforceDynamicLinks':  'never' }],
 		'react/react-in-jsx-scope': 0
-	},
-	'globals': {
-		'BMap': true
-	},
-};
+	}
+}
