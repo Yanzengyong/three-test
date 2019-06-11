@@ -1,18 +1,20 @@
 
-import React from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useDispatch, useMappedState } from 'redux-react-hook'
+import action from '../../actions/test'
 
 function APage () {
 	const { count } = useMappedState((state) => ({
 		count: state.test.count
 	}))
 	const dispatch = useDispatch()
-	const add = () => {
+	const add = async () => {
 		dispatch({
 			type: 'TEST_ADD_COUNT',
 			num: 3
 		})
-		console.log(count)
+		let res = await action.TestRQ()
+		console.log(res)
 	}
 	const sub = () => {
 		dispatch({
@@ -22,7 +24,7 @@ function APage () {
 	}
 	return (
 		<div>
-      count: ======= {count}
+	    count: ======= {count}
 			<button onClick={add}> + </button>
 			<button onClick={sub}> - </button>
 		</div>

@@ -13,7 +13,8 @@ module.exports = {
 		'sourceType': 'module'
 	},
 	'plugins': [
-		'react'
+		'react',
+		'react-hooks'
 	],
 	'parser': 'babel-eslint',
 	'rules': {
@@ -45,6 +46,8 @@ module.exports = {
 		'react/jsx-filename-extension': [2, { 'extensions': ['.js', '.jsx'] }],
 		'react/jsx-key': 0,
 		'react/jsx-no-target-blank': [1, { 'enforceDynamicLinks':  'never' }],
-		'react/react-in-jsx-scope': 0
+		'react/react-in-jsx-scope': 0,
+		'react-hooks/rules-of-hooks': 'error', // 检查 Hook 的规则
+		'react-hooks/exhaustive-deps': 'warn' // 检查 effect 的依赖
 	}
 }

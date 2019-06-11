@@ -6,7 +6,7 @@ import { StoreContext } from 'redux-react-hook'
 import store from './store'
 
 ReactDOM.render(
-	<StoreContext.Provider value={store}>
+	<StoreContext.Provider value={store()}>
 		<Routes />
 	</StoreContext.Provider>,
 	document.getElementById('root'))
