@@ -51,7 +51,7 @@ function Scene () {
 
 function App () {
 	return (
-		<Canvas style={{ background: '#324444' }} camera={{ position: [0, 50, 10], fov: 75 }}>
+		<Canvas style={{ background: '#324444', height: 1000 }} camera={{ position: [0, 50, 10], fov: 75 }}>
 			<Scene />
 		</Canvas>
 	)
