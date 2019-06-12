@@ -16,28 +16,36 @@ function MainPage () {
 		let camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 50000)
 		let stats = new Stats()
 		let render = new THREE.WebGLRenderer()
+		let cameraTarget = new THREE.Vector3(10, 10, 50)
 		const init = () => {
-		// 创建场景和组
+			// 创建场景和组
 			scene.add(group)
 			// 创建透视相机
 			camera.position.set(10, 15, 500)
-			camera.lookAt(scene.position)
 			// 相机作为orbitcontrol的参数，支持鼠标交互
 			let orbitControls = new Orbitcontrols(camera)
 			orbitControls.autoRotate = false
+      				// LIGHTS
+			var dirLight = new THREE.DirectionalLight(0xffffff, 0.125)
+			dirLight.position.set(0, 0, 1).normalize()
+			scene.add(dirLight)
+			var pointLight = new THREE.PointLight(0xffffff, 1.5)
+			pointLight.position.set(0, 100, 90)
+			scene.add(pointLight)
 			// 添加光源：环境光（氛围灯）和平行光源（射入光源）
-			let ambi = new THREE.AmbientLight(0x000000) // 氛围灯
-			scene.add(ambi)
-			let spotLight = new THREE.DirectionalLight(0xffffff) // 射入光源
-			spotLight.position.set(550, 100, 550)
-			spotLight.intensity = 0.6 // 光的强度
-			scene.add(spotLight)
+			// let ambi = new THREE.AmbientLight(0x000000) // 氛围灯
+			// scene.add(ambi)
+			// let spotLight = new THREE.DirectionalLight(0xffffff) // 射入光源
+			// spotLight.position.set(550, 100, 550)
+			// spotLight.intensity = 0.6 // 光的强度
+			// scene.add(spotLight)
 			// 创建模型和材质
 			// 纹理loader
 			let texture = new THREE.TextureLoader().load(require('../../assets/images/ironman.jpg'), (texture) => {
 				let geometry = new THREE.BoxGeometry(200, 300, 100) // 创建一个球形几何体 SphereGeometry
 				let material = new THREE.MeshBasicMaterial({ map: texture }) // 创建基础为网格基础材料
 				let mesh = new THREE.Mesh(geometry, material)
+				// console.log(mesh)
 				// group.add(mesh)
 			})
 			texture.wrapS = THREE.RepeatWrapping
@@ -54,24 +62,59 @@ function MainPage () {
 			geometry_line.vertices.push(new THREE.Vector3(0, 100, 0))
 			geometry_line.vertices.push(new THREE.Vector3(100, 0, 0))
 			let line = new THREE.Line(geometry_line, material_line)
-			group.add(line)
+			// console.log(line)
+			// group.add(line)
 			// 创建几何文字
-			// new THREE.FontLoader().load('../../assets/font/gentilis_bold.typeface.json', function (font) {
-			// 	let geometry = new THREE.TextGeometry('Hello three.js!', {
-			// 		font: font,
-			// 		size: 80,
-			// 		height: 5,
-			// 		curveSegments: 12,
-			// 		bevelEnabled: true,
-			// 		bevelThickness: 10,
-			// 		bevelSize: 8,
-			// 		bevelSegments: 5
-			// 	})
-			// 	let materials = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true })
-			// 	let textMesh1 = new THREE.Mesh(geometry, materials)
-
-			// 	group.add(textMesh1)
-			// })
+			console.log(require('../../assets/font/gentilis_bold.typeface.json'))
+			console.log('../../assets/font/gentilis_bold.typeface.json')
+			new THREE.FontLoader().load('../../assets/font/gentilis_bold.typeface.json', function (font) {
+				console.log(font)
+				// var xMid, text
+				// var color = 0x006699
+				// var matDark = new THREE.LineBasicMaterial({
+				// 	color: color,
+				// 	side: THREE.DoubleSide
+				// })
+				// var matLite = new THREE.MeshBasicMaterial({
+				// 	color: 0x006699,
+				// 	transparent: true,
+				// 	opacity: 0.4,
+				// 	side: THREE.DoubleSide
+				// })
+				// var shapes = font.generateShapes('Hello three.js!', 100)
+				// console.log(shapes)
+				// let geometry = new THREE.TextGeometry('Hello three.js!', {
+				// 	font: font,
+				// 	size: 80,
+				// 	height: 5,
+				// 	curveSegments: 12,
+				// 	bevelEnabled: true,
+				// 	bevelThickness: 10,
+				// 	bevelSize: 8,
+				// 	bevelSegments: 5
+				// })
+				// // let materials = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true })
+				// // let textMesh1 = new THREE.Mesh(geometry, materials)
+				// let materials = [
+				// 	new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
+				// 	new THREE.MeshPhongMaterial({ color: 0xffffff }) // side
+				// ]
+				// geometry.computeBoundingBox()
+				// geometry.computeVertexNormals()
+				// var centerOffset = - 0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x)
+				// geometry = new THREE.BufferGeometry().fromGeometry(geometry)
+				// let textMesh1 = new THREE.Mesh(geometry, materials)
+				// textMesh1.position.x = centerOffset
+				// textMesh1.position.y = 30
+				// textMesh1.position.z = 0
+				// scene.add(textMesh1)
+			}, // onProgress回调
+			function (xhr) {
+				console.log((xhr.loaded / xhr.total * 100) + '% loaded')
+			}, // onError回调
+			function (err) {
+				console.log(err)
+			})
 
 
 			// console.log(Text_3D)
@@ -88,8 +131,9 @@ function MainPage () {
 		const animate = () => {
 			requestAnimationFrame(animate)
 			// group.rotation.y -= 0.005 // 这行可以控制地球自转
-			group.rotation.x += 0.01
+			// group.rotation.x += 0.01
 			group.rotation.y += 0.01
+			camera.lookAt(cameraTarget)
 			render.render(scene, camera)
 			stats.update()
 		}
