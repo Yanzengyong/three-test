@@ -32,6 +32,14 @@ function MainPage () {
 			spotLight.position.set(550, 100, 550)
 			spotLight.intensity = 0.6 // 光的强度
 			scene.add(spotLight)
+			// 创建线（被几何体挡住了）
+			let geometry_line = new THREE.Geometry()
+			let material_line = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth: 200 })
+			geometry_line.vertices.push(new THREE.Vector3(-100, 0, 0))
+			geometry_line.vertices.push(new THREE.Vector3(0, 100, 0))
+			geometry_line.vertices.push(new THREE.Vector3(100, 0, 0))
+			let line = new THREE.Line(geometry_line, material_line)
+			group.add(line)
 			// 创建模型和材质
 			// 纹理loader
 			let texture = new THREE.TextureLoader().load(require('../../assets/images/ironman.jpg'), (texture) => {
@@ -47,14 +55,6 @@ function MainPage () {
 			// let material = new THREE.MeshBasicMaterial({ color: '#2969a0', overdraw: 0.3 }) // 创建基础为网格基础材料
 			// let mesh = new THREE.Mesh(geometry, material)
 			// group.add(mesh)
-			// 创建线（被几何体挡住了）
-			let geometry_line = new THREE.Geometry()
-			let material_line = new THREE.LineBasicMaterial({ color: 0x0000ff })
-			geometry_line.vertices.push(new THREE.Vector3(-100, 0, 0))
-			geometry_line.vertices.push(new THREE.Vector3(0, 100, 0))
-			geometry_line.vertices.push(new THREE.Vector3(100, 0, 0))
-			let line = new THREE.Line(geometry_line, material_line)
-			group.add(line)
 			// 创建几何文字
 			// new THREE.FontLoader().load('../../assets/font/gentilis_bold.typeface.json', function (font) {
 			// 	let geometry = new THREE.TextGeometry('Hello three.js!', {
