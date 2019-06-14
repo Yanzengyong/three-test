@@ -64,58 +64,6 @@ function MainPage () {
 			let line = new THREE.Line(geometry_line, material_line)
 			// console.log(line)
 			// group.add(line)
-			// 创建几何文字
-			console.log(require('../../assets/font/gentilis_bold.typeface.json'))
-			console.log('../../assets/font/gentilis_bold.typeface.json')
-			new THREE.FontLoader().load('../../assets/font/gentilis_bold.typeface.json', function (font) {
-				console.log(font)
-				// var xMid, text
-				// var color = 0x006699
-				// var matDark = new THREE.LineBasicMaterial({
-				// 	color: color,
-				// 	side: THREE.DoubleSide
-				// })
-				// var matLite = new THREE.MeshBasicMaterial({
-				// 	color: 0x006699,
-				// 	transparent: true,
-				// 	opacity: 0.4,
-				// 	side: THREE.DoubleSide
-				// })
-				// var shapes = font.generateShapes('Hello three.js!', 100)
-				// console.log(shapes)
-				// let geometry = new THREE.TextGeometry('Hello three.js!', {
-				// 	font: font,
-				// 	size: 80,
-				// 	height: 5,
-				// 	curveSegments: 12,
-				// 	bevelEnabled: true,
-				// 	bevelThickness: 10,
-				// 	bevelSize: 8,
-				// 	bevelSegments: 5
-				// })
-				// // let materials = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true })
-				// // let textMesh1 = new THREE.Mesh(geometry, materials)
-				// let materials = [
-				// 	new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
-				// 	new THREE.MeshPhongMaterial({ color: 0xffffff }) // side
-				// ]
-				// geometry.computeBoundingBox()
-				// geometry.computeVertexNormals()
-				// var centerOffset = - 0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x)
-				// geometry = new THREE.BufferGeometry().fromGeometry(geometry)
-				// let textMesh1 = new THREE.Mesh(geometry, materials)
-				// textMesh1.position.x = centerOffset
-				// textMesh1.position.y = 30
-				// textMesh1.position.z = 0
-				// scene.add(textMesh1)
-			}, // onProgress回调
-			function (xhr) {
-				console.log((xhr.loaded / xhr.total * 100) + '% loaded')
-			}, // onError回调
-			function (err) {
-				console.log(err)
-			})
-
 
 			// console.log(Text_3D)
 			// 渲染
