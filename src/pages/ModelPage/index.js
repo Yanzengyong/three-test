@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import * as THREE from 'three'
-// import Stats from '../../assets/others/stats.min'
+// import Stats from '../../utils/stats.min.js'
 import './index.scss'
 import Orbitcontrols from 'three-orbitcontrols'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'

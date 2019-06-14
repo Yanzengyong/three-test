@@ -32,8 +32,7 @@ function FontPage () {
 			group.position.y = 100
 			scene.add(group)
 			var fontLoader = new THREE.FontLoader()
-			// console.log(require('/static/media/gentilis_bold.typeface.json'))
-			fontLoader.load('/static/media/gentilis_bold.typeface.json', function (response) {
+			fontLoader.load('assets/font/gentilis_bold.typeface.json', function (response) {
 				let textGeo = new THREE.TextGeometry('three', {
 					font: response,
 					size: 70,

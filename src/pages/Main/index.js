@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import * as THREE from 'three'
 import Orbitcontrols from 'three-orbitcontrols'
-import Stats from '../../assets/others/stats.min'
+import Stats from '../../utils/stats.min'
 import './index.scss'
 
 function MainPage () {
@@ -41,7 +41,7 @@ function MainPage () {
 			// scene.add(spotLight)
 			// 创建模型和材质
 			// 纹理loader
-			let texture = new THREE.TextureLoader().load(require('../../assets/images/ironman.jpg'), (texture) => {
+			let texture = new THREE.TextureLoader().load('assets/images/ironman.jpg', (texture) => {
 				let geometry = new THREE.BoxGeometry(200, 300, 100) // 创建一个球形几何体 SphereGeometry
 				let material = new THREE.MeshBasicMaterial({ map: texture }) // 创建基础为网格基础材料
 				let mesh = new THREE.Mesh(geometry, material)
