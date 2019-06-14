@@ -8,7 +8,8 @@ import {
 	FiberTest,
 	TPage,
 	FontPage,
-	ModelPage
+	ModelPage,
+	SuccessPage
 } from './routes'
 // const { RouterHandler } = Router
 
@@ -23,6 +24,7 @@ const routes = () => (
 			<Route path='/test' component={TPage}/>
 			<Route path='/font' component={FontPage}/>
 			<Route path='/model' component={ModelPage}/>
+			<Route path='/success' component={SuccessPage}/>
 			{/* <Route path='/standardDetail' component={StandardDetail}/> */}
 		</Switch>
 	</Router>

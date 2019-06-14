@@ -36,6 +36,7 @@
     "three": "^0.105.2",
     "three-gltf-loader": "^1.105.0",
     "three-orbitcontrols": "^2.102.1",
+    "three-pointer-lock-controls": "^1.0.0",
     "three.meshline": "^1.2.0"
   }
 }
