@@ -46,7 +46,7 @@ function MainPage () {
 				let material = new THREE.MeshBasicMaterial({ map: texture }) // 创建基础为网格基础材料
 				let mesh = new THREE.Mesh(geometry, material)
 				// console.log(mesh)
-				// group.add(mesh)
+				group.add(mesh)
 			})
 			texture.wrapS = THREE.RepeatWrapping
 			texture.wrapT = THREE.RepeatWrapping
