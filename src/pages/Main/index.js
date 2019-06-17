@@ -18,6 +18,18 @@ function MainPage () {
 		let render = new THREE.WebGLRenderer()
 		let cameraTarget = new THREE.Vector3(10, 10, 50)
 		const init = () => {
+			//六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
+
+			// scene.background = new THREE.CubeTextureLoader()
+			// 	.setPath('assets/images/')
+			// 	.load([
+			// 		'ironman.jpg',
+			// 		'ironman.jpg',
+			// 		'ironman.jpg',
+			// 		'ironman.jpg',
+			// 		'ironman.jpg',
+			// 		'ironman.jpg'
+			// 	])
 			// 创建场景和组
 			scene.add(group)
 			// 创建透视相机
@@ -26,7 +38,7 @@ function MainPage () {
 			let orbitControls = new Orbitcontrols(camera)
 			orbitControls.autoRotate = false
       				// LIGHTS
-			var dirLight = new THREE.DirectionalLight(0xffffff, 0.125)
+			var dirLight = new THREE.DirectionalLight(0xffffff, 0.8)
 			dirLight.position.set(0, 0, 1).normalize()
 			scene.add(dirLight)
 			var pointLight = new THREE.PointLight(0xffffff, 1.5)
@@ -43,7 +55,7 @@ function MainPage () {
 			// 纹理loader
 			let texture = new THREE.TextureLoader().load('assets/images/ironman.jpg', (texture) => {
 				let geometry = new THREE.BoxGeometry(200, 300, 100) // 创建一个球形几何体 SphereGeometry
-				let material = new THREE.MeshBasicMaterial({ map: texture }) // 创建基础为网格基础材料
+				let material = new THREE.MeshStandardMaterial({ map: texture }) // 创建基础为网格基础材料
 				let mesh = new THREE.Mesh(geometry, material)
 				// console.log(mesh)
 				group.add(mesh)
