@@ -9,7 +9,8 @@ import {
 	TPage,
 	FontPage,
 	ModelPage,
-	SuccessPage
+	SuccessPage,
+	ProdAnimate
 } from './routes'
 // const { RouterHandler } = Router
 
@@ -25,6 +26,7 @@ const routes = () => (
 			<Route path='/font' component={FontPage}/>
 			<Route path='/model' component={ModelPage}/>
 			<Route path='/success' component={SuccessPage}/>
+			<Route path='/prod' component={ProdAnimate}/>
 			{/* <Route path='/standardDetail' component={StandardDetail}/> */}
 		</Switch>
 	</Router>
