@@ -58,11 +58,11 @@ function MainPage () {
 				let material = new THREE.MeshStandardMaterial({ map: texture }) // 创建基础为网格基础材料
 				let mesh = new THREE.Mesh(geometry, material)
 				// console.log(mesh)
+				texture.wrapS = THREE.RepeatWrapping
+				texture.wrapT = THREE.RepeatWrapping
+				texture.repeat.set(4, 4)
 				group.add(mesh)
 			})
-			texture.wrapS = THREE.RepeatWrapping
-			texture.wrapT = THREE.RepeatWrapping
-			texture.repeat.set(4, 4)
 			// let geometry = new THREE.BoxGeometry(200, 200, 200) // 创建一个球形几何体
 			// let material = new THREE.MeshBasicMaterial({ color: '#2969a0', overdraw: 0.3 }) // 创建基础为网格基础材料
 			// let mesh = new THREE.Mesh(geometry, material)

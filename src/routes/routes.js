@@ -4,6 +4,7 @@ import TPage from '../pages/TPage'
 import FontPage from '../pages/FontPage'
 import ModelPage from '../pages/ModelPage'
 import SuccessPage from '../pages/SuccessModel'
+import ProdAnimate from '../pages/ProdAnimate'
 
 export {
 	Main,
@@ -11,5 +12,6 @@ export {
 	TPage,
 	FontPage,
 	ModelPage,
-	SuccessPage
+	SuccessPage,
+	ProdAnimate
 }

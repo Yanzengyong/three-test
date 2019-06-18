@@ -8,6 +8,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 function ModelPage () {
 	useEffect(() => {
+		console.log(window.innerWidth)
+		console.log(window.innerHeight)
 		init()
 	})
 	let manager = new THREE.LoadingManager()
@@ -16,21 +18,23 @@ function ModelPage () {
 	let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000)
 	let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
 	let cameraTarget = new THREE.Vector3(0, 0, 0)
+	// animation.clipAction
 	const init = () => {
 		const container = document.getElementById('box')
 		//给场景添加天空盒子纹理
-		var cubeTextureLoader = new THREE.CubeTextureLoader()
-		cubeTextureLoader.setPath('assets/images/')
+		new THREE.CubeTextureLoader()
+			.setPath('assets/images/')
+			.load([
+				'xk1.jpg',
+				'xk1.jpg',
+				'xk1.jpg',
+				'xk1.jpg',
+				'xk1.jpg',
+				'xk1.jpg'
+			], (texture) => {
+				scene.background = texture
+			})
 		//六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
-		var cubeTexture = cubeTextureLoader.load([
-			'xk1.jpg', 'xk2.jpg',
-			'xk3.jpg', 'xk4.jpg',
-			'xk5.jpg', 'xk6.jpg'
-		])
-
-		console.log(cubeTexture)
-		scene.background = cubeTexture
-		// scene.background = new THREE.Color(0x000000)
 		camera.position.set(600, 250, 1000)
 		// 相机作为orbitcontrol的参数，支持鼠标交互
 		let orbitControls = new Orbitcontrols(camera)
