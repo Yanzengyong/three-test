@@ -273,11 +273,11 @@ function ModelPage () {
 				console.error('Error loading glTF asset', err)
 			}
 		)
-		var objects = []
+
 		// 尝试做一个可以侧面展示文字的平面
 		var element = document.createElement('div')
 		element.className = 'element'
-		element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')'
+		element.style.backgroundColor = 'rgba(0, 0, 0, .4)'
 		var number = document.createElement('div')
 		number.className = 'number'
 		number.textContent = '312'
@@ -291,12 +291,9 @@ function ModelPage () {
 		details.innerHTML = 'dasdas' + '<br>' + 'das'
 		element.appendChild(details)
 		var object = new CSS3DObject(element)
-		// object.position.x = Math.random() * 4000 - 2000
-		// object.position.y = Math.random() * 4000 - 2000
-		// object.position.z = Math.random() * 4000 - 2000
+		object.position.set(900, 100, 0)
+		object.rotation.y = 30
 		group_plane_news.add(object)
-		objects.push(object)
-
 
 
 		// 初次渲染时候的背景颜色
@@ -312,7 +309,6 @@ function ModelPage () {
 		labelRenderer.domElement.style.top = 20 + 'px'
 		container.appendChild(labelRenderer.domElement)
 		// 3d文字渲染器
-
 		css3DRenderer.setSize(window.innerWidth, window.innerHeight)
 		css3DRenderer.domElement.style.position = 'absolute'
 		css3DRenderer.domElement.style.top = 20 + 'px'
