@@ -72,6 +72,7 @@ function ModelPage () {
 				camera.position.z = obj.z
 			}).start()
 	}
+
 	// 数据源小方块飞行的效果
 	const animateCubeFly = (current, target, type, cube) => {
 		new TWEEN.Tween({
@@ -93,6 +94,7 @@ function ModelPage () {
 				cube.position.z = obj.z
 			}).start()
 	}
+
 	// 数据源 小方块在球体中的循环移动的效果
 	const animateCubeTranslate = (current, target, type1, type2, cube) => {
 		const uploadHandle = (obj) => {
@@ -124,6 +126,7 @@ function ModelPage () {
 		translate2.chain(translate1)
 		translate1.start()
 	}
+
 	// 动态添加文字处理函数
 	const dynamicAddText = (group, text, x, y, z) => {
 		// 为这个模型几何加上label文案
@@ -136,10 +139,12 @@ function ModelPage () {
 		group.add(modelLabel)
 		return modelLabel
 	}
+
 	// 动态清除group的2d文字
 	const dynamicDeleteText = (group, labelModel) => {
 		group.remove(group, labelModel)
 	}
+
 	// 切换视角
 	const clickFn = () => {
 		animateCamera({
@@ -154,6 +159,7 @@ function ModelPage () {
 		cameraTarget = new THREE.Vector3(1200, 700, 100)
 		model_text = dynamicAddText(group_process, '我可以加工数据', 0, 200, 0)
 	}
+
 	// 切换会最初状态
 	const resetFn = () => {
 		animateCamera({
@@ -167,6 +173,10 @@ function ModelPage () {
 		}, TWEEN.Easing.Quadratic.Out)
 		cameraTarget = new THREE.Vector3(0, 0, 100)
 		dynamicDeleteText(group_process, model_text)
+	}
+	// 查看详情版面
+	const checkFn = () => {
+
 	}
 	// 初始化函数
 	const init = () => {
@@ -339,6 +349,7 @@ function ModelPage () {
 		<div id='box'>
 			<button onClick={clickFn}>click</button>
 			<button onClick={resetFn}>reset</button>
+			<button onClick={checkFn}>checkInfo</button>
 			<div className='illustration'>
         这是一段讲解
 			</div>
