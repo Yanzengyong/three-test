@@ -49,7 +49,7 @@ function FontPage () {
 		// 	// scene.background = texture
 		// 	group.add(mesh)
 		// })
-		var loader = new THREE.FontLoader()
+		let loader = new THREE.FontLoader()
 		let materials = [
 			new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
 			new THREE.MeshPhongMaterial({ color: 0xffffff }) // side
