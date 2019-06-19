@@ -3,12 +3,50 @@ import * as THREE from 'three'
 import './index.scss'
 import Orbitcontrols from 'three-orbitcontrols'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer'
+import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import TWEEN from '@tweenjs/tween.js'
 
-let scene = new THREE.Scene() // 创建场景
-let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 3000) // 创建透视相机
-let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }) // 创建渲染器
+// 创建场景
+let scene = new THREE.Scene()
+
+// 创建透视相机
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 3000)
+
+// 创建渲染器
+let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
+
+// 相机镜头视野终点
 let cameraTarget = new THREE.Vector3(0, 0, 100)
+
+// 创建2d渲染器
+let labelRenderer = new CSS2DRenderer()
+let css3DRenderer = new CSS3DRenderer()
+// 文字声明
+let model_text
+
+// 创建数据源组
+let group_source = new THREE.Group()
+scene.add(group_source)
+
+// 创建数据源组 ----- 球形
+let group_source_sphere = new THREE.Group()
+scene.add(group_source_sphere)
+
+// 创建数据源组 ----- 球体 --- 上方的文字
+let group_source_sphere_text = new THREE.Group()
+group_source_sphere_text.position.set(0, 800, 0)
+scene.add(group_source_sphere_text)
+
+// 创建加工组
+let group_process = new THREE.Group()
+group_process.position.set(1200, 800, -800)
+scene.add(group_process)
+
+// 创建一个平面展示组
+let group_plane_news = new THREE.Group()
+group_plane_news.position.set(800, 0, 0)
+scene.add(group_plane_news)
 
 function ModelPage () {
 	useEffect(() => {
@@ -86,6 +124,22 @@ function ModelPage () {
 		translate2.chain(translate1)
 		translate1.start()
 	}
+	// 动态添加文字处理函数
+	const dynamicAddText = (group, text, x, y, z) => {
+		// 为这个模型几何加上label文案
+		let labelDiv = document.createElement('div')
+		labelDiv.className = 'label'
+		labelDiv.textContent = text
+		labelDiv.style.marginTop = '-1em'
+		let modelLabel = new CSS2DObject(labelDiv)
+		modelLabel.position.set(x || 0, y || 0, z || 0)
+		group.add(modelLabel)
+		return modelLabel
+	}
+	// 动态清除group的2d文字
+	const dynamicDeleteText = (group, labelModel) => {
+		group.remove(group, labelModel)
+	}
 	// 切换视角
 	const clickFn = () => {
 		animateCamera({
@@ -98,6 +152,7 @@ function ModelPage () {
 			z: 600
 		}, TWEEN.Easing.Circular.InOut, 1200)
 		cameraTarget = new THREE.Vector3(1200, 700, 100)
+		model_text = dynamicAddText(group_process, '我可以加工数据', 0, 200, 0)
 	}
 	// 切换会最初状态
 	const resetFn = () => {
@@ -111,6 +166,7 @@ function ModelPage () {
 			z: 1400
 		}, TWEEN.Easing.Quadratic.Out)
 		cameraTarget = new THREE.Vector3(0, 0, 100)
+		dynamicDeleteText(group_process, model_text)
 	}
 	// 初始化函数
 	const init = () => {
@@ -119,20 +175,6 @@ function ModelPage () {
 		const clock = new THREE.Clock()
 		// 获取盒子的dom元素
 		const container = document.getElementById('box')
-		// 创建数据源组
-		let group_source = new THREE.Group()
-		scene.add(group_source)
-		// 创建数据源组 ----- 球形
-		let group_source_sphere = new THREE.Group()
-		scene.add(group_source_sphere)
-		// 创建数据源组 ----- 球体 --- 上方的文字
-		let group_source_sphere_text = new THREE.Group()
-		group_source_sphere_text.position.set(0, 800, 0)
-		scene.add(group_source_sphere_text)
-		// 创建加工组
-		let group_process = new THREE.Group()
-		group_process.position.set(1200, 800, -800)
-		scene.add(group_process)
 		// 给场景添加星空盒子纹理
 		new THREE.CubeTextureLoader()
 			.setPath('assets/images/')
@@ -168,6 +210,14 @@ function ModelPage () {
 			let sphere_model = new THREE.Mesh(sphere, sphereMaterial)
 			sphere_model.updateMatrix()
 			group_source_sphere.add(sphere_model)
+			// 为这个球体几何加上label文案
+			let sphereDiv = document.createElement('div')
+			sphereDiv.className = 'label'
+			sphereDiv.textContent = '我是数据源'
+			sphereDiv.style.marginTop = '-1em'
+			let sphereLabel = new CSS2DObject(sphereDiv)
+			sphereLabel.position.set(0, 800, 0)
+			sphere_model.add(sphereLabel)
 			// 创建 长宽高都为40的立方体
 			let cube = new THREE.BoxBufferGeometry(40, 40, 40)
 			// 材质进行设置
@@ -206,34 +256,8 @@ function ModelPage () {
 					}, TWEEN.Easing.Linear.None, cube_model)
 				}
 			}
-			// 给这个球体添加上文字
-			let materials = [
-				new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
-				new THREE.MeshPhongMaterial({ color: 0xffffff }) // side
-			]
-			new THREE.FontLoader().load('assets/font/gentilis_bold.typeface.json', font => {
-				var geometry = new THREE.TextGeometry('souce data', {
-					font: font,
-					size: 100,
-					height: 5,
-					curveSegments: 12,
-					bevelEnabled: true,
-					bevelThickness: 10,
-					bevelSize: 8,
-					bevelSegments: 5
-				})
-				geometry.computeBoundingBox()
-				geometry.computeVertexNormals()
-				geometry = new THREE.BufferGeometry().fromGeometry(geometry)
-				let textMesh1 = new THREE.Mesh(geometry, materials)
-				textMesh1.position.x = -300
-				textMesh1.position.y = 0
-				textMesh1.position.z = 0
-				textMesh1.rotation.x = 0
-				textMesh1.rotation.y = 0
-				group_source_sphere_text.add(textMesh1)
-			})
 		}
+		// 加工机器人 loader 引用模型动画
 		let robot_model_mixer
 		new GLTFLoader().load('assets/utilModel/scene.gltf',
 			// onLoad
@@ -249,6 +273,31 @@ function ModelPage () {
 				console.error('Error loading glTF asset', err)
 			}
 		)
+		var objects = []
+		// 尝试做一个可以侧面展示文字的平面
+		var element = document.createElement('div')
+		element.className = 'element'
+		element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')'
+		var number = document.createElement('div')
+		number.className = 'number'
+		number.textContent = '312'
+		element.appendChild(number)
+		var symbol = document.createElement('div')
+		symbol.className = 'symbol'
+		symbol.textContent = 'dasdsadsa'
+		element.appendChild(symbol)
+		var details = document.createElement('div')
+		details.className = 'details'
+		details.innerHTML = 'dasdas' + '<br>' + 'das'
+		element.appendChild(details)
+		var object = new CSS3DObject(element)
+		// object.position.x = Math.random() * 4000 - 2000
+		// object.position.y = Math.random() * 4000 - 2000
+		// object.position.z = Math.random() * 4000 - 2000
+		group_plane_news.add(object)
+		objects.push(object)
+
+
 
 		// 初次渲染时候的背景颜色
 		renderer.setClearColor(0x000000)
@@ -257,6 +306,17 @@ function ModelPage () {
 		// 场景尺寸
 		renderer.setSize(window.innerWidth, window.innerHeight)
 		container.appendChild(renderer.domElement)
+		// 2d渲染器
+		labelRenderer.setSize(window.innerWidth, window.innerHeight)
+		labelRenderer.domElement.style.position = 'absolute'
+		labelRenderer.domElement.style.top = 20 + 'px'
+		container.appendChild(labelRenderer.domElement)
+		// 3d文字渲染器
+
+		css3DRenderer.setSize(window.innerWidth, window.innerHeight)
+		css3DRenderer.domElement.style.position = 'absolute'
+		css3DRenderer.domElement.style.top = 20 + 'px'
+		container.appendChild(css3DRenderer.domElement)
 		const animate = () => {
 			let time = clock.getDelta()
 			// update 推进混合器时间并更新动画
@@ -273,6 +333,8 @@ function ModelPage () {
 			camera.lookAt(cameraTarget)
 			// 渲染
 			renderer.render(scene, camera)
+			labelRenderer.render(scene, camera)
+			css3DRenderer.render(scene, camera)
 		}
 		souce_show_handle()
 		animate()
