@@ -10,7 +10,8 @@ import {
 	FontPage,
 	ModelPage,
 	SuccessPage,
-	ProdAnimate
+	ProdAnimate,
+	FinalPage
 } from './routes'
 // const { RouterHandler } = Router
 
@@ -27,6 +28,7 @@ const routes = () => (
 			<Route path='/model' component={ModelPage}/>
 			<Route path='/success' component={SuccessPage}/>
 			<Route path='/prod' component={ProdAnimate}/>
+			<Route path='/final' component={FinalPage}/>
 			{/* <Route path='/standardDetail' component={StandardDetail}/> */}
 		</Switch>
 	</Router>

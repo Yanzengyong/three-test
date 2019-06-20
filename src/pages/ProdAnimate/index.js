@@ -53,6 +53,22 @@ function ModelPage () {
 		console.log(TWEEN)
 		init()
 	})
+
+	// 创建一个可以侧面展示文字的平面
+	let planeDiv = document.createElement('div')
+	planeDiv.className = 'illustration'
+	let titleDiv = document.createElement('div')
+	titleDiv.className = 'title'
+	titleDiv.textContent = '这是一段讲解'
+	let contentDiv = document.createElement('div')
+	contentDiv.className = 'content'
+	contentDiv.textContent = '不好的不好好不包含呵呵回家大啥黑科技阿实践活动加速度计安徽省大家啊收到就好点击阿斯加德很骄傲的加厚的加上回到家爱上大酒店加上的吉安市加上的黄寺大街按时间段按实际就'
+	planeDiv.appendChild(titleDiv)
+	planeDiv.appendChild(contentDiv)
+	let planeObject = new CSS3DObject(planeDiv)
+	// planeObject.position.set(900, 100, 500)
+	// planeObject.rotation.y = -0.5 * Math.PI
+
 	// 相机控制函数
 	const animateCamera = (current, target, type, time) => {
 		new TWEEN.Tween({
@@ -157,7 +173,8 @@ function ModelPage () {
 			z: 600
 		}, TWEEN.Easing.Circular.InOut, 1200)
 		cameraTarget = new THREE.Vector3(1200, 700, 100)
-		model_text = dynamicAddText(group_process, '我可以加工数据', 0, 200, 0)
+		model_text = dynamicAddText(group_process, '我可以加工数据', 0, 68, 0)
+		planeObject.scale.set(.3, .3, .3)
 	}
 
 	// 切换会最初状态
@@ -173,10 +190,21 @@ function ModelPage () {
 		}, TWEEN.Easing.Quadratic.Out)
 		cameraTarget = new THREE.Vector3(0, 0, 100)
 		dynamicDeleteText(group_process, model_text)
+		planeObject.scale.set(0, 0, 0)
 	}
 	// 查看详情版面
 	const checkFn = () => {
-
+		animateCamera({
+			x: 0,
+			y: 0,
+			z: 0
+		}, {
+			x: 1600,
+			y: 0,
+			z: 700
+		}, TWEEN.Easing.Circular.InOut, 1200)
+		cameraTarget = new THREE.Vector3(1600, 0, 0)
+		planeObject.rotation.y = 0
 	}
 	// 初始化函数
 	const init = () => {
@@ -212,14 +240,19 @@ function ModelPage () {
 		// let dirLight_helper = new THREE.DirectionalLightHelper(dirLight, 2)
 		// scene.add(dirLight_helper)
 		scene.add(dirLight)
+
+		let mixer
+
 		// 第一屏 ------- 数据源 -------- 以无数粒子方式展示效果
 		const souce_show_handle = () => {
+
 			// 在中心创建一个原型包裹这些立方体
 			let sphere = new THREE.SphereGeometry(670, 100, 100)
 			let sphereMaterial = new THREE.MeshNormalMaterial({ opacity: .7, wireframe: true })
 			let sphere_model = new THREE.Mesh(sphere, sphereMaterial)
 			sphere_model.updateMatrix()
 			group_source_sphere.add(sphere_model)
+
 			// 为这个球体几何加上label文案
 			let sphereDiv = document.createElement('div')
 			sphereDiv.className = 'label'
@@ -228,10 +261,13 @@ function ModelPage () {
 			let sphereLabel = new CSS2DObject(sphereDiv)
 			sphereLabel.position.set(0, 800, 0)
 			sphere_model.add(sphereLabel)
+
 			// 创建 长宽高都为40的立方体
 			let cube = new THREE.BoxBufferGeometry(40, 40, 40)
+
 			// 材质进行设置
 			let cubeMaterial = new THREE.MeshNormalMaterial({ opacity: .9, transparent: true })
+
 			// 循环渲染 400 个立方体盒子 为其添加上纹理
 			for (let i = 0; i < 520; i++) {
 				let cube_model = new THREE.Mesh(cube, cubeMaterial)
@@ -243,6 +279,7 @@ function ModelPage () {
 				cube_model.rotation.z = Math.random() * Math.PI
 				cube_model.updateMatrix()
 				group_source.add(cube_model)
+
 				// 球体中粒子的动画
 				animateCubeTranslate({
 					x: cube_model.position.x,
@@ -253,6 +290,7 @@ function ModelPage () {
 					y: cube_model.position.y,
 					z: cube_model.position.z,
 				}, TWEEN.Easing.Linear.None, TWEEN.Easing.Back.Out, cube_model)
+
 				// 飞行动画
 				if (i > 510) {
 					animateCubeFly({
@@ -267,14 +305,18 @@ function ModelPage () {
 				}
 			}
 		}
+
 		// 加工机器人 loader 引用模型动画
 		let robot_model_mixer
 		new GLTFLoader().load('assets/utilModel/scene.gltf',
 			// onLoad
 			gltf => {
-				gltf.scene.scale.set(16, 16, 16)
-				gltf.scene.position.y = -850
 				group_process.add(gltf.scene)
+				group_process.add(planeObject)
+				planeObject.scale.set(0, 0, 0)
+				planeObject.position.x = 90
+				group_process.scale.set(12, 12, 12)
+				group_process.position.y = 150
 				robot_model_mixer = new THREE.AnimationMixer(gltf.scene)
 				robot_model_mixer.clipAction(gltf.animations[0]).setDuration(12).play()
 			}, xhr => {
@@ -284,27 +326,14 @@ function ModelPage () {
 			}
 		)
 
-		// 尝试做一个可以侧面展示文字的平面
-		var element = document.createElement('div')
-		element.className = 'element'
-		element.style.backgroundColor = 'rgba(0, 0, 0, .4)'
-		var number = document.createElement('div')
-		number.className = 'number'
-		number.textContent = '312'
-		element.appendChild(number)
-		var symbol = document.createElement('div')
-		symbol.className = 'symbol'
-		symbol.textContent = 'dasdsadsa'
-		element.appendChild(symbol)
-		var details = document.createElement('div')
-		details.className = 'details'
-		details.innerHTML = 'dasdas' + '<br>' + 'das'
-		element.appendChild(details)
-		var object = new CSS3DObject(element)
-		object.position.set(900, 100, 0)
-		object.rotation.y = 30
-		group_plane_news.add(object)
-
+		// 添加做一个可以侧面展示文字的平面
+		// group_plane_news.add(planeObject)
+		// group_plane_news.position.x = 1600
+		// group_plane_news.rotation.y = 0
+		// var opacityKF = new THREE.NumberKeyframeTrack('.material.opacity', [0, 1, 2], [1, 0, 1])
+		// var clip = new THREE.AnimationClip('Action', 3, [opacityKF])
+		// mixer = new THREE.AnimationMixer(planeObject)
+		// mixer.clipAction(clip).play()
 
 		// 初次渲染时候的背景颜色
 		renderer.setClearColor(0x000000)
@@ -329,10 +358,14 @@ function ModelPage () {
 			if (robot_model_mixer) {
 				robot_model_mixer.update(time)
 			}
+			if (mixer) {
+				mixer.update(time)
+			}
 			// 必须写的
 			requestAnimationFrame(animate)
 			// 必须再此调用
 			TWEEN.update()
+			// scene.rotation.y += 0.001
 			// 数据源展示中 圆球的转动效果
 			group_source_sphere.rotation.y += 0.005
 			// 设置相机镜头的朝向
@@ -350,9 +383,6 @@ function ModelPage () {
 			<button onClick={clickFn}>click</button>
 			<button onClick={resetFn}>reset</button>
 			<button onClick={checkFn}>checkInfo</button>
-			<div className='illustration'>
-        这是一段讲解
-			</div>
 		</div>
 	)
 }

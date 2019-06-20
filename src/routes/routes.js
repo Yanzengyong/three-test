@@ -5,6 +5,7 @@ import FontPage from '../pages/FontPage'
 import ModelPage from '../pages/ModelPage'
 import SuccessPage from '../pages/SuccessModel'
 import ProdAnimate from '../pages/ProdAnimate'
+import FinalPage from '../pages/FinalPage'
 
 export {
 	Main,
@@ -13,5 +14,6 @@ export {
 	FontPage,
 	ModelPage,
 	SuccessPage,
-	ProdAnimate
+	ProdAnimate,
+	FinalPage
 }
