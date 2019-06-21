@@ -1,130 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import * as THREE from 'three'
 import './index.scss'
 import Orbitcontrols from 'three-orbitcontrols'
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer'
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import TWEEN from '@tweenjs/tween.js'
-var table = [
-	'H', 'Hydrogen', '1.00794', 1, 1,
-	'He', 'Helium', '4.002602', 18, 1,
-	'Li', 'Lithium', '6.941', 1, 2,
-	'Be', 'Beryllium', '9.012182', 2, 2,
-	'B', 'Boron', '10.811', 13, 2,
-	'C', 'Carbon', '12.0107', 14, 2,
-	'N', 'Nitrogen', '14.0067', 15, 2,
-	'O', 'Oxygen', '15.9994', 16, 2,
-	'F', 'Fluorine', '18.9984032', 17, 2,
-	'Ne', 'Neon', '20.1797', 18, 2,
-	'Na', 'Sodium', '22.98976...', 1, 3,
-	'Mg', 'Magnesium', '24.305', 2, 3,
-	'Al', 'Aluminium', '26.9815386', 13, 3,
-	'Si', 'Silicon', '28.0855', 14, 3,
-	'P', 'Phosphorus', '30.973762', 15, 3,
-	'S', 'Sulfur', '32.065', 16, 3,
-	'Cl', 'Chlorine', '35.453', 17, 3,
-	'Ar', 'Argon', '39.948', 18, 3,
-	'K', 'Potassium', '39.948', 1, 4,
-	'Ca', 'Calcium', '40.078', 2, 4,
-	'Sc', 'Scandium', '44.955912', 3, 4,
-	'Ti', 'Titanium', '47.867', 4, 4,
-	'V', 'Vanadium', '50.9415', 5, 4,
-	'Cr', 'Chromium', '51.9961', 6, 4,
-	'Mn', 'Manganese', '54.938045', 7, 4,
-	'Fe', 'Iron', '55.845', 8, 4,
-	'Co', 'Cobalt', '58.933195', 9, 4,
-	'Ni', 'Nickel', '58.6934', 10, 4,
-	'Cu', 'Copper', '63.546', 11, 4,
-	'Zn', 'Zinc', '65.38', 12, 4,
-	'Ga', 'Gallium', '69.723', 13, 4,
-	'Ge', 'Germanium', '72.63', 14, 4,
-	'As', 'Arsenic', '74.9216', 15, 4,
-	'Se', 'Selenium', '78.96', 16, 4,
-	'Br', 'Bromine', '79.904', 17, 4,
-	'Kr', 'Krypton', '83.798', 18, 4,
-	'Rb', 'Rubidium', '85.4678', 1, 5,
-	'Sr', 'Strontium', '87.62', 2, 5,
-	'Y', 'Yttrium', '88.90585', 3, 5,
-	'Zr', 'Zirconium', '91.224', 4, 5,
-	'Nb', 'Niobium', '92.90628', 5, 5,
-	'Mo', 'Molybdenum', '95.96', 6, 5,
-	'Tc', 'Technetium', '(98)', 7, 5,
-	'Ru', 'Ruthenium', '101.07', 8, 5,
-	'Rh', 'Rhodium', '102.9055', 9, 5,
-	'Pd', 'Palladium', '106.42', 10, 5,
-	'Ag', 'Silver', '107.8682', 11, 5,
-	'Cd', 'Cadmium', '112.411', 12, 5,
-	'In', 'Indium', '114.818', 13, 5,
-	'Sn', 'Tin', '118.71', 14, 5,
-	'Sb', 'Antimony', '121.76', 15, 5,
-	'Te', 'Tellurium', '127.6', 16, 5,
-	'I', 'Iodine', '126.90447', 17, 5,
-	'Xe', 'Xenon', '131.293', 18, 5,
-	'Cs', 'Caesium', '132.9054', 1, 6,
-	'Ba', 'Barium', '132.9054', 2, 6,
-	'La', 'Lanthanum', '138.90547', 4, 9,
-	'Ce', 'Cerium', '140.116', 5, 9,
-	'Pr', 'Praseodymium', '140.90765', 6, 9,
-	'Nd', 'Neodymium', '144.242', 7, 9,
-	'Pm', 'Promethium', '(145)', 8, 9,
-	'Sm', 'Samarium', '150.36', 9, 9,
-	'Eu', 'Europium', '151.964', 10, 9,
-	'Gd', 'Gadolinium', '157.25', 11, 9,
-	'Tb', 'Terbium', '158.92535', 12, 9,
-	'Dy', 'Dysprosium', '162.5', 13, 9,
-	'Ho', 'Holmium', '164.93032', 14, 9,
-	'Er', 'Erbium', '167.259', 15, 9,
-	'Tm', 'Thulium', '168.93421', 16, 9,
-	'Yb', 'Ytterbium', '173.054', 17, 9,
-	'Lu', 'Lutetium', '174.9668', 18, 9,
-	'Hf', 'Hafnium', '178.49', 4, 6,
-	'Ta', 'Tantalum', '180.94788', 5, 6,
-	'W', 'Tungsten', '183.84', 6, 6,
-	'Re', 'Rhenium', '186.207', 7, 6,
-	'Os', 'Osmium', '190.23', 8, 6,
-	'Ir', 'Iridium', '192.217', 9, 6,
-	'Pt', 'Platinum', '195.084', 10, 6,
-	'Au', 'Gold', '196.966569', 11, 6,
-	'Hg', 'Mercury', '200.59', 12, 6,
-	'Tl', 'Thallium', '204.3833', 13, 6,
-	'Pb', 'Lead', '207.2', 14, 6,
-	'Bi', 'Bismuth', '208.9804', 15, 6,
-	'Po', 'Polonium', '(209)', 16, 6,
-	'At', 'Astatine', '(210)', 17, 6,
-	'Rn', 'Radon', '(222)', 18, 6,
-	'Fr', 'Francium', '(223)', 1, 7,
-	'Ra', 'Radium', '(226)', 2, 7,
-	'Ac', 'Actinium', '(227)', 4, 10,
-	'Th', 'Thorium', '232.03806', 5, 10,
-	'Pa', 'Protactinium', '231.0588', 6, 10,
-	'U', 'Uranium', '238.02891', 7, 10,
-	'Np', 'Neptunium', '(237)', 8, 10,
-	'Pu', 'Plutonium', '(244)', 9, 10,
-	'Am', 'Americium', '(243)', 10, 10,
-	'Cm', 'Curium', '(247)', 11, 10,
-	'Bk', 'Berkelium', '(247)', 12, 10,
-	'Cf', 'Californium', '(251)', 13, 10,
-	'Es', 'Einstenium', '(252)', 14, 10,
-	'Fm', 'Fermium', '(257)', 15, 10,
-	'Md', 'Mendelevium', '(258)', 16, 10,
-	'No', 'Nobelium', '(259)', 17, 10,
-	'Lr', 'Lawrencium', '(262)', 18, 10,
-	'Rf', 'Rutherfordium', '(267)', 4, 7,
-	'Db', 'Dubnium', '(268)', 5, 7,
-	'Sg', 'Seaborgium', '(271)', 6, 7,
-	'Bh', 'Bohrium', '(272)', 7, 7,
-	'Hs', 'Hassium', '(270)', 8, 7,
-	'Mt', 'Meitnerium', '(276)', 9, 7,
-	'Ds', 'Darmstadium', '(281)', 10, 7,
-	'Rg', 'Roentgenium', '(280)', 11, 7,
-	'Cn', 'Copernicium', '(285)', 12, 7,
-	'Nh', 'Nihonium', '(286)', 13, 7,
-	'Fl', 'Flerovium', '(289)', 14, 7,
-	'Mc', 'Moscovium', '(290)', 15, 7,
-	'Lv', 'Livermorium', '(293)', 16, 7,
-	'Ts', 'Tennessine', '(294)', 17, 7,
-	'Og', 'Oganesson', '(294)', 18, 7
-]
+
 function FinalPage () {
 	useEffect(() => {
 		console.log(TWEEN)
@@ -139,6 +20,9 @@ function FinalPage () {
 	// 创建渲染器
 	let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
 
+	// 创建向量
+	let vector = new THREE.Vector3()
+
 	// 相机镜头视野终点
 	let cameraTarget = new THREE.Vector3(0, 0, 100)
 
@@ -148,8 +32,24 @@ function FinalPage () {
 	// 创建css3d渲染器
 	let css3DRenderer = new CSS3DRenderer()
 
-	// 文字声明 （为了提供动态删除的可能性）
+	// 为点击声明的变量 （广播 、 鼠标）
+	let raycaster = new THREE.Raycaster()
+	let mouse = new THREE.Vector2()
+
+	// 文字声明 / 详情面板（为了提供动态删除的可能性）
 	let model_text
+	let field_info_plane
+
+	// 可以被点击的模型对象数组
+	let clickObjectArr = []
+
+	// filed组成的模型的名称声明 （目的提供全局使用该坐标） 当前的状态
+	let irregular_field = []
+	let cube_field = []
+	let annular_field = []
+	let sphere_field = []
+	let init_field = []
+	let currentField = 'init'
 
 	// 创建数据源组 ----- 球形
 	let group_source_sphere = new THREE.Group()
@@ -158,6 +58,10 @@ function FinalPage () {
 	// 创建数据源组
 	let group_source = new THREE.Group()
 	scene.add(group_source)
+
+	// 创建数据源filed的详情面板组
+	let group_field_info = new THREE.Group()
+	scene.add(group_field_info)
 
 	// 创建数据源组 ----- 球体 --- 上方的文字
 	let group_source_sphere_text = new THREE.Group()
@@ -173,21 +77,6 @@ function FinalPage () {
 	let group_plane_news = new THREE.Group()
 	group_plane_news.position.set(800, 0, 0)
 	scene.add(group_plane_news)
-
-	// 创建一个可以侧面展示文字的平面
-	let planeDiv = document.createElement('div')
-	planeDiv.className = 'illustration'
-	let titleDiv = document.createElement('div')
-	titleDiv.className = 'title'
-	titleDiv.textContent = '这是一段讲解'
-	let contentDiv = document.createElement('div')
-	contentDiv.className = 'content'
-	contentDiv.textContent = '不好的不好好不包含呵呵回家大啥黑科技阿实践活动加速度计安徽省大家啊收到就好点击阿斯加德很骄傲的加厚的加上回到家爱上大酒店加上的吉安市加上的黄寺大街按时间段按实际就'
-	planeDiv.appendChild(titleDiv)
-	planeDiv.appendChild(contentDiv)
-	let planeObject = new CSS3DObject(planeDiv)
-	// planeObject.position.set(900, 100, 500)
-	// planeObject.rotation.y = -0.5 * Math.PI
 
 	// 相机控制函数
 	const animateCamera = (current, target, type, time) => {
@@ -206,28 +95,6 @@ function FinalPage () {
 				camera.position.x = obj.x
 				camera.position.y = obj.y
 				camera.position.z = obj.z
-			}).start()
-	}
-
-	// 数据源小方块飞行的效果
-	const animateCubeFly = (current, target, type, cube) => {
-		new TWEEN.Tween({
-			x: current.x,
-			y: current.y,
-			z: current.z,
-		})
-			.delay(1000)
-			.to({
-				x: target.x,
-				y: target.y,
-				z: target.z
-			}, 2600)
-			.easing(type)
-			.repeat(Infinity)
-			.onUpdate(obj => {
-				cube.position.x = obj.x
-				cube.position.y = obj.y
-				cube.position.z = obj.z
 			}).start()
 	}
 
@@ -294,7 +161,6 @@ function FinalPage () {
 		}, TWEEN.Easing.Circular.InOut, 1200)
 		cameraTarget = new THREE.Vector3(1200, 700, 100)
 		model_text = dynamicAddText(group_process, '我可以加工数据', 0, 68, 0)
-		planeObject.scale.set(.3, .3, .3)
 	}
 
 	// 切换会最初状态
@@ -310,7 +176,7 @@ function FinalPage () {
 		}, TWEEN.Easing.Quadratic.Out)
 		cameraTarget = new THREE.Vector3(0, 0, 100)
 		dynamicDeleteText(group_process, model_text)
-		planeObject.scale.set(0, 0, 0)
+		group_field_info.remove(field_info_plane)
 	}
 
 	// 查看详情版面
@@ -325,7 +191,89 @@ function FinalPage () {
 			z: 700
 		}, TWEEN.Easing.Circular.InOut, 1200)
 		cameraTarget = new THREE.Vector3(1600, 0, 0)
-		planeObject.rotation.y = 0
+	}
+
+	// 切换字段组成形状效果的 --------  过渡效果函数
+	const filedChangeTransform = (targets, duration) => {
+		for (let i = 0; i < 300; i ++) {
+			let object = init_field[i]
+			let target = targets[i]
+			new TWEEN.Tween(object.position)
+				.to({ x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration)
+				.easing(TWEEN.Easing.Exponential.InOut)
+				.start()
+			new TWEEN.Tween(object.rotation)
+				.to({ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration)
+				.easing(TWEEN.Easing.Exponential.InOut)
+				.start()
+		}
+	}
+
+	// 切换字段效果的组成形状的 处理函数
+	const filedGeometryChangeFn = (name) => {
+		currentField = name
+		TWEEN.removeAll()
+		if (name === 'Sphere') {
+			filedChangeTransform(sphere_field, 2000)
+		} else if (name === 'Cube') {
+			filedChangeTransform(cube_field, 2000)
+		} else if (name === 'Annular') {
+			filedChangeTransform(annular_field, 2000)
+		} else {
+			filedChangeTransform(irregular_field, 2000)
+		}
+	}
+
+	// 查看生成详情的字段信息 --- 点击
+	const fieldInfoFn = () => {
+		filedChangeTransform(sphere_field, 1000)
+		animateCamera(camera.position, {
+			x: 0,
+			y: 0,
+			z: 500
+		}, TWEEN.Easing.Circular.InOut, 2400)
+		setTimeout(() => {
+			let souceDiv = document.createElement('div')
+			souceDiv.className = 'element_big'
+			souceDiv.style.backgroundColor = 'rgb(6, 90, 245)'
+			let symbol = document.createElement('div')
+			symbol.className = 'symbol_big'
+			symbol.textContent = '字段名称：Name'
+			souceDiv.appendChild(symbol)
+			let nameDiv = document.createElement('div')
+			nameDiv.className = 'symbol_big'
+			nameDiv.textContent = '中文名称：姓名'
+			souceDiv.appendChild(nameDiv)
+			let modelDiv = document.createElement('div')
+			modelDiv.className = 'symbol_big'
+			modelDiv.textContent = '所属模型：暂无'
+			souceDiv.appendChild(modelDiv)
+			let rangeDiv = document.createElement('div')
+			rangeDiv.className = 'symbol_big'
+			rangeDiv.textContent = '值域：1 -- 4'
+			souceDiv.appendChild(rangeDiv)
+			let bornDiv = document.createElement('div')
+			bornDiv.className = 'symbol_big'
+			bornDiv.textContent = '来源方式：自动生成'
+			souceDiv.appendChild(bornDiv)
+			let descDiv = document.createElement('div')
+			descDiv.className = 'details_big'
+			souceDiv.appendChild(descDiv)
+			let descTitleDiv = document.createElement('div')
+			descTitleDiv.className = 'title_big'
+			descTitleDiv.textContent = '描述：'
+			descDiv.appendChild(descTitleDiv)
+			let infoDiv = document.createElement('div')
+			infoDiv.className = 'info_big'
+			infoDiv.innerHTML = '<p>大法师是好好干过过过过过过过过各行的哈的火锅店嘎哈的sad公司大好时光的阿斯钢大会时代光华个韩国短时搭嘎说过的话撒多好的感动行阿十多个安徽大的大说过的话阿萨德刚爱上低功耗对哈</p>'
+			descDiv.appendChild(infoDiv)
+			let typeDiv = document.createElement('div')
+			typeDiv.className = 'type_big'
+			typeDiv.innerHTML = Math.ceil(Math.random() * 10) > 5 ? '(类型：str)' : '(类型：int)'
+			symbol.appendChild(typeDiv)
+			field_info_plane = new CSS3DObject(souceDiv)
+			group_field_info.add(field_info_plane)
+		}, 2500)
 	}
 
 	// 初始化函数
@@ -336,7 +284,36 @@ function FinalPage () {
 
 		// 获取盒子的dom元素
 		const container = document.getElementById('box')
-
+		// 监听点击模型事件
+		container.addEventListener('click', (event) => {
+			event.preventDefault()
+			console.log(event.target.getAttribute('id'))
+			mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 -1
+			mouse.y = (event.clientY / renderer.domElement.clientHeight) * 2 -1
+			raycaster.setFromCamera(mouse, camera)
+			let intersects = raycaster.intersectObjects(clickObjectArr)
+			console.log(intersects)
+			if (intersects.length > 0) {
+				// 说明存在被点击的模型
+				// 如果被点击的是中心圆球的话执行动画的切换
+				if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && !event.target.getAttribute('id')) {
+					switch (currentField) {
+					case 'init': filedGeometryChangeFn('Cube')
+						break
+					case 'Cube': filedGeometryChangeFn('Annular')
+						break
+					case 'Annular': filedGeometryChangeFn('Sphere')
+						break
+					default: filedGeometryChangeFn('init')
+					}
+				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && event.target.getAttribute('id') && event.target.getAttribute('id').indexOf('plane') !== -1) {
+					fieldInfoFn()
+				}
+			} else {
+				// 不存在被点击的模型
+				resetFn()
+			}
+		}, true)
 		// 给场景添加星空盒子纹理
 		new THREE.CubeTextureLoader()
 			.setPath('assets/images/')
@@ -368,8 +345,6 @@ function FinalPage () {
 		scene.add(dirLight)
 
 		// let mixer
-		var objects = []
-		var targets = { table: [], sphere: [], helix: [], grid: [] }
 
 		// 中心的球体 ------- 数据源 -------- 以无数粒子方式展示效果
 		const souce_show_handle = () => {
@@ -379,6 +354,8 @@ function FinalPage () {
 			let sphereMaterial = new THREE.MeshNormalMaterial({ opacity: .7, wireframe: true })
 			let sphere_model = new THREE.Mesh(sphere, sphereMaterial)
 			sphere_model.updateMatrix()
+			clickObjectArr.push(sphere_model)
+			sphere_model.name = 'centerSphereModel'
 			group_source_sphere.add(sphere_model)
 
 			// 为这个球体几何加上label文案
@@ -419,113 +396,118 @@ function FinalPage () {
 					z: cube_model.position.z,
 				}, TWEEN.Easing.Linear.None, TWEEN.Easing.Back.Out, cube_model)
 
-				// 飞行动画
-				// if (i > 510) {
-				// 	animateCubeFly({
-				// 		x: cube_model.position.x,
-				// 		y: cube_model.position.y,
-				// 		z: cube_model.position.z
-				// 	}, {
-				// 		x: 1190,
-				// 		y: 800,
-				// 		z: -800
-				// 	}, TWEEN.Easing.Linear.None, cube_model)
-				// }
 			}
 
 			// 动画的第二部 ---- 将这些方块变换成有文字的plan 进行组合
-			// for (let i = 0; i < table.length; i += 5) {
-			// 	console.log(table)
-			// 	let souceDiv = document.createElement('div')
-			// 	souceDiv.className = 'element'
-			// 	souceDiv.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')'
-			// 	var symbol = document.createElement('div')
-			// 	symbol.className = 'symbol'
-			// 	symbol.textContent = table[i]
-			// 	souceDiv.appendChild(symbol)
-			// 	var details = document.createElement('div')
-			// 	details.className = 'details'
-			// 	details.innerHTML = table[i + 1]
-			// 	souceDiv.appendChild(details)
-			// 	var object = new CSS3DObject(souceDiv)
-			// 	object.position.x = Math.random() * 800 - 400
-			// 	object.position.y = Math.random() * 800 - 400
-			// 	object.position.z = Math.random() * 800 - 400
-			// 	// group_source.add(object)
-			// 	objects.push(object)
-			// 	//
-			// 	// var object = new THREE.Object3D()
-			// 	// object.position.x = (table[i + 3] * 140) - 1330
-			// 	// object.position.y = - (table[i + 4] * 180) + 990
-			// 	// targets.table.push(object)
-			// }
+			// 无规则的效果
+			for (let i = 0; i < 300; i++) {
+				let souceDiv = document.createElement('div')
+				souceDiv.setAttribute('id', `plane${i}`)
+				souceDiv.className = 'element'
+				souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
+				let symbol = document.createElement('div')
+				symbol.setAttribute('id', `planeSymbol${i}`)
+				symbol.className = 'symbol'
+				symbol.textContent = 'Field'
+				souceDiv.appendChild(symbol)
+				let details = document.createElement('div')
+				details.setAttribute('id', `planeDetail${i}`)
+				details.className = 'details'
+				details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
+				souceDiv.appendChild(details)
+				let object = new CSS3DObject(souceDiv)
+				object.position.x = Math.random() * 800 - 400
+				object.position.y = Math.random() * 800 - 400
+				object.position.z = Math.random() * 800 - 400
+				group_source.add(object)
+				init_field.push(object)
+				clickObjectArr.push(group_source)
+				object.name = 'soucePlane'
+			}
 
-			// for (var i = 0; i < table.length; i ++) {
-			// let souceDiv = document.createElement('div')
-			// souceDiv.className = 'element'
-			// souceDiv.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')'
-			// var symbol = document.createElement('div')
-			// symbol.className = 'symbol'
-			// symbol.textContent = table[i]
-			// souceDiv.appendChild(symbol)
-			// var details = document.createElement('div')
-			// details.className = 'details'
-			// details.innerHTML = table[i + 1]
-			// souceDiv.appendChild(details)
-			// var object = new CSS3DObject(souceDiv)
-			// 	object.position.x = ((i % 5) * 400) - 800
-			// 	object.position.y = (- (Math.floor(i / 5) % 5) * 400) + 800
-			// 	object.position.z = (Math.floor(i / 25)) * 1000 - 2000
-			// 	// targets.grid.push(object)
-			// 	group_source.add(object)
-			// }
-
-			// var vector = new THREE.Vector3()
-			// for (var i = 0, l = table.length; i < l; i ++) {
-			// 	var theta = i * 0.175 + Math.PI
-			// 	var y = - (i * 8) + 450
-			// let souceDiv = document.createElement('div')
-			// souceDiv.className = 'element'
-			// souceDiv.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')'
-			// var symbol = document.createElement('div')
-			// symbol.className = 'symbol'
-			// symbol.textContent = table[i]
-			// souceDiv.appendChild(symbol)
-			// var details = document.createElement('div')
-			// details.className = 'details'
-			// details.innerHTML = table[i + 1]
-			// souceDiv.appendChild(details)
-			// var object = new CSS3DObject(souceDiv)
-			// 	object.position.setFromCylindricalCoords(600, theta, y)
-			// 	vector.x = object.position.x * 2
-			// 	vector.y = object.position.y
-			// 	vector.z = object.position.z * 2
-			// 	// object.lookAt(vector)
-			// 	targets.helix.push(object)
-			// 	group_source.add(object)
-			// }
-
-			var vector = new THREE.Vector3()
-			for (var i = 0, l = table.length; i < l; i ++) {
-				var phi = Math.acos(- 1 + (2 * i) / l)
-				var theta = Math.sqrt(l * Math.PI) * phi
+			for (let i = 0; i < 300; i++) {
 				let souceDiv = document.createElement('div')
 				souceDiv.className = 'element'
-				souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.35) + ')'
-				var symbol = document.createElement('div')
+				souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
+				let symbol = document.createElement('div')
 				symbol.className = 'symbol'
-				symbol.textContent = 'a'
+				symbol.textContent = 'Field'
 				souceDiv.appendChild(symbol)
-				var details = document.createElement('div')
+				let details = document.createElement('div')
 				details.className = 'details'
-				details.innerHTML = 'str'
+				details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
 				souceDiv.appendChild(details)
-				var object = new CSS3DObject(souceDiv)
-				object.position.setFromSphericalCoords(500, phi, theta)
+				let object = new CSS3DObject(souceDiv)
+				object.position.x = Math.random() * 800 - 400
+				object.position.y = Math.random() * 800 - 400
+				object.position.z = Math.random() * 800 - 400
+				irregular_field.push(object)
+			}
+
+			// 矩形的效果
+			for (let i = 0; i < 300; i++) {
+				let souceDiv = document.createElement('div')
+				souceDiv.className = 'element'
+				souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
+				let symbol = document.createElement('div')
+				symbol.className = 'symbol'
+				symbol.textContent = 'Field'
+				souceDiv.appendChild(symbol)
+				let details = document.createElement('div')
+				details.className = 'details'
+				details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
+				souceDiv.appendChild(details)
+				let object = new CSS3DObject(souceDiv)
+				object.position.x = ((i % 5) * 100) - 200
+				object.position.y = (- (Math.floor(i / 5) % 5) * 100) + 200
+				object.position.z = (Math.floor(i / 25)) * 45 - 247
+				cube_field.push(object)
+			}
+
+			// 环形的效果
+			for (let i = 0; i < 300; i++) {
+				let theta = i * 0.175 + Math.PI
+				let y = -(i * 3) + 450
+				let souceDiv = document.createElement('div')
+				souceDiv.className = 'element'
+				souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
+				let symbol = document.createElement('div')
+				symbol.className = 'symbol'
+				symbol.textContent = 'Field'
+				souceDiv.appendChild(symbol)
+				let details = document.createElement('div')
+				details.className = 'details'
+				details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
+				souceDiv.appendChild(details)
+				let object = new CSS3DObject(souceDiv)
+				object.position.setFromCylindricalCoords(400, theta, y)
+				vector.x = object.position.x * 2
+				vector.y = object.position.y * 0.2
+				vector.z = object.position.z * 2
+				object.lookAt(vector)
+				annular_field.push(object)
+			}
+
+			// 圆形球体的效果
+			for (let i = 0; i < 300; i++) {
+				let phi = Math.acos(- 1 + (2 * i) / 300)
+				let theta = Math.sqrt(300 * Math.PI) * phi
+				let souceDiv = document.createElement('div')
+				souceDiv.className = 'element'
+				souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
+				let symbol = document.createElement('div')
+				symbol.className = 'symbol'
+				symbol.textContent = 'Field'
+				souceDiv.appendChild(symbol)
+				let details = document.createElement('div')
+				details.className = 'details'
+				details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
+				souceDiv.appendChild(details)
+				let object = new CSS3DObject(souceDiv)
+				object.position.setFromSphericalCoords(560, phi, theta)
 				vector.copy(object.position).multiplyScalar(2)
 				object.lookAt(vector)
-				targets.sphere.push(object)
-				group_source.add(object)
+				sphere_field.push(object)
 			}
 
 		}
@@ -558,9 +540,9 @@ function FinalPage () {
 			requestAnimationFrame(animate)
 			// 必须再此调用
 			TWEEN.update()
-			// scene.rotation.y += 0.001
 			// 数据源展示中 圆球的转动效果
-			group_source_sphere.rotation.y += 0.001
+			// group_source_sphere.rotation.y += 0.001
+			// group_source.rotation.y += 0.003
 			// 设置相机镜头的朝向
 			camera.lookAt(cameraTarget)
 			// 渲染
@@ -576,6 +558,11 @@ function FinalPage () {
 			<button onClick={clickFn}>click</button>
 			<button onClick={resetFn}>reset</button>
 			<button onClick={checkFn}>checkInfo</button>
+			<button onClick={fieldInfoFn}>查看字段详情</button>
+			<button onClick={() => (filedGeometryChangeFn('Irregular'))}>混乱</button>
+			<button onClick={() => (filedGeometryChangeFn('Cube'))}>矩形</button>
+			<button onClick={() => (filedGeometryChangeFn('Annular'))}>环形</button>
+			<button onClick={() => (filedGeometryChangeFn('Sphere'))}>圆形</button>
 		</div>
 	)
 }
