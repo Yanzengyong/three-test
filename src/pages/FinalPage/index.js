@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as THREE from 'three'
 import './index.scss'
 import Orbitcontrols from 'three-orbitcontrols'
@@ -11,11 +11,12 @@ function FinalPage () {
 		console.log(TWEEN)
 		init()
 	})
+	const [showFont, setShowFont] = useState(false)
 	// 创建场景
 	let scene = new THREE.Scene()
 
 	// 创建透视相机
-	let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 3000)
+	let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000)
 
 	// 创建渲染器
 	let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
@@ -38,7 +39,15 @@ function FinalPage () {
 
 	// 文字声明 / 详情面板（为了提供动态删除的可能性）
 	let model_text
+	let apply_one
+	let apply_two
+	let apply_three
+	let apply_four
 	let field_info_plane
+	let apply_one_text
+	let apply_two_text
+	let apply_three_text
+	let apply_four_text
 
 	// 可以被点击的模型对象数组
 	let clickObjectArr = []
@@ -73,14 +82,18 @@ function FinalPage () {
 	scene.add(group_source_sphere_text)
 
 	// 创建加工组
-	let group_process = new THREE.Group()
-	group_process.position.set(1200, 800, -800)
-	scene.add(group_process)
+	// let group_process = new THREE.Group()
+	// group_process.position.set(1200, 800, -800)
+	// scene.add(group_process)
 
 	// 创建一个平面展示组
 	let group_plane_news = new THREE.Group()
 	group_plane_news.position.set(800, 0, 0)
 	scene.add(group_plane_news)
+
+	// 创建围绕中新球体的球体
+	let group_rotate = new THREE.Group()
+	scene.add(group_rotate)
 
 	// 相机控制函数
 	const animateCamera = (current, target, type, time) => {
@@ -135,10 +148,10 @@ function FinalPage () {
 	}
 
 	// 动态添加文字处理函数
-	const dynamicAddText = (group, text, x, y, z) => {
+	const dynamicAddText = (group, text, x, y, z, size) => {
 		// 为这个模型几何加上label文案
 		let labelDiv = document.createElement('div')
-		labelDiv.className = 'label'
+		labelDiv.className = size === 'small' ? 'label_small' : 'label'
 		labelDiv.textContent = text
 		labelDiv.style.marginTop = '-1em'
 		let modelLabel = new CSS2DObject(labelDiv)
@@ -154,31 +167,56 @@ function FinalPage () {
 
 	// 这是数据源头 --- 缩小为一个点后 ---- 扩散成数据元的动画过程（使用chain会变得巨卡，待优化，暂时以settimeout方式）
 	const sourceChangeField = () => {
-		for (let i = 0; i < group_source_array.length; i++) {
-			new TWEEN.Tween({
-				x: group_source_array[i].position.x,
-				y: group_source_array[i].position.y,
-				z: group_source_array[i].position.z
-			})
-				.to({
-					x: 0,
-					y: 0,
-					z: 0
-				}, 3000)
-				.easing(TWEEN.Easing.Linear.None)
-				.onUpdate(obj => {
-					group_source_array[i].position.x = obj.x
-					group_source_array[i].position.y = obj.y
-					group_source_array[i].position.z = obj.z
-				}).start()
-			let timer = setTimeout(() => {
-				group_source.remove(group_source_array[i])
-				TWEEN.removeAll()
-				hasSource = false
-				clearTimeout(timer)
-			}, 4000)
-		}
-		let timer = setTimeout(() => {
+		// setShowFont(true)
+		new TWEEN.Tween({
+			x: camera.position.x,
+			y: camera.position.y,
+			z: camera.position.z
+		})
+			.to({
+				x: 0,
+				y: 100,
+				z: 1300
+			}, 1500)
+			.easing(TWEEN.Easing.Linear.None)
+			.onUpdate(obj => {
+				camera.position.x = obj.x
+				camera.position.y = obj.y
+				camera.position.z = obj.z
+			}).start()
+		let timer_lessen = setTimeout(() => {
+			for (let i = 0; i < group_source_array.length; i++) {
+				new TWEEN.Tween({
+					x: group_source_array[i].position.x,
+					y: group_source_array[i].position.y,
+					z: group_source_array[i].position.z
+				})
+					.to({
+						x: 0,
+						y: 0,
+						z: 0
+					}, 3000)
+					.easing(TWEEN.Easing.Linear.None)
+					.onUpdate(obj => {
+						group_source_array[i].position.x = obj.x
+						group_source_array[i].position.y = obj.y
+						group_source_array[i].position.z = obj.z
+					}).start()
+				let timer = setTimeout(() => {
+					group_source.remove(group_source_array[i])
+					// TWEEN.removeAll()
+					// 清除其他求的标题文字
+					// dynamicDeleteText(group_rotate, apply_one_text)
+					// dynamicDeleteText(group_rotate, apply_two_text)
+					// dynamicDeleteText(group_rotate, apply_three_text)
+					// dynamicDeleteText(group_rotate, apply_four_text)
+					hasSource = false
+					clearTimeout(timer)
+				}, 4000)
+			}
+			clearTimeout(timer_lessen)
+		}, 2000)
+		let timer_field = setTimeout(() => {
 			for (let i = 0; i < init_field.length; i++) {
 				group_source.add(init_field[i])
 				new TWEEN.Tween({
@@ -198,13 +236,29 @@ function FinalPage () {
 						init_field[i].position.z = obj.z
 					}).start()
 			}
-			clearTimeout(timer)
-		}, 4000)
+			clearTimeout(timer_field)
+		}, 6000)
+
 	}
 
 	// 合并这些矩形几何体
 	const showPlaneFn = () => {
 		sourceChangeField()
+	}
+
+	// 切回到观察中心圆球的视角
+	const backSourceFn = () => {
+		animateCamera({
+			x: 0,
+			y: 0,
+			z: 0
+		}, {
+			x: 0,
+			y: 100,
+			z: 1300
+		}, TWEEN.Easing.Quadratic.Out)
+		cameraTarget = new THREE.Vector3(0, 0, 100)
+		group_field_info.remove(field_info_plane)
 	}
 
 	// 切换视角
@@ -219,7 +273,7 @@ function FinalPage () {
 			z: 600
 		}, TWEEN.Easing.Circular.InOut, 1200)
 		cameraTarget = new THREE.Vector3(1200, 700, 100)
-		model_text = dynamicAddText(group_process, '我可以加工数据', 0, 68, 0)
+		// model_text = dynamicAddText(group_process, '我可以加工数据', 0, 68, 0)
 	}
 
 	// 切换会最初状态
@@ -230,11 +284,10 @@ function FinalPage () {
 			z: 0
 		}, {
 			x: 0,
-			y: 0,
-			z: 1400
+			y: 600,
+			z: 2400
 		}, TWEEN.Easing.Quadratic.Out)
 		cameraTarget = new THREE.Vector3(0, 0, 100)
-		dynamicDeleteText(group_process, model_text)
 		group_field_info.remove(field_info_plane)
 	}
 
@@ -336,6 +389,27 @@ function FinalPage () {
 		}, 2500)
 	}
 
+	// 添加轨道
+	const addTrack = (radius, position) => {
+		let trackGeometry = new THREE.RingGeometry(radius, radius + 6, 300)
+		let trackMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
+		let track = new THREE.Mesh(trackGeometry, trackMaterial)
+		track.position.set(position.x, position.y, position.z)
+		track.rotation.x = - Math.PI / 2
+		return(track)
+	}
+
+	// 添加球体
+	const addPlanet = (radius, position, texture, name) => {
+		let planetGeometry = new THREE.SphereGeometry(radius, 50, 50)
+		let planetMaterial = new THREE.MeshNormalMaterial()
+		let planet = new THREE.Mesh(planetGeometry, planetMaterial)
+		// planet.name = name
+		planet.castShadow = true
+		planet.position.set(position.x, position.y, position.z)
+		return planet
+	}
+
 	// 初始化函数
 	const init = () => {
 		let helper = new THREE.AxesHelper(3000)
@@ -375,7 +449,7 @@ function FinalPage () {
 				}
 			} else {
 				// 不存在被点击的模型
-				resetFn()
+				backSourceFn()
 			}
 		}, true)
 		// 给场景添加星空盒子纹理
@@ -393,7 +467,7 @@ function FinalPage () {
 			})
 
 		// 相机所在位子
-		camera.position.set(0, 0, 1400)
+		camera.position.set(0, 600, 2400)
 
 		// 相机作为orbitcontrol的参数，支持鼠标交互
 		let orbitControls = new Orbitcontrols(camera)
@@ -424,13 +498,7 @@ function FinalPage () {
 			group_source_sphere.add(sphere_model)
 
 			// 为这个球体几何加上label文案
-			let sphereDiv = document.createElement('div')
-			sphereDiv.className = 'label'
-			sphereDiv.textContent = '我是数据源'
-			sphereDiv.style.marginTop = '-1em'
-			let sphereLabel = new CSS2DObject(sphereDiv)
-			sphereLabel.position.set(0, 800, 0)
-			sphere_model.add(sphereLabel)
+			dynamicAddText(sphere_model, '我是数据源', 0, 800, 0)
 
 			// 创建 长宽高都为40的立方体
 			let cube = new THREE.BoxBufferGeometry(40, 40, 40)
@@ -525,6 +593,30 @@ function FinalPage () {
 
 		}
 
+		// 添加围绕的球体
+		let group_sphere_line = addTrack(1300, { x: 0, y: -400, z: 0 })
+		group_rotate.add(group_sphere_line)
+		apply_one = addPlanet(260, { x: 1300, y: -400, z: 0 })
+		apply_two = addPlanet(260, { x: -1300, y: -400, z: 0 })
+		apply_three = addPlanet(260, { x: 0, y: -400, z: 1300 })
+		apply_four = addPlanet(260, { x: 0, y: -400, z: -1300 })
+		group_rotate.add(apply_one)
+		group_rotate.add(apply_two)
+		group_rotate.add(apply_three)
+		group_rotate.add(apply_four)
+		apply_one_text = dynamicAddText(apply_one, '我是应用1', 1300, 0, 0, 'small')
+		apply_two_text = dynamicAddText(apply_two, '我是应用3', -1300, 0, 0, 'small')
+		apply_three_text = dynamicAddText(apply_three, '我是应用4', 0, 0, 1300, 'small')
+		apply_four_text = dynamicAddText(apply_four, '我是应用2', 0, 0, -1300, 'small')
+		group_rotate.add(apply_one_text)
+		group_rotate.add(apply_two_text)
+		group_rotate.add(apply_three_text)
+		group_rotate.add(apply_four_text)
+		clickObjectArr.push(apply_one)
+		clickObjectArr.push(apply_two)
+		clickObjectArr.push(apply_three)
+		clickObjectArr.push(apply_four)
+
 		// 初次渲染时候的背景颜色
 		renderer.setClearColor(0x000000)
 		// 像素点
@@ -554,10 +646,11 @@ function FinalPage () {
 			// 必须再此调用
 			TWEEN.update()
 			// 数据源展示中 圆球的转动效果
-			// group_source_sphere.rotation.y += 0.001
-			// if (!hasSource) {
-			// 	group_source.rotation.y += 0.003
-			// }
+			group_source_sphere.rotation.y += 0.001
+			if (!hasSource) {
+				group_source.rotation.y += 0.003
+			}
+			group_rotate.rotation.y += 0.002
 			// 设置相机镜头的朝向
 			camera.lookAt(cameraTarget)
 			// 渲染
@@ -579,6 +672,12 @@ function FinalPage () {
 			<button onClick={() => (filedGeometryChangeFn('Cube'))}>矩形</button>
 			<button onClick={() => (filedGeometryChangeFn('Annular'))}>环形</button>
 			<button onClick={() => (filedGeometryChangeFn('Sphere'))}>圆形</button>
+			{showFont ? (
+				<div>
+					<div className='scene_desc'>这是该场景的描述</div>
+					<div className='scene_data'>这是该场景展示的一些数据</div>
+				</div>
+			) : null}
 		</div>
 	)
 }
