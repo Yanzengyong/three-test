@@ -11,7 +11,8 @@ function FinalPage () {
 		console.log(TWEEN)
 		init()
 	})
-	const [showFont, setShowFont] = useState(false)
+	// const [showFont, setShowFont] = useState(false)
+	let showFont = false
 	// 创建场景
 	let scene = new THREE.Scene()
 
