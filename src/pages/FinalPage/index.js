@@ -50,6 +50,10 @@ function FinalPage () {
 	let sphere_field = []
 	let init_field = []
 	let currentField = 'init'
+	let group_source_array = []
+
+	// 判断的关键字声明
+	let hasSource = true
 
 	// 创建数据源组 ----- 球形
 	let group_source_sphere = new THREE.Group()
@@ -101,9 +105,9 @@ function FinalPage () {
 	// 数据源 小方块在球体中的循环移动的效果
 	const animateCubeTranslate = (current, target, type1, type2, cube) => {
 		const uploadHandle = (obj) => {
-			cube.position.x = obj.x
-			cube.position.y = obj.y
-			cube.position.z = obj.z
+			// cube.position.x = obj.x
+			// cube.position.y = obj.y
+			// cube.position.z = obj.z
 			cube.rotation.x += Math.random() * 0.05
 			cube.rotation.y += Math.random() * 0.05
 			cube.rotation.z += Math.random() * 0.05
@@ -146,6 +150,61 @@ function FinalPage () {
 	// 动态清除group的2d文字
 	const dynamicDeleteText = (group, labelModel) => {
 		group.remove(group, labelModel)
+	}
+
+	// 这是数据源头 --- 缩小为一个点后 ---- 扩散成数据元的动画过程（使用chain会变得巨卡，待优化，暂时以settimeout方式）
+	const sourceChangeField = () => {
+		for (let i = 0; i < group_source_array.length; i++) {
+			new TWEEN.Tween({
+				x: group_source_array[i].position.x,
+				y: group_source_array[i].position.y,
+				z: group_source_array[i].position.z
+			})
+				.to({
+					x: 0,
+					y: 0,
+					z: 0
+				}, 3000)
+				.easing(TWEEN.Easing.Linear.None)
+				.onUpdate(obj => {
+					group_source_array[i].position.x = obj.x
+					group_source_array[i].position.y = obj.y
+					group_source_array[i].position.z = obj.z
+				}).start()
+			let timer = setTimeout(() => {
+				group_source.remove(group_source_array[i])
+				TWEEN.removeAll()
+				hasSource = false
+				clearTimeout(timer)
+			}, 4000)
+		}
+		let timer = setTimeout(() => {
+			for (let i = 0; i < init_field.length; i++) {
+				group_source.add(init_field[i])
+				new TWEEN.Tween({
+					x: 0,
+					y: 0,
+					z: 0
+				})
+					.to({
+						x: init_field[i].position.x,
+						y: init_field[i].position.y,
+						z: init_field[i].position.z
+					}, 3000)
+					.easing(TWEEN.Easing.Linear.None)
+					.onUpdate(obj => {
+						init_field[i].position.x = obj.x
+						init_field[i].position.y = obj.y
+						init_field[i].position.z = obj.z
+					}).start()
+			}
+			clearTimeout(timer)
+		}, 4000)
+	}
+
+	// 合并这些矩形几何体
+	const showPlaneFn = () => {
+		sourceChangeField()
 	}
 
 	// 切换视角
@@ -232,7 +291,7 @@ function FinalPage () {
 			y: 0,
 			z: 500
 		}, TWEEN.Easing.Circular.InOut, 2400)
-		setTimeout(() => {
+		let timer = setTimeout(() => {
 			let souceDiv = document.createElement('div')
 			souceDiv.className = 'element_big'
 			souceDiv.style.backgroundColor = 'rgb(6, 90, 245)'
@@ -273,6 +332,7 @@ function FinalPage () {
 			symbol.appendChild(typeDiv)
 			field_info_plane = new CSS3DObject(souceDiv)
 			group_field_info.add(field_info_plane)
+			clearTimeout(timer)
 		}, 2500)
 	}
 
@@ -281,7 +341,6 @@ function FinalPage () {
 		let helper = new THREE.AxesHelper(3000)
 		scene.add(helper)
 		// const clock = new THREE.Clock()
-
 		// 获取盒子的dom元素
 		const container = document.getElementById('box')
 		// 监听点击模型事件
@@ -296,7 +355,11 @@ function FinalPage () {
 			if (intersects.length > 0) {
 				// 说明存在被点击的模型
 				// 如果被点击的是中心圆球的话执行动画的切换
-				if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && !event.target.getAttribute('id')) {
+				if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && hasSource) {
+					// 调用数据源切换到数据元场景的函数
+					sourceChangeField()
+				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && !event.target.getAttribute('id')) {
+					// 调用数据模型切换的动画
 					switch (currentField) {
 					case 'init': filedGeometryChangeFn('Cube')
 						break
@@ -307,6 +370,7 @@ function FinalPage () {
 					default: filedGeometryChangeFn('init')
 					}
 				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && event.target.getAttribute('id') && event.target.getAttribute('id').indexOf('plane') !== -1) {
+					// 查看数据元详情
 					fieldInfoFn()
 				}
 			} else {
@@ -318,12 +382,12 @@ function FinalPage () {
 		new THREE.CubeTextureLoader()
 			.setPath('assets/images/')
 			.load([
-				'xk1.jpg',
-				'xk1.jpg',
-				'xk1.jpg',
-				'xk1.jpg',
-				'xk1.jpg',
-				'xk1.jpg' 		// 六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
+				'bg1.jpg',
+				'bg1.jpg',
+				'bg1.jpg',
+				'bg1.jpg',
+				'bg1.jpg',
+				'bg1.jpg' 		// 六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
 			], (texture) => {
 				scene.background = texture // 添加背景到场景
 			})
@@ -350,8 +414,9 @@ function FinalPage () {
 		const souce_show_handle = () => {
 
 			// 在中心创建一个原型包裹这些立方体
-			let sphere = new THREE.SphereGeometry(700, 100, 100)
+			let sphere = new THREE.SphereGeometry(700, 65, 65)
 			let sphereMaterial = new THREE.MeshNormalMaterial({ opacity: .7, wireframe: true })
+			// let sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x08a9a9, wireframe: true })
 			let sphere_model = new THREE.Mesh(sphere, sphereMaterial)
 			sphere_model.updateMatrix()
 			clickObjectArr.push(sphere_model)
@@ -376,30 +441,21 @@ function FinalPage () {
 			// 循环渲染 400 个立方体盒子 为其添加上纹理
 			for (let i = 0; i < 520; i++) {
 				let cube_model = new THREE.Mesh(cube, cubeMaterial)
-				cube_model.position.x = 360 * (2.0 * Math.random() - 1.0)
-				cube_model.position.y = 360 * (2.0 * Math.random() - 1.0)
-				cube_model.position.z = 360 * (2.0 * Math.random() - 1.0)
+				cube_model.position.x = 400 * (2.0 * Math.random() - 1.0)
+				cube_model.position.y = 400 * (2.0 * Math.random() - 1.0)
+				cube_model.position.z = 400 * (2.0 * Math.random() - 1.0)
 				cube_model.rotation.x = Math.random() * Math.PI
 				cube_model.rotation.y = Math.random() * Math.PI
 				cube_model.rotation.z = Math.random() * Math.PI
 				cube_model.updateMatrix()
-				// group_source.add(cube_model)
-
+				group_source.add(cube_model)
+				group_source_array.push(cube_model)
 				// 球体中粒子的动画
-				animateCubeTranslate({
-					x: cube_model.position.x,
-					y: cube_model.position.y,
-					z: cube_model.position.z,
-				}, {
-					x: cube_model.position.x,
-					y: cube_model.position.y,
-					z: cube_model.position.z,
-				}, TWEEN.Easing.Linear.None, TWEEN.Easing.Back.Out, cube_model)
-
+				animateCubeTranslate({}, {}, TWEEN.Easing.Linear.None, TWEEN.Easing.Back.Out, cube_model)
 			}
 
 			// 动画的第二部 ---- 将这些方块变换成有文字的plan 进行组合
-			// 无规则的效果
+			// 无规则 ---- 进行初始化
 			for (let i = 0; i < 300; i++) {
 				let souceDiv = document.createElement('div')
 				souceDiv.setAttribute('id', `plane${i}`)
@@ -419,25 +475,15 @@ function FinalPage () {
 				object.position.x = Math.random() * 800 - 400
 				object.position.y = Math.random() * 800 - 400
 				object.position.z = Math.random() * 800 - 400
-				group_source.add(object)
+				// group_source.add(object)
 				init_field.push(object)
 				clickObjectArr.push(group_source)
 				object.name = 'soucePlane'
 			}
 
+			// 无规则的效果
 			for (let i = 0; i < 300; i++) {
-				let souceDiv = document.createElement('div')
-				souceDiv.className = 'element'
-				souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
-				let symbol = document.createElement('div')
-				symbol.className = 'symbol'
-				symbol.textContent = 'Field'
-				souceDiv.appendChild(symbol)
-				let details = document.createElement('div')
-				details.className = 'details'
-				details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
-				souceDiv.appendChild(details)
-				let object = new CSS3DObject(souceDiv)
+				let object = new THREE.Object3D()
 				object.position.x = Math.random() * 800 - 400
 				object.position.y = Math.random() * 800 - 400
 				object.position.z = Math.random() * 800 - 400
@@ -446,18 +492,7 @@ function FinalPage () {
 
 			// 矩形的效果
 			for (let i = 0; i < 300; i++) {
-				let souceDiv = document.createElement('div')
-				souceDiv.className = 'element'
-				souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
-				let symbol = document.createElement('div')
-				symbol.className = 'symbol'
-				symbol.textContent = 'Field'
-				souceDiv.appendChild(symbol)
-				let details = document.createElement('div')
-				details.className = 'details'
-				details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
-				souceDiv.appendChild(details)
-				let object = new CSS3DObject(souceDiv)
+				let object = new THREE.Object3D()
 				object.position.x = ((i % 5) * 100) - 200
 				object.position.y = (- (Math.floor(i / 5) % 5) * 100) + 200
 				object.position.z = (Math.floor(i / 25)) * 45 - 247
@@ -468,18 +503,7 @@ function FinalPage () {
 			for (let i = 0; i < 300; i++) {
 				let theta = i * 0.175 + Math.PI
 				let y = -(i * 3) + 450
-				let souceDiv = document.createElement('div')
-				souceDiv.className = 'element'
-				souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
-				let symbol = document.createElement('div')
-				symbol.className = 'symbol'
-				symbol.textContent = 'Field'
-				souceDiv.appendChild(symbol)
-				let details = document.createElement('div')
-				details.className = 'details'
-				details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
-				souceDiv.appendChild(details)
-				let object = new CSS3DObject(souceDiv)
+				let object = new THREE.Object3D()
 				object.position.setFromCylindricalCoords(400, theta, y)
 				vector.x = object.position.x * 2
 				vector.y = object.position.y * 0.2
@@ -492,18 +516,7 @@ function FinalPage () {
 			for (let i = 0; i < 300; i++) {
 				let phi = Math.acos(- 1 + (2 * i) / 300)
 				let theta = Math.sqrt(300 * Math.PI) * phi
-				let souceDiv = document.createElement('div')
-				souceDiv.className = 'element'
-				souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
-				let symbol = document.createElement('div')
-				symbol.className = 'symbol'
-				symbol.textContent = 'Field'
-				souceDiv.appendChild(symbol)
-				let details = document.createElement('div')
-				details.className = 'details'
-				details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
-				souceDiv.appendChild(details)
-				let object = new CSS3DObject(souceDiv)
+				let object = new THREE.Object3D()
 				object.position.setFromSphericalCoords(560, phi, theta)
 				vector.copy(object.position).multiplyScalar(2)
 				object.lookAt(vector)
@@ -511,7 +524,6 @@ function FinalPage () {
 			}
 
 		}
-
 
 		// 初次渲染时候的背景颜色
 		renderer.setClearColor(0x000000)
@@ -531,6 +543,7 @@ function FinalPage () {
 		css3DRenderer.domElement.style.top = 20 + 'px'
 		container.appendChild(css3DRenderer.domElement)
 		const animate = () => {
+			// 球体中粒子的动画
 			// let time = clock.getDelta()
 			// update 推进混合器时间并更新动画
 			// if (mixer) {
@@ -542,7 +555,9 @@ function FinalPage () {
 			TWEEN.update()
 			// 数据源展示中 圆球的转动效果
 			// group_source_sphere.rotation.y += 0.001
-			// group_source.rotation.y += 0.003
+			// if (!hasSource) {
+			// 	group_source.rotation.y += 0.003
+			// }
 			// 设置相机镜头的朝向
 			camera.lookAt(cameraTarget)
 			// 渲染
@@ -559,6 +574,7 @@ function FinalPage () {
 			<button onClick={resetFn}>reset</button>
 			<button onClick={checkFn}>checkInfo</button>
 			<button onClick={fieldInfoFn}>查看字段详情</button>
+			<button onClick={showPlaneFn}>点击合并</button>
 			<button onClick={() => (filedGeometryChangeFn('Irregular'))}>混乱</button>
 			<button onClick={() => (filedGeometryChangeFn('Cube'))}>矩形</button>
 			<button onClick={() => (filedGeometryChangeFn('Annular'))}>环形</button>
