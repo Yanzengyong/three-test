@@ -327,9 +327,9 @@ function ModelPage () {
 		)
 
 		// 添加做一个可以侧面展示文字的平面
-		// group_plane_news.add(planeObject)
-		// group_plane_news.position.x = 1600
-		// group_plane_news.rotation.y = 0
+		group_plane_news.add(planeObject)
+		group_plane_news.position.x = 1600
+		group_plane_news.rotation.y = 0
 		// var opacityKF = new THREE.NumberKeyframeTrack('.material.opacity', [0, 1, 2], [1, 0, 1])
 		// var clip = new THREE.AnimationClip('Action', 3, [opacityKF])
 		// mixer = new THREE.AnimationMixer(planeObject)

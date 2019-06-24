@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import * as THREE from 'three'
 import './index.scss'
@@ -10,9 +11,13 @@ function FinalPage () {
 	useEffect(() => {
 		console.log(TWEEN)
 		init()
-	})
-	// const [showFont, setShowFont] = useState(false)
-	let showFont = false
+	}, [])
+	const [showFont, setShowFont] = useState(false)
+	// 查看详情版面
+	const checkFn = () => {
+		console.log('312312312')
+		setShowFont(true)
+	}
 	// 创建场景
 	let scene = new THREE.Scene()
 
@@ -150,6 +155,7 @@ function FinalPage () {
 
 	// 动态添加文字处理函数
 	const dynamicAddText = (group, text, x, y, z, size) => {
+		console.log('此刻我正在添加文字' + text)
 		// 为这个模型几何加上label文案
 		let labelDiv = document.createElement('div')
 		labelDiv.className = size === 'small' ? 'label_small' : 'label'
@@ -293,18 +299,18 @@ function FinalPage () {
 	}
 
 	// 查看详情版面
-	const checkFn = () => {
-		animateCamera({
-			x: 0,
-			y: 0,
-			z: 0
-		}, {
-			x: 1600,
-			y: 0,
-			z: 700
-		}, TWEEN.Easing.Circular.InOut, 1200)
-		cameraTarget = new THREE.Vector3(1600, 0, 0)
-	}
+	// const checkFn = () => {
+	// 	animateCamera({
+	// 		x: 0,
+	// 		y: 0,
+	// 		z: 0
+	// 	}, {
+	// 		x: 1600,
+	// 		y: 0,
+	// 		z: 700
+	// 	}, TWEEN.Easing.Circular.InOut, 1200)
+	// 	cameraTarget = new THREE.Vector3(1600, 0, 0)
+	// }
 
 	// 切换字段组成形状效果的 --------  过渡效果函数
 	const filedChangeTransform = (targets, duration) => {
@@ -413,6 +419,7 @@ function FinalPage () {
 
 	// 初始化函数
 	const init = () => {
+		console.log('再次发生了init')
 		let helper = new THREE.AxesHelper(3000)
 		scene.add(helper)
 		// const clock = new THREE.Clock()
@@ -450,7 +457,7 @@ function FinalPage () {
 				}
 			} else {
 				// 不存在被点击的模型
-				backSourceFn()
+				// backSourceFn()
 			}
 		}, true)
 		// 给场景添加星空盒子纹理
@@ -475,11 +482,11 @@ function FinalPage () {
 		orbitControls.enableDamping = true
 
 		// 设置环境光
-		let light = new THREE.AmbientLight(0x000000, 3)
+		let light = new THREE.AmbientLight(0x000000, 1)
 		scene.add(light)
 
 		// 设置平行光
-		let dirLight = new THREE.DirectionalLight(0xffffff, 16)
+		let dirLight = new THREE.DirectionalLight(0xffffff, 1)
 		dirLight.position.set(100, 1000, 1600)
 		scene.add(dirLight)
 
@@ -490,12 +497,12 @@ function FinalPage () {
 
 			// 在中心创建一个原型包裹这些立方体
 			let sphere = new THREE.SphereGeometry(700, 65, 65)
-			let sphereMaterial = new THREE.MeshNormalMaterial({ opacity: .7, wireframe: true })
-			// let sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x08a9a9, wireframe: true })
+			let sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x59ffc9, wireframe: true })
 			let sphere_model = new THREE.Mesh(sphere, sphereMaterial)
 			sphere_model.updateMatrix()
 			clickObjectArr.push(sphere_model)
 			sphere_model.name = 'centerSphereModel'
+			console.log('球体也被再次添加？？？？')
 			group_source_sphere.add(sphere_model)
 
 			// 为这个球体几何加上label文案
@@ -505,7 +512,7 @@ function FinalPage () {
 			let cube = new THREE.BoxBufferGeometry(40, 40, 40)
 
 			// 材质进行设置
-			let cubeMaterial = new THREE.MeshNormalMaterial({ opacity: .9, transparent: true })
+			let cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x34a0ff })
 
 			// 循环渲染 400 个立方体盒子 为其添加上纹理
 			for (let i = 0; i < 520; i++) {
@@ -605,6 +612,7 @@ function FinalPage () {
 		group_rotate.add(apply_two)
 		group_rotate.add(apply_three)
 		group_rotate.add(apply_four)
+		console.log('我是的第607行，下一场是执行添加文字的函数')
 		apply_one_text = dynamicAddText(apply_one, '我是应用1', 1300, 0, 0, 'small')
 		apply_two_text = dynamicAddText(apply_two, '我是应用3', -1300, 0, 0, 'small')
 		apply_three_text = dynamicAddText(apply_three, '我是应用4', 0, 0, 1300, 'small')
@@ -663,22 +671,26 @@ function FinalPage () {
 		animate()
 	}
 	return (
-		<div id='box'>
-			<button onClick={clickFn}>click</button>
-			<button onClick={resetFn}>reset</button>
-			<button onClick={checkFn}>checkInfo</button>
-			<button onClick={fieldInfoFn}>查看字段详情</button>
-			<button onClick={showPlaneFn}>点击合并</button>
-			<button onClick={() => (filedGeometryChangeFn('Irregular'))}>混乱</button>
-			<button onClick={() => (filedGeometryChangeFn('Cube'))}>矩形</button>
-			<button onClick={() => (filedGeometryChangeFn('Annular'))}>环形</button>
-			<button onClick={() => (filedGeometryChangeFn('Sphere'))}>圆形</button>
-			{showFont ? (
+		<div>
+			<div id='box'>
 				<div>
-					<div className='scene_desc'>这是该场景的描述</div>
-					<div className='scene_data'>这是该场景展示的一些数据</div>
+					<button onClick={clickFn}>click</button>
+					<button onClick={resetFn}>reset</button>
+					<button onClick={checkFn}>checkInfo</button>
+					<button onClick={fieldInfoFn}>查看字段详情</button>
+					<button onClick={showPlaneFn}>点击合并</button>
+					<button onClick={() => (filedGeometryChangeFn('Irregular'))}>混乱</button>
+					<button onClick={() => (filedGeometryChangeFn('Cube'))}>矩形</button>
+					<button onClick={() => (filedGeometryChangeFn('Annular'))}>环形</button>
+					<button onClick={() => (filedGeometryChangeFn('Sphere'))}>圆形</button>
+					{showFont ? (
+						<div>
+							<div className='scene_desc'>这是该场景的描述</div>
+							<div className='scene_data'>这是该场景展示的一些数据</div>
+						</div>
+					) : null}
 				</div>
-			) : null}
+			</div>
 		</div>
 	)
 }
