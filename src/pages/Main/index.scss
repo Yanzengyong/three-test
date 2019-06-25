@@ -154,10 +154,19 @@
 }
 .plane_container{
   width: 100%;
+  .plane_left{
+    width: 500px;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    top: 0px;
+    z-index: 666;
+    background-color: rgba(93, 255, 241, 0.5);
+  }
   .plane_right{
     position: absolute;
     right: 0;
-    top: 0;
+    top: 50px;
     z-index: 666;
     .operationBar {
       height: 400px;

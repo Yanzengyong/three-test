@@ -5,14 +5,20 @@ import './index.scss'
 import Orbitcontrols from 'three-orbitcontrols'
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer'
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
-// import GPUParticleSystem from 'three/examples/js/GPUParticleSystem'
+// import { GPUParticleSystem } from 'three/examples/jsm/objects/'
+// require('three/examples/js/GPUParticleSystem')
+// import 'three/examples/js/GPUParticleSystem'
 import TWEEN from '@tweenjs/tween.js'
-import DataElement from '../../components/DataElement'
+// import DataElement from '../../components/DataElement'
+import DataAssets from '../../components/DataAssets'
 
 function FinalPage () {
 	useEffect(() => {
 		init()
 	}, [])
+
+	// 一些判断是否显示div的state
+	const [isShowDiv, setIsShowDiv] = useState(true)
 
 	// 创建场景
 	let scene = new THREE.Scene()
@@ -38,7 +44,7 @@ function FinalPage () {
 	// 为点击声明的变量 （广播 、 鼠标）
 	let raycaster = new THREE.Raycaster()
 	let mouse = new THREE.Vector2()
-
+	// console.log(GPUParticleSystem)
 	// let particleSystem = new GPUParticleSystem({
 	// 	maxParticles: 250000
 	// })
@@ -63,6 +69,7 @@ function FinalPage () {
 	let sphere_field = []
 	let init_field = []
 	let currentField = 'init'
+	let currentData = 1
 	let group_source_array = []
 
 	// 判断的关键字声明
@@ -219,6 +226,7 @@ function FinalPage () {
 			}
 			let timer = setTimeout(() => {
 				resolve('success')
+				currentData = 2
 				clearTimeout(timer)
 			}, time + 100 || 1100)
 		})
@@ -262,7 +270,7 @@ function FinalPage () {
 					let timer = setTimeout(() => {
 						group_source.remove(thunk_one[i])
 						clearTimeout(timer)
-					}, time + delay)
+					}, time + (delay || 0))
 				}
 				for (let i = 0; i < thunk_two.length; i++) {
 					// 添加卡片
@@ -298,7 +306,7 @@ function FinalPage () {
 					let timer = setTimeout(() => {
 						group_source.remove(thunk_two[i])
 						clearTimeout(timer)
-					}, time + delay)
+					}, time + (delay || 0))
 				}
 				for (let i = 0; i < thunk_three.length; i++) {
 					// 添加卡片
@@ -334,7 +342,7 @@ function FinalPage () {
 					let timer = setTimeout(() => {
 						group_source.remove(thunk_three[i])
 						clearTimeout(timer)
-					}, time + delay)
+					}, time + (delay || 0))
 				}
 				for (let i = 0; i < thunk_four.length; i++) {
 					// 添加卡片
@@ -370,7 +378,7 @@ function FinalPage () {
 					let timer = setTimeout(() => {
 						group_source.remove(thunk_four[i])
 						clearTimeout(timer)
-					}, time + delay)
+					}, time + (delay || 0))
 				}
 				for (let i = 0; i < thunk_five.length; i++) {
 					// 添加卡片
@@ -406,14 +414,14 @@ function FinalPage () {
 					let timer = setTimeout(() => {
 						group_source.remove(thunk_five[i])
 						clearTimeout(timer)
-					}, time + delay)
+					}, time + (delay || 0))
 				}
 				let timer = setTimeout(() => {
 					resolve('success')
 					clearTimeout(timer)
 					clearTimeout(timer_delay)
-				}, time + timer_delay || 1100)
-			}, delay || 0)
+				}, time + (delay || 0) || 1100)
+			}, delay)
 		})
 	}
 
@@ -518,19 +526,14 @@ function FinalPage () {
 				let timer = setTimeout(() => {
 					clearTimeout(timer)
 					clearTimeout(timer_delay)
-				}, time + timer_delay || 1100)
+				}, time + (delay || 0) || 1100)
 			}, delay || 0)
 		})
 	}
 
-	// 这是数据源头 --- 缩小为一个点后 ---- 扩散成数据元的动画过程（使用chain会变得巨卡，待优化，暂时以settimeout方式）
+	// 这是数据源头 --- 缩小为一个点后 ---- 扩散成数据元的动画过程
 	const sourceChangeField = async () => {
-		let animate_one = await classifyDataHandle(3000)
-		console.log(animate_one)
-		alert('success')
-		let animate_two = await shrinkDataHandle(2000, 2000)
-		console.log(animate_two)
-		alert('success 2!!!!')
+		await shrinkDataHandle(3000)
 		showFieldHandle(3000)
 		hasSource = false
 	}
@@ -665,6 +668,11 @@ function FinalPage () {
 		return (new THREE.Points(geometry, material))
 	}
 
+	// 点击事件 --- 流程 --- div
+	const onClickStep = () => {
+
+	}
+
 	// 初始化函数
 	const init = () => {
 		// scene.add(particleSystem)
@@ -686,10 +694,14 @@ function FinalPage () {
 				// 说明存在被点击的模型
 				// 如果被点击的是中心圆球的话执行动画的切换
 				if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && hasSource) {
-					// 调用数据源切换到数据元场景的函数
-					sourceChangeField()
+					// 调用数据源切换到数据元场景的动画合集
+					switch (currentData) {
+					case 1: classifyDataHandle(3000)
+						break
+					case 2: sourceChangeField()
+						break
+					}
 				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && !event.target.getAttribute('id')) {
-					console.log('dasdsadasda')
 					// 调用数据模型切换的动画
 					switch (currentField) {
 					case 'init': filedGeometryChangeFn('Cube')
@@ -703,10 +715,12 @@ function FinalPage () {
 				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && event.target.getAttribute('id') && event.target.getAttribute('id').indexOf('plane') !== -1) {
 					// 查看数据元详情
 					fieldInfoFn()
+					setIsShowDiv(false)
 				}
 			} else {
 				// 不存在被点击的模型
 				backSourceFn()
+				setIsShowDiv(true)
 			}
 		}, true)
 
@@ -879,39 +893,40 @@ function FinalPage () {
 	}
 	return (
 		<div>
-			<div className='plane_container'>
-				{/* <DataElement /> */}
-				<div className='plane_right'>
-					<div className='operationBar'>
-						<button onClick={this.onClickStep.bind(this, 1)}>
-							<div className='buttonDiv'>
-								<img src={require('assets/images/1.svg')} className='opr_icon'/>
-								<span>1. 数据资源</span>
-							</div>
-						</button>
-
-						<img src={require('assets/images/arrow.svg')} className='opr_arrow'/>
-						<img src={require('assets/images/arrow.svg')} className='opr_arrow'/>
-
-						<button onClick={this.onClickStep.bind(this, 2)}>
-							<div className='buttonDiv'>
-								<img src={require('assets/images/1.svg')} className='opr_icon'/>
-								<span>2. 数据元</span>
-							</div>
-						</button>
-
-						<img src={require('assets/images/arrow.svg')} className='opr_arrow'/>
-						<img src={require('assets/images/arrow.svg')} className='opr_arrow'/>
-
-						<button onClick={this.onClickStep.bind(this, 3)}>
-							<div className='buttonDiv'>
-								<img src={require('assets/images/1.svg')} className='opr_icon'/>
-								<span>3. 数据资产</span>
-							</div>
-						</button>
+			{isShowDiv ? (
+				<div className='plane_container'>
+					<div className='plane_left'>
+						{/* <DataElement /> */}
+						<DataAssets />
+					</div>
+					<div className='plane_right'>
+						<div className='operationBar'>
+							<button onClick={onClickStep}>
+								<div className='buttonDiv'>
+									<img src='assets/images/1.svg' className='opr_icon'/>
+									<span>1. 数据资源</span>
+								</div>
+							</button>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<button onClick={onClickStep}>
+								<div className='buttonDiv'>
+									<img src='assets/images/1.svg' className='opr_icon'/>
+									<span>2. 数据元</span>
+								</div>
+							</button>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<button onClick={onClickStep}>
+								<div className='buttonDiv'>
+									<img src='assets/images/1.svg' className='opr_icon'/>
+									<span>3. 数据资产</span>
+								</div>
+							</button>
+						</div>
 					</div>
 				</div>
-			</div>
+			) : null}
 			<div id='box'></div>
 		</div>
 	)
