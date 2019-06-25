@@ -165,56 +165,56 @@ function FinalPage () {
 				camera.position.y = obj.y
 				camera.position.z = obj.z
 			}).start()
-		let timer_lessen = setTimeout(() => {
-			for (let i = 0; i < group_source_array.length; i++) {
-				new TWEEN.Tween({
-					x: group_source_array[i].position.x,
-					y: group_source_array[i].position.y,
-					z: group_source_array[i].position.z
-				})
-					.to({
-						x: 0,
-						y: 0,
-						z: 0
-					}, 3000)
-					.easing(TWEEN.Easing.Linear.None)
-					.onUpdate(obj => {
-						group_source_array[i].position.x = obj.x
-						group_source_array[i].position.y = obj.y
-						group_source_array[i].position.z = obj.z
-					}).start()
-				let timer = setTimeout(() => {
-					group_source.remove(group_source_array[i])
-					// TWEEN.removeAll()
-					// 清除其他求的标题文字
-					hasSource = false
-					clearTimeout(timer)
-				}, 4000)
-			}
-			clearTimeout(timer_lessen)
-		}, 2000)
-		let timer_field = setTimeout(() => {
-			for (let i = 0; i < init_field.length; i++) {
-				group_source.add(init_field[i])
-				new TWEEN.Tween({
-					x: 0,
-					y: 0,
-					z: 0
-				})
-					.to({
-						x: init_field[i].position.x,
-						y: init_field[i].position.y,
-						z: init_field[i].position.z
-					}, 3000)
-					.easing(TWEEN.Easing.Linear.None)
-					.onUpdate(obj => {
-						init_field[i].position.x = obj.x
-						init_field[i].position.y = obj.y
-						init_field[i].position.z = obj.z
-					}).start()
-			}
-			clearTimeout(timer_field)
-		}, 6000)
+		// let timer_lessen = setTimeout(() => {
+		// 	for (let i = 0; i < group_source_array.length; i++) {
+		// 		new TWEEN.Tween({
+		// 			x: group_source_array[i].position.x,
+		// 			y: group_source_array[i].position.y,
+		// 			z: group_source_array[i].position.z
+		// 		})
+		// 			.to({
+		// 				x: 0,
+		// 				y: 0,
+		// 				z: 0
+		// 			}, 3000)
+		// 			.easing(TWEEN.Easing.Linear.None)
+		// 			.onUpdate(obj => {
+		// 				group_source_array[i].position.x = obj.x
+		// 				group_source_array[i].position.y = obj.y
+		// 				group_source_array[i].position.z = obj.z
+		// 			}).start()
+		// 		let timer = setTimeout(() => {
+		// 			group_source.remove(group_source_array[i])
+		// 			// TWEEN.removeAll()
+		// 			// 清除其他求的标题文字
+		// 			hasSource = false
+		// 			clearTimeout(timer)
+		// 		}, 4000)
+		// 	}
+		// 	clearTimeout(timer_lessen)
+		// }, 2000)
+		// let timer_field = setTimeout(() => {
+		// 	for (let i = 0; i < init_field.length; i++) {
+		// 		group_source.add(init_field[i])
+		// 		new TWEEN.Tween({
+		// 			x: 0,
+		// 			y: 0,
+		// 			z: 0
+		// 		})
+		// 			.to({
+		// 				x: init_field[i].position.x,
+		// 				y: init_field[i].position.y,
+		// 				z: init_field[i].position.z
+		// 			}, 3000)
+		// 			.easing(TWEEN.Easing.Linear.None)
+		// 			.onUpdate(obj => {
+		// 				init_field[i].position.x = obj.x
+		// 				init_field[i].position.y = obj.y
+		// 				init_field[i].position.z = obj.z
+		// 			}).start()
+		// 	}
+		// 	clearTimeout(timer_field)
+		// }, 6000)
 
 	}
 
@@ -525,12 +525,12 @@ function FinalPage () {
 		// 2d渲染器
 		labelRenderer.setSize(window.innerWidth, window.innerHeight)
 		labelRenderer.domElement.style.position = 'absolute'
-		// labelRenderer.domElement.style.top = 20 + 'px'
+		labelRenderer.domElement.style.top = 0 + 'px'
 		container.appendChild(labelRenderer.domElement)
 		// 3d文字渲染器
 		css3DRenderer.setSize(window.innerWidth, window.innerHeight)
 		css3DRenderer.domElement.style.position = 'absolute'
-		// css3DRenderer.domElement.style.top = 20 + 'px'
+		css3DRenderer.domElement.style.top = 0 + 'px'
 		container.appendChild(css3DRenderer.domElement)
 		const animate = () => {
 			// 球体中粒子的动画
