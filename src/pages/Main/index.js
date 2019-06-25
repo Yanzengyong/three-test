@@ -43,6 +43,13 @@ function FinalPage () {
 	// 可以被点击的模型对象数组
 	let clickObjectArr = []
 
+	// 分类后（编目后）被分成了5分，每一份的几何声明
+	let thunk_one = []
+	let thunk_two = []
+	let thunk_three = []
+	let thunk_four = []
+	let thunk_five = []
+
 	// filed组成的模型的名称声明 （目的提供全局使用该坐标） 当前的状态
 	let irregular_field = []
 	let cube_field = []
@@ -76,32 +83,9 @@ function FinalPage () {
 	let group_rotate = new THREE.Group()
 	scene.add(group_rotate)
 
-	// 相机控制函数
-	const animateCamera = (current, target, type, time) => {
-		new TWEEN.Tween({
-			x: current.x,
-			y: current.y,
-			z: current.z
-		})
-			.to({
-				x: target.x,
-				y: target.y,
-				z: target.z
-			}, time || 1000)
-			.easing(type)
-			.onUpdate(obj => {
-				camera.position.x = obj.x
-				camera.position.y = obj.y
-				camera.position.z = obj.z
-			}).start()
-	}
-
-	// 数据源 小方块在球体中的循环移动的效果
+	// 数据源 小方块在球体中的循环转动的效果 ---- 不规则旋转
 	const animateCubeTranslate = (current, target, type1, type2, cube) => {
-		const uploadHandle = (obj) => {
-			// cube.position.x = obj.x
-			// cube.position.y = obj.y
-			// cube.position.z = obj.z
+		const uploadHandle = () => {
 			cube.rotation.x += Math.random() * 0.05
 			cube.rotation.y += Math.random() * 0.05
 			cube.rotation.z += Math.random() * 0.05
@@ -114,23 +98,57 @@ function FinalPage () {
 				z: 200 * (2.0 * Math.random() - 1.0)
 			}, 3600)
 			.easing(type1)
-			.onUpdate(obj => {
-				uploadHandle(obj)
+			.onUpdate(() => {
+				uploadHandle()
 			})
 		let translate2 = new TWEEN.Tween(position)
 			.to(target, 3600)
 			.easing(type2)
-			.onUpdate(obj => {
-				uploadHandle(obj)
+			.onUpdate(() => {
+				uploadHandle()
 			})
 		translate1.chain(translate2)
 		translate2.chain(translate1)
 		translate1.start()
 	}
 
+	// 封装的一个 动画完成的函数 ----- promise函数
+	const animateHandle = (current, target, geometry, type, time, cameraTar) => {
+		return new Promise((resolve) => {
+			new TWEEN.Tween({
+				x: current.x,
+				y: current.y,
+				z: current.z,
+				xc: cameraTarget.x,
+				yc: cameraTarget.y,
+				zc: cameraTarget.z,
+			})
+				.to({
+					x: target.x,
+					y: target.y,
+					z: target.z,
+					xc: cameraTar ? cameraTar.x : cameraTarget.x,
+					yc: cameraTar ? cameraTar.y : cameraTarget.y,
+					zc: cameraTar ? cameraTar.z : cameraTarget.z,
+				}, time || 1000)
+				.easing(type || TWEEN.Easing.Linear.None)
+				.onUpdate(obj => {
+					geometry.position.x = obj.x
+					geometry.position.y = obj.y
+					geometry.position.z = obj.z
+					cameraTarget.x = obj.xc
+					cameraTarget.y = obj.yc
+					cameraTarget.z = obj.zc
+				}).start()
+			let timer = setTimeout(() => {
+				resolve('success')
+				clearTimeout(timer)
+			}, time + 100 || 1100)
+		})
+	}
+
 	// 动态添加文字处理函数
 	const dynamicAddText = (group, text, x, y, z, size) => {
-		console.log('此刻我正在添加文字' + text)
 		// 为这个模型几何加上label文案
 		let labelDiv = document.createElement('div')
 		labelDiv.className = size === 'small' ? 'label_small' : 'label'
@@ -147,80 +165,373 @@ function FinalPage () {
 		group.remove(group, labelModel)
 	}
 
-	// 这是数据源头 --- 缩小为一个点后 ---- 扩散成数据元的动画过程（使用chain会变得巨卡，待优化，暂时以settimeout方式）
-	const sourceChangeField = () => {
-		new TWEEN.Tween({
-			x: camera.position.x,
-			y: camera.position.y,
-			z: camera.position.z
+	// 这是分装的一个动画过程函数（调用即可） ----- 主题为编目
+	const classifyDataHandle = (time) => {
+		return new Promise((resolve) => {
+			for (let i = 0; i < group_source_array.length; i++) {
+				let unit = group_source_array.length / 5
+				if (i < unit) {
+					animateHandle(group_source_array[i].position, {
+						x: (2.0 * Math.random() - 1.0) * 160 + 250,
+						y: (2.0 * Math.random() - 1.0) * 160 + 250,
+						z: (2.0 * Math.random() - 1.0) * 160 + 250
+					}, group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
+					group_source_array[i].material.color = new THREE.Color('skyblue')
+					thunk_one.push(group_source_array[i])
+				} else if (i < unit * 2) {
+					animateHandle(group_source_array[i].position, {
+						x: (2.0 * Math.random() - 1.0) * -160 - 250,
+						y: (2.0 * Math.random() - 1.0) * 160 + 250,
+						z: (2.0 * Math.random() - 1.0) * 160 + 250
+					}, group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
+					group_source_array[i].material.color = new THREE.Color('yellowgreen')
+					thunk_two.push(group_source_array[i])
+				} else if (i < unit * 3) {
+					animateHandle(group_source_array[i].position, {
+						x: (2.0 * Math.random() - 1.0) * -160 - 250,
+						y: (2.0 * Math.random() - 1.0) * -160 - 250,
+						z: (2.0 * Math.random() - 1.0) * 160 + 250
+					}, group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
+					group_source_array[i].material.color = new THREE.Color('red')
+					thunk_three.push(group_source_array[i])
+				} else if (i < unit * 4) {
+					animateHandle(group_source_array[i].position, {
+						x: (2.0 * Math.random() - 1.0) * 160 + 250,
+						y: (2.0 * Math.random() - 1.0) * -160 - 250,
+						z: (2.0 * Math.random() - 1.0) * 160 + 250
+					}, group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
+					group_source_array[i].material.color = new THREE.Color('pink')
+					thunk_four.push(group_source_array[i])
+				} else if (i < unit * 5) {
+					animateHandle(group_source_array[i].position, {
+						x: (2.0 * Math.random() - 1.0) * 160,
+						y: (2.0 * Math.random() - 1.0) * 160,
+						z: (2.0 * Math.random() - 1.0) * 160 + 250
+					}, group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
+					thunk_five.push(group_source_array[i])
+				}
+			}
+			let timer = setTimeout(() => {
+				resolve('success')
+				clearTimeout(timer)
+			}, time + 100 || 1100)
 		})
-			.to({
-				x: 0,
-				y: 100,
-				z: 1300
-			}, 1500)
-			.easing(TWEEN.Easing.Linear.None)
-			.onUpdate(obj => {
-				camera.position.x = obj.x
-				camera.position.y = obj.y
-				camera.position.z = obj.z
-			}).start()
-		// let timer_lessen = setTimeout(() => {
-		// 	for (let i = 0; i < group_source_array.length; i++) {
-		// 		new TWEEN.Tween({
-		// 			x: group_source_array[i].position.x,
-		// 			y: group_source_array[i].position.y,
-		// 			z: group_source_array[i].position.z
-		// 		})
-		// 			.to({
-		// 				x: 0,
-		// 				y: 0,
-		// 				z: 0
-		// 			}, 3000)
-		// 			.easing(TWEEN.Easing.Linear.None)
-		// 			.onUpdate(obj => {
-		// 				group_source_array[i].position.x = obj.x
-		// 				group_source_array[i].position.y = obj.y
-		// 				group_source_array[i].position.z = obj.z
-		// 			}).start()
-		// 		let timer = setTimeout(() => {
-		// 			group_source.remove(group_source_array[i])
-		// 			// TWEEN.removeAll()
-		// 			// 清除其他求的标题文字
-		// 			hasSource = false
-		// 			clearTimeout(timer)
-		// 		}, 4000)
-		// 	}
-		// 	clearTimeout(timer_lessen)
-		// }, 2000)
-		// let timer_field = setTimeout(() => {
-		// 	for (let i = 0; i < init_field.length; i++) {
-		// 		group_source.add(init_field[i])
-		// 		new TWEEN.Tween({
-		// 			x: 0,
-		// 			y: 0,
-		// 			z: 0
-		// 		})
-		// 			.to({
-		// 				x: init_field[i].position.x,
-		// 				y: init_field[i].position.y,
-		// 				z: init_field[i].position.z
-		// 			}, 3000)
-		// 			.easing(TWEEN.Easing.Linear.None)
-		// 			.onUpdate(obj => {
-		// 				init_field[i].position.x = obj.x
-		// 				init_field[i].position.y = obj.y
-		// 				init_field[i].position.z = obj.z
-		// 			}).start()
-		// 	}
-		// 	clearTimeout(timer_field)
-		// }, 6000)
+	}
 
+	// 这是将分类的数据资源缩小成一个小的球体的动画过程 ---- 并且在此时形成字段效果
+	const shrinkDataHandle = (time, delay) => {
+		return new Promise((resolve) => {
+			let timer_delay = setTimeout(() => {
+				for (let i = 0; i < thunk_one.length; i++) {
+					// 添加卡片
+					let souceDiv = document.createElement('div')
+					souceDiv.setAttribute('id', `plane${i}`)
+					souceDiv.className = 'element'
+					souceDiv.style.backgroundColor = thunk_one[i].material.color.getStyle()
+					let symbol = document.createElement('div')
+					symbol.setAttribute('id', `planeSymbol${i}`)
+					symbol.className = 'symbol'
+					symbol.textContent = 'Field'
+					souceDiv.appendChild(symbol)
+					let details = document.createElement('div')
+					details.setAttribute('id', `planeDetail${i}`)
+					details.className = 'details'
+					details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
+					souceDiv.appendChild(details)
+					let object = new CSS3DObject(souceDiv)
+					object.position.x = Math.random() * 800 - 400
+					object.position.y = Math.random() * 800 - 400
+					object.position.z = Math.random() * 800 - 400
+					// group_source.add(object)
+					init_field.push(object)
+					clickObjectArr.push(group_source)
+					object.name = 'soucePlane'
+					// 执行缩小动画
+					animateHandle(thunk_one[i].position, {
+						x: 250,
+						y: 250,
+						z: 250,
+					}, thunk_one[i], TWEEN.Easing.Linear.None, time || 1000)
+					// 删除定时器
+					let timer = setTimeout(() => {
+						group_source.remove(thunk_one[i])
+						clearTimeout(timer)
+					}, time + delay)
+				}
+				for (let i = 0; i < thunk_two.length; i++) {
+					// 添加卡片
+					let souceDiv = document.createElement('div')
+					souceDiv.setAttribute('id', `plane${i}`)
+					souceDiv.className = 'element'
+					souceDiv.style.backgroundColor = thunk_two[i].material.color.getStyle()
+					let symbol = document.createElement('div')
+					symbol.setAttribute('id', `planeSymbol${i}`)
+					symbol.className = 'symbol'
+					symbol.textContent = 'Field'
+					souceDiv.appendChild(symbol)
+					let details = document.createElement('div')
+					details.setAttribute('id', `planeDetail${i}`)
+					details.className = 'details'
+					details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
+					souceDiv.appendChild(details)
+					let object = new CSS3DObject(souceDiv)
+					object.position.x = Math.random() * 800 - 400
+					object.position.y = Math.random() * 800 - 400
+					object.position.z = Math.random() * 800 - 400
+					// group_source.add(object)
+					init_field.push(object)
+					clickObjectArr.push(group_source)
+					object.name = 'soucePlane'
+					// 执行缩小动画
+					animateHandle(thunk_two[i].position, {
+						x: -250,
+						y: 250,
+						z: 250,
+					}, thunk_two[i], TWEEN.Easing.Linear.None, time || 1000)
+					// 删除定时器
+					let timer = setTimeout(() => {
+						group_source.remove(thunk_two[i])
+						clearTimeout(timer)
+					}, time + delay)
+				}
+				for (let i = 0; i < thunk_three.length; i++) {
+					// 添加卡片
+					let souceDiv = document.createElement('div')
+					souceDiv.setAttribute('id', `plane${i}`)
+					souceDiv.className = 'element'
+					souceDiv.style.backgroundColor = thunk_three[i].material.color.getStyle()
+					let symbol = document.createElement('div')
+					symbol.setAttribute('id', `planeSymbol${i}`)
+					symbol.className = 'symbol'
+					symbol.textContent = 'Field'
+					souceDiv.appendChild(symbol)
+					let details = document.createElement('div')
+					details.setAttribute('id', `planeDetail${i}`)
+					details.className = 'details'
+					details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
+					souceDiv.appendChild(details)
+					let object = new CSS3DObject(souceDiv)
+					object.position.x = Math.random() * 800 - 400
+					object.position.y = Math.random() * 800 - 400
+					object.position.z = Math.random() * 800 - 400
+					// group_source.add(object)
+					init_field.push(object)
+					clickObjectArr.push(group_source)
+					object.name = 'soucePlane'
+					// 执行缩小动画
+					animateHandle(thunk_three[i].position, {
+						x: -250,
+						y: -250,
+						z: 250,
+					}, thunk_three[i], TWEEN.Easing.Linear.None, time || 1000)
+					// 删除定时器
+					let timer = setTimeout(() => {
+						group_source.remove(thunk_three[i])
+						clearTimeout(timer)
+					}, time + delay)
+				}
+				for (let i = 0; i < thunk_four.length; i++) {
+					// 添加卡片
+					let souceDiv = document.createElement('div')
+					souceDiv.setAttribute('id', `plane${i}`)
+					souceDiv.className = 'element'
+					souceDiv.style.backgroundColor = thunk_four[i].material.color.getStyle()
+					let symbol = document.createElement('div')
+					symbol.setAttribute('id', `planeSymbol${i}`)
+					symbol.className = 'symbol'
+					symbol.textContent = 'Field'
+					souceDiv.appendChild(symbol)
+					let details = document.createElement('div')
+					details.setAttribute('id', `planeDetail${i}`)
+					details.className = 'details'
+					details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
+					souceDiv.appendChild(details)
+					let object = new CSS3DObject(souceDiv)
+					object.position.x = Math.random() * 800 - 400
+					object.position.y = Math.random() * 800 - 400
+					object.position.z = Math.random() * 800 - 400
+					// group_source.add(object)
+					init_field.push(object)
+					clickObjectArr.push(group_source)
+					object.name = 'soucePlane'
+					// 执行缩小动画
+					animateHandle(thunk_four[i].position, {
+						x: 250,
+						y: -250,
+						z: 250,
+					}, thunk_four[i], TWEEN.Easing.Linear.None, time || 1000)
+					// 删除定时器
+					let timer = setTimeout(() => {
+						group_source.remove(thunk_four[i])
+						clearTimeout(timer)
+					}, time + delay)
+				}
+				for (let i = 0; i < thunk_five.length; i++) {
+					// 添加卡片
+					let souceDiv = document.createElement('div')
+					souceDiv.setAttribute('id', `plane${i}`)
+					souceDiv.className = 'element'
+					souceDiv.style.backgroundColor = thunk_five[i].material.color.getStyle()
+					let symbol = document.createElement('div')
+					symbol.setAttribute('id', `planeSymbol${i}`)
+					symbol.className = 'symbol'
+					symbol.textContent = 'Field'
+					souceDiv.appendChild(symbol)
+					let details = document.createElement('div')
+					details.setAttribute('id', `planeDetail${i}`)
+					details.className = 'details'
+					details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
+					souceDiv.appendChild(details)
+					let object = new CSS3DObject(souceDiv)
+					object.position.x = Math.random() * 800 - 400
+					object.position.y = Math.random() * 800 - 400
+					object.position.z = Math.random() * 800 - 400
+					// group_source.add(object)
+					init_field.push(object)
+					clickObjectArr.push(group_source)
+					object.name = 'soucePlane'
+					// 执行缩小动画
+					animateHandle(thunk_five[i].position, {
+						x: 0,
+						y: 0,
+						z: 250,
+					}, thunk_five[i], TWEEN.Easing.Linear.None, time || 1000)
+					// 删除定时器
+					let timer = setTimeout(() => {
+						group_source.remove(thunk_five[i])
+						clearTimeout(timer)
+					}, time + delay)
+				}
+				let timer = setTimeout(() => {
+					resolve('success')
+					clearTimeout(timer)
+					clearTimeout(timer_delay)
+				}, time + timer_delay || 1100)
+			}, delay || 0)
+		})
+	}
+
+	// 这是一个分类后的数据资源变成一个一个字段的动画过程
+	const showFieldHandle = (time, delay) => {
+		return new Promise((resolve) => {
+			let timer_delay = setTimeout(() => {
+				let unit = group_source_array.length / 5
+				for (let i = 0; i < init_field.length; i++) {
+					if (i < unit) {
+						group_source.add(init_field[i])
+						new TWEEN.Tween({
+							x: 250,
+							y: 250,
+							z: 250
+						})
+							.to({
+								x: init_field[i].position.x,
+								y: init_field[i].position.y,
+								z: init_field[i].position.z
+							}, time || 1000)
+							.easing(TWEEN.Easing.Linear.None)
+							.onUpdate(obj => {
+								init_field[i].position.x = obj.x
+								init_field[i].position.y = obj.y
+								init_field[i].position.z = obj.z
+							}).start()
+					} else if (i < unit * 2) {
+						group_source.add(init_field[i])
+						new TWEEN.Tween({
+							x: -250,
+							y: 250,
+							z: 250
+						})
+							.to({
+								x: init_field[i].position.x,
+								y: init_field[i].position.y,
+								z: init_field[i].position.z
+							}, time || 1000)
+							.easing(TWEEN.Easing.Linear.None)
+							.onUpdate(obj => {
+								init_field[i].position.x = obj.x
+								init_field[i].position.y = obj.y
+								init_field[i].position.z = obj.z
+							}).start()
+					} else if (i < unit * 3) {
+						group_source.add(init_field[i])
+						new TWEEN.Tween({
+							x: -250,
+							y: -250,
+							z: 250
+						})
+							.to({
+								x: init_field[i].position.x,
+								y: init_field[i].position.y,
+								z: init_field[i].position.z
+							}, time || 1000)
+							.easing(TWEEN.Easing.Linear.None)
+							.onUpdate(obj => {
+								init_field[i].position.x = obj.x
+								init_field[i].position.y = obj.y
+								init_field[i].position.z = obj.z
+							}).start()
+					} else if (i < unit * 4) {
+						group_source.add(init_field[i])
+						new TWEEN.Tween({
+							x: 250,
+							y: -250,
+							z: 250
+						})
+							.to({
+								x: init_field[i].position.x,
+								y: init_field[i].position.y,
+								z: init_field[i].position.z
+							}, time || 1000)
+							.easing(TWEEN.Easing.Linear.None)
+							.onUpdate(obj => {
+								init_field[i].position.x = obj.x
+								init_field[i].position.y = obj.y
+								init_field[i].position.z = obj.z
+							}).start()
+					} else if (i < unit * 5) {
+						group_source.add(init_field[i])
+						new TWEEN.Tween({
+							x: 0,
+							y: 0,
+							z: 250
+						})
+							.to({
+								x: init_field[i].position.x,
+								y: init_field[i].position.y,
+								z: init_field[i].position.z
+							}, time || 1000)
+							.easing(TWEEN.Easing.Linear.None)
+							.onUpdate(obj => {
+								init_field[i].position.x = obj.x
+								init_field[i].position.y = obj.y
+								init_field[i].position.z = obj.z
+							}).start()
+					}
+				}
+				let timer = setTimeout(() => {
+					clearTimeout(timer)
+					clearTimeout(timer_delay)
+				}, time + timer_delay || 1100)
+			}, delay || 0)
+		})
+	}
+
+	// 这是数据源头 --- 缩小为一个点后 ---- 扩散成数据元的动画过程（使用chain会变得巨卡，待优化，暂时以settimeout方式）
+	const sourceChangeField = async () => {
+		let animate_one = await classifyDataHandle(3000)
+		console.log(animate_one)
+		alert('success')
+		let animate_two = await shrinkDataHandle(2000, 2000)
+		console.log(animate_two)
+		alert('success 2!!!!')
+		showFieldHandle(3000)
+		hasSource = false
 	}
 
 	// 切回到观察中心圆球的视角
 	const backSourceFn = () => {
-		animateCamera({
+		animateHandle({
 			x: 0,
 			y: 0,
 			z: 0
@@ -228,14 +539,15 @@ function FinalPage () {
 			x: 0,
 			y: 100,
 			z: 1300
-		}, TWEEN.Easing.Quadratic.Out)
-		cameraTarget = new THREE.Vector3(0, 0, 100)
+		}, camera, TWEEN.Easing.Quadratic.Out)
+		// cameraTarget = new THREE.Vector3(0, 0, 100)
+		// cameraTarget.set(0, 0, 100)
 		group_field_info.remove(field_info_plane)
 	}
 
 	// 切换会最初状态
 	const resetFn = () => {
-		animateCamera({
+		animateHandle({
 			x: 0,
 			y: 0,
 			z: 0
@@ -243,7 +555,7 @@ function FinalPage () {
 			x: 0,
 			y: 600,
 			z: 2400
-		}, TWEEN.Easing.Quadratic.Out)
+		}, camera, TWEEN.Easing.Quadratic.Out)
 		cameraTarget = new THREE.Vector3(0, 0, 100)
 		group_field_info.remove(field_info_plane)
 	}
@@ -282,11 +594,11 @@ function FinalPage () {
 	// 查看生成详情的字段信息 --- 点击
 	const fieldInfoFn = () => {
 		filedChangeTransform(sphere_field, 1000)
-		animateCamera(camera.position, {
+		animateHandle(camera.position, {
 			x: 0,
 			y: 0,
 			z: 500
-		}, TWEEN.Easing.Circular.InOut, 2400)
+		}, camera, TWEEN.Easing.Circular.InOut, 2400)
 		let timer = setTimeout(() => {
 			let souceDiv = document.createElement('div')
 			souceDiv.className = 'element_big'
@@ -356,6 +668,7 @@ function FinalPage () {
 					// 调用数据源切换到数据元场景的函数
 					sourceChangeField()
 				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && !event.target.getAttribute('id')) {
+					console.log('dasdsadasda')
 					// 调用数据模型切换的动画
 					switch (currentField) {
 					case 'init': filedGeometryChangeFn('Cube')
@@ -375,6 +688,7 @@ function FinalPage () {
 				backSourceFn()
 			}
 		}, true)
+
 		// 给场景添加星空盒子纹理
 		new THREE.CubeTextureLoader()
 			.setPath('assets/images/')
@@ -414,6 +728,7 @@ function FinalPage () {
 			let sphere = new THREE.SphereGeometry(700, 65, 65)
 			let sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x59ffc9, wireframe: true })
 			let sphere_model = new THREE.Mesh(sphere, sphereMaterial)
+			console.log(sphereMaterial.color.getStyle())
 			sphere_model.updateMatrix()
 			clickObjectArr.push(sphere_model)
 			sphere_model.name = 'centerSphereModel'
@@ -425,11 +740,10 @@ function FinalPage () {
 			// 创建 长宽高都为40的立方体
 			let cube = new THREE.BoxBufferGeometry(40, 40, 40)
 
-			// 材质进行设置
-			let cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x34a0ff })
-
 			// 循环渲染 400 个立方体盒子 为其添加上纹理
-			for (let i = 0; i < 520; i++) {
+			for (let i = 0; i < 300; i++) {
+        	// 材质进行设置
+				let cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x2774b7 })
 				let cube_model = new THREE.Mesh(cube, cubeMaterial)
 				cube_model.position.x = 400 * (2.0 * Math.random() - 1.0)
 				cube_model.position.y = 400 * (2.0 * Math.random() - 1.0)
@@ -446,30 +760,32 @@ function FinalPage () {
 
 			// 动画的第二部 ---- 将这些方块变换成有文字的plan 进行组合
 			// 无规则 ---- 进行初始化
-			for (let i = 0; i < 300; i++) {
-				let souceDiv = document.createElement('div')
-				souceDiv.setAttribute('id', `plane${i}`)
-				souceDiv.className = 'element'
-				souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
-				let symbol = document.createElement('div')
-				symbol.setAttribute('id', `planeSymbol${i}`)
-				symbol.className = 'symbol'
-				symbol.textContent = 'Field'
-				souceDiv.appendChild(symbol)
-				let details = document.createElement('div')
-				details.setAttribute('id', `planeDetail${i}`)
-				details.className = 'details'
-				details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
-				souceDiv.appendChild(details)
-				let object = new CSS3DObject(souceDiv)
-				object.position.x = Math.random() * 800 - 400
-				object.position.y = Math.random() * 800 - 400
-				object.position.z = Math.random() * 800 - 400
-				// group_source.add(object)
-				init_field.push(object)
-				clickObjectArr.push(group_source)
-				object.name = 'soucePlane'
-			}
+			// for (let i = 0; i < 300; i++) {
+			// 	let souceDiv = document.createElement('div')
+			// 	souceDiv.setAttribute('id', `plane${i}`)
+			// 	souceDiv.className = 'element'
+			// 	souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
+			// 	let symbol = document.createElement('div')
+			// 	symbol.setAttribute('id', `planeSymbol${i}`)
+			// 	symbol.className = 'symbol'
+			// 	symbol.textContent = 'Field'
+			// 	souceDiv.appendChild(symbol)
+			// 	let details = document.createElement('div')
+			// 	details.setAttribute('id', `planeDetail${i}`)
+			// 	details.className = 'details'
+			// 	details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
+			// 	souceDiv.appendChild(details)
+			// 	let object = new CSS3DObject(souceDiv)
+			// 	object.position.x = Math.random() * 800 - 400
+			// 	object.position.y = Math.random() * 800 - 400
+			// 	object.position.z = Math.random() * 800 - 400
+			// 	// group_source.add(object)
+			// 	init_field.push(object)
+			// 	clickObjectArr.push(group_source)
+			// 	object.name = 'soucePlane'
+			// }
+
+			// {r: 0.5294117647058824, g: 0.807843137254902, b: 0.9215686274509803}
 
 			// 无规则的效果
 			for (let i = 0; i < 300; i++) {
