@@ -5,7 +5,9 @@ import './index.scss'
 import Orbitcontrols from 'three-orbitcontrols'
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer'
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
+// import GPUParticleSystem from 'three/examples/js/GPUParticleSystem'
 import TWEEN from '@tweenjs/tween.js'
+import DataElement from '../../components/DataElement'
 
 function FinalPage () {
 	useEffect(() => {
@@ -36,6 +38,10 @@ function FinalPage () {
 	// 为点击声明的变量 （广播 、 鼠标）
 	let raycaster = new THREE.Raycaster()
 	let mouse = new THREE.Vector2()
+
+	// let particleSystem = new GPUParticleSystem({
+	// 	maxParticles: 250000
+	// })
 
 	// 文字声明 / 详情面板（为了提供动态删除的可能性）
 	let field_info_plane
@@ -540,8 +546,6 @@ function FinalPage () {
 			y: 100,
 			z: 1300
 		}, camera, TWEEN.Easing.Quadratic.Out)
-		// cameraTarget = new THREE.Vector3(0, 0, 100)
-		// cameraTarget.set(0, 0, 100)
 		group_field_info.remove(field_info_plane)
 	}
 
@@ -553,8 +557,8 @@ function FinalPage () {
 			z: 0
 		}, {
 			x: 0,
-			y: 600,
-			z: 2400
+			y: 100,
+			z: 1300
 		}, camera, TWEEN.Easing.Quadratic.Out)
 		cameraTarget = new THREE.Vector3(0, 0, 100)
 		group_field_info.remove(field_info_plane)
@@ -644,9 +648,26 @@ function FinalPage () {
 		}, 2500)
 	}
 
+	//创造星空
+	const createParticles = (size, transparent, opacity, vertexColors, sizeAttenuation, color, num) => {
+		let geometry = new THREE.Geometry()
+		let material = new THREE.PointsMaterial({ size: size, transparent: transparent, opacity: opacity, vertexColors: vertexColors, sizeAttenuation: sizeAttenuation, color: color })
+		let range = window.innerWidth
+		for (let i = 0; i < num; i++) {
+			//创建随机粒子并添加到geometry中
+			let particle = new THREE.Vector3(Math.random() *range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2)
+			geometry.vertices.push(particle)
+
+			//创建颜色数组geometry.colors
+			let color = new THREE.Color(0xffffff)
+			geometry.colors.push(color)
+		}
+		return (new THREE.Points(geometry, material))
+	}
+
 	// 初始化函数
 	const init = () => {
-
+		// scene.add(particleSystem)
 		let helper = new THREE.AxesHelper(3000)
 		scene.add(helper)
 		// const clock = new THREE.Clock()
@@ -690,21 +711,24 @@ function FinalPage () {
 		}, true)
 
 		// 给场景添加星空盒子纹理
-		new THREE.CubeTextureLoader()
-			.setPath('assets/images/')
-			.load([
-				'bg1.jpg',
-				'bg1.jpg',
-				'bg1.jpg',
-				'bg1.jpg',
-				'bg1.jpg',
-				'bg1.jpg' 		// 六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
-			], (texture) => {
-				scene.background = texture // 添加背景到场景
-			})
+		// new THREE.CubeTextureLoader()
+		// 	.setPath('assets/images/')
+		// 	.load([
+		// 		'bg1.jpg',
+		// 		'bg1.jpg',
+		// 		'bg1.jpg',
+		// 		'bg1.jpg',
+		// 		'bg1.jpg',
+		// 		'bg1.jpg' 		// 六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
+		// 	], (texture) => {
+		// 		scene.background = texture // 添加背景到场景
+		// 	})
+		// 背景星空 ----- 调用函数
+		let backgroundCloud = createParticles(2, true, 0.7, 0xffffff, false, 0xffffff, 2000)
+		scene.add(backgroundCloud)
 
 		// 相机所在位子
-		camera.position.set(0, 600, 2400)
+		camera.position.set(0, 100, 1300)
 
 		// 相机作为orbitcontrol的参数，支持鼠标交互
 		let orbitControls = new Orbitcontrols(camera)
@@ -759,34 +783,6 @@ function FinalPage () {
 			}
 
 			// 动画的第二部 ---- 将这些方块变换成有文字的plan 进行组合
-			// 无规则 ---- 进行初始化
-			// for (let i = 0; i < 300; i++) {
-			// 	let souceDiv = document.createElement('div')
-			// 	souceDiv.setAttribute('id', `plane${i}`)
-			// 	souceDiv.className = 'element'
-			// 	souceDiv.style.backgroundColor = 'rgba(6, 90, 245,' + (Math.random() * 0.5 + 0.45) + ')'
-			// 	let symbol = document.createElement('div')
-			// 	symbol.setAttribute('id', `planeSymbol${i}`)
-			// 	symbol.className = 'symbol'
-			// 	symbol.textContent = 'Field'
-			// 	souceDiv.appendChild(symbol)
-			// 	let details = document.createElement('div')
-			// 	details.setAttribute('id', `planeDetail${i}`)
-			// 	details.className = 'details'
-			// 	details.innerHTML = Math.ceil(Math.random() * 10) > 5 ? 'str' : 'int'
-			// 	souceDiv.appendChild(details)
-			// 	let object = new CSS3DObject(souceDiv)
-			// 	object.position.x = Math.random() * 800 - 400
-			// 	object.position.y = Math.random() * 800 - 400
-			// 	object.position.z = Math.random() * 800 - 400
-			// 	// group_source.add(object)
-			// 	init_field.push(object)
-			// 	clickObjectArr.push(group_source)
-			// 	object.name = 'soucePlane'
-			// }
-
-			// {r: 0.5294117647058824, g: 0.807843137254902, b: 0.9215686274509803}
-
 			// 无规则的效果
 			for (let i = 0; i < 300; i++) {
 				let object = new THREE.Object3D()
@@ -849,6 +845,12 @@ function FinalPage () {
 		css3DRenderer.domElement.style.top = 0 + 'px'
 		container.appendChild(css3DRenderer.domElement)
 		const animate = () => {
+			//星空效果
+			// let vertices = cloud.geometry.vertices
+			// vertices.forEach(function (v) {
+			// 	let distance = Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2))
+			// 	particleAnimate(v)
+			// })
 			// 球体中粒子的动画
 			// let time = clock.getDelta()
 			// update 推进混合器时间并更新动画
@@ -877,11 +879,40 @@ function FinalPage () {
 	}
 	return (
 		<div>
-			<div id='box'>
-				<div>
+			<div className='plane_container'>
+				{/* <DataElement /> */}
+				<div className='plane_right'>
+					<div className='operationBar'>
+						<button onClick={this.onClickStep.bind(this, 1)}>
+							<div className='buttonDiv'>
+								<img src={require('assets/images/1.svg')} className='opr_icon'/>
+								<span>1. 数据资源</span>
+							</div>
+						</button>
 
+						<img src={require('assets/images/arrow.svg')} className='opr_arrow'/>
+						<img src={require('assets/images/arrow.svg')} className='opr_arrow'/>
+
+						<button onClick={this.onClickStep.bind(this, 2)}>
+							<div className='buttonDiv'>
+								<img src={require('assets/images/1.svg')} className='opr_icon'/>
+								<span>2. 数据元</span>
+							</div>
+						</button>
+
+						<img src={require('assets/images/arrow.svg')} className='opr_arrow'/>
+						<img src={require('assets/images/arrow.svg')} className='opr_arrow'/>
+
+						<button onClick={this.onClickStep.bind(this, 3)}>
+							<div className='buttonDiv'>
+								<img src={require('assets/images/1.svg')} className='opr_icon'/>
+								<span>3. 数据资产</span>
+							</div>
+						</button>
+					</div>
 				</div>
 			</div>
+			<div id='box'></div>
 		</div>
 	)
 }
