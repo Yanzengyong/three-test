@@ -4,7 +4,8 @@
 import React from 'react'
 import { Route, Redirect, Switch, HashRouter as Router } from 'react-router-dom'
 import {
-	Main
+	Main,
+	Test
 } from './routes'
 // const { RouterHandler } = Router
 
@@ -15,6 +16,7 @@ const routes = () => (
 				<Redirect to="/main"/>
 			)}/>
 			<Route path='/main' component={Main}/>
+			<Route path='/Test' component={Test}/>
 			{/* <Route path='/standardDetail' component={StandardDetail}/> */}
 		</Switch>
 	</Router>
