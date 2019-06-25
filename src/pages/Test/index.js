@@ -1,10 +1,13 @@
 import React from 'react'
-import Pie from '../../components/pie'
+import DataAssets from '../../components/DataAssets'
+import DataElement from '../../components/DataElement'
+
 function Test () {
 
 	return (
 		<div className="Test">
-			<Pie></Pie>
+			{/* <DataAssets></DataAssets> */}
+			<DataElement></DataElement>
 		</div>
 	)
 }

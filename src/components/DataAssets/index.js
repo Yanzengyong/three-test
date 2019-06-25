@@ -2,7 +2,7 @@ import React from 'react'
 import ReactEcharts from 'echarts-for-react'
 import './scss/pie.scss'
 
-export default function Pie () {
+export default function DataAssets () {
 	const option = {
 		tooltip: {
 			trigger: 'item',
