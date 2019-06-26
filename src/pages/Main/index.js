@@ -938,8 +938,8 @@ function FinalPage () {
 			{isShowDiv ? (
 				<div className='plane_container'>
 					<div className='plane_left'>
-						<DataElement />
-						{/* <DataAssets /> */}
+						<DataAssets />
+						{/* <DataElement /> */}
 					</div>
 					<div className='plane_right'>
 						<div className='operationBar'>
