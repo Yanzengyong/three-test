@@ -96,6 +96,11 @@ function FinalPage () {
 	let group_rotate = new THREE.Group()
 	scene.add(group_rotate)
 
+	// 创建标题组 ----- 球体 --- 整体的标题 3d效果
+	let group_title = new THREE.Group()
+	group_title.position.set(0, 830, 0)
+	scene.add(group_title)
+
 	// 数据源 小方块在球体中的循环转动的效果 ---- 不规则旋转
 	const animateCubeTranslate = (current, target, type1, type2, cube) => {
 		const uploadHandle = () => {
@@ -189,7 +194,7 @@ function FinalPage () {
 						y: (2.0 * Math.random() - 1.0) * 160 + 250,
 						z: (2.0 * Math.random() - 1.0) * 160 + 250
 					}, group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
-					group_source_array[i].material.color = new THREE.Color('skyblue')
+					group_source_array[i].material.color = new THREE.Color('#007eff')
 					thunk_one.push(group_source_array[i])
 				} else if (i < unit * 2) {
 					animateHandle(group_source_array[i].position, {
@@ -197,7 +202,7 @@ function FinalPage () {
 						y: (2.0 * Math.random() - 1.0) * 160 + 250,
 						z: (2.0 * Math.random() - 1.0) * 160 + 250
 					}, group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
-					group_source_array[i].material.color = new THREE.Color('yellowgreen')
+					group_source_array[i].material.color = new THREE.Color('#00ff66')
 					thunk_two.push(group_source_array[i])
 				} else if (i < unit * 3) {
 					animateHandle(group_source_array[i].position, {
@@ -205,7 +210,7 @@ function FinalPage () {
 						y: (2.0 * Math.random() - 1.0) * -160 - 250,
 						z: (2.0 * Math.random() - 1.0) * 160 + 250
 					}, group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
-					group_source_array[i].material.color = new THREE.Color('red')
+					group_source_array[i].material.color = new THREE.Color('#c0ff00')
 					thunk_three.push(group_source_array[i])
 				} else if (i < unit * 4) {
 					animateHandle(group_source_array[i].position, {
@@ -213,7 +218,7 @@ function FinalPage () {
 						y: (2.0 * Math.random() - 1.0) * -160 - 250,
 						z: (2.0 * Math.random() - 1.0) * 160 + 250
 					}, group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
-					group_source_array[i].material.color = new THREE.Color('pink')
+					group_source_array[i].material.color = new THREE.Color('#fff700')
 					thunk_four.push(group_source_array[i])
 				} else if (i < unit * 5) {
 					animateHandle(group_source_array[i].position, {
@@ -547,7 +552,7 @@ function FinalPage () {
 		}, {
 			x: 0,
 			y: 100,
-			z: 1300
+			z: 1400
 		}, camera, TWEEN.Easing.Quadratic.Out)
 		group_field_info.remove(field_info_plane)
 	}
@@ -658,7 +663,7 @@ function FinalPage () {
 		let range = window.innerWidth
 		for (let i = 0; i < num; i++) {
 			//创建随机粒子并添加到geometry中
-			let particle = new THREE.Vector3(Math.random() *range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2)
+			let particle = new THREE.Vector3(Math.random() *range - range / 4, Math.random() * range - range / 4, Math.random() * range - range / 4)
 			geometry.vertices.push(particle)
 
 			//创建颜色数组geometry.colors
@@ -741,8 +746,17 @@ function FinalPage () {
 		let backgroundCloud = createParticles(2, true, 0.7, 0xffffff, false, 0xffffff, 2000)
 		scene.add(backgroundCloud)
 
+		let geometry = new THREE.Geometry()
+		let material = new THREE.PointsMaterial({ size: 60, vertexColors: 0xffffff, color: 0xffffff })
+		geometry.vertices.push(new THREE.Vector3(1200, 800, 0))
+		geometry.colors.push(new THREE.Color(0xffffff))
+		scene.add(new THREE.Points(geometry, material))
+		// 轨道集
+		// let animationClip = new THREE.AnimationClip('lx', 1000, THREE.KeyframeTrack[])
+
+
 		// 相机所在位子
-		camera.position.set(0, 100, 1300)
+		camera.position.set(0, 100, 1400)
 
 		// 相机作为orbitcontrol的参数，支持鼠标交互
 		let orbitControls = new Orbitcontrols(camera)
@@ -758,13 +772,40 @@ function FinalPage () {
 		scene.add(dirLight)
 
 		// let mixer
+		// 添加整体标题
+		new THREE.FontLoader().load('assets/font/FangSong_GB2312_Regular.json', (font) => {
+			let geometry = new THREE.TextGeometry('实验室数据治理平台', {
+				font: font,
+				size: 100,
+				height: 5,
+				curveSegments: 12,
+				bevelEnabled: true,
+				bevelThickness: 10,
+				bevelSize: 8,
+				bevelSegments: 5
+			})
+			geometry.computeBoundingBox()
+			geometry.computeVertexNormals()
+			geometry = new THREE.BufferGeometry().fromGeometry(geometry)
+			let materials = [
+				new THREE.MeshPhongMaterial({ color: 0x1F89B5, flatShading: true }), // front
+				new THREE.MeshPhongMaterial({ color: 0x1F89B5 }) // side
+			]
+			let textMesh = new THREE.Mesh(geometry, materials)
+			textMesh.position.x = -625
+			textMesh.position.y = 0
+			textMesh.position.z = 0
+			textMesh.rotation.x = 0
+			textMesh.rotation.y = 0
+			group_title.add(textMesh)
+		})
 
 		// 中心的球体 ------- 数据源 -------- 以无数粒子方式展示效果
 		const souce_show_handle = () => {
 
 			// 在中心创建一个原型包裹这些立方体
-			let sphere = new THREE.SphereGeometry(700, 65, 65)
-			let sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x59ffc9, wireframe: true })
+			let sphere = new THREE.SphereGeometry(700, 35, 35)
+			let sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x1d87c4, wireframe: true })
 			let sphere_model = new THREE.Mesh(sphere, sphereMaterial)
 			console.log(sphereMaterial.color.getStyle())
 			sphere_model.updateMatrix()
@@ -773,7 +814,7 @@ function FinalPage () {
 			group_source_sphere.add(sphere_model)
 
 			// 为这个球体几何加上label文案
-			dynamicAddText(sphere_model, '我是数据源', 0, 800, 0)
+			// dynamicAddText(sphere_model, '我是数据源', 0, 800, 0)
 
 			// 创建 长宽高都为40的立方体
 			let cube = new THREE.BoxBufferGeometry(40, 40, 40)
@@ -781,7 +822,7 @@ function FinalPage () {
 			// 循环渲染 400 个立方体盒子 为其添加上纹理
 			for (let i = 0; i < 300; i++) {
         	// 材质进行设置
-				let cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x2774b7 })
+				let cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x00ffd0 })
 				let cube_model = new THREE.Mesh(cube, cubeMaterial)
 				cube_model.position.x = 400 * (2.0 * Math.random() - 1.0)
 				cube_model.position.y = 400 * (2.0 * Math.random() - 1.0)
