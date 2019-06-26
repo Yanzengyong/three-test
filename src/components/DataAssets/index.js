@@ -224,11 +224,8 @@ export default function DataAssets () {
 		<div className="dataAssets" >
 			<div className="maintitle">平台数据资产概况</div>
 			<div className='divider'/>
-			{/* <div className="subTitle">政府数据资源</div> */}
 			<ReactEcharts option={option}/>
-			{/* <div className="subTitle">行业数据资源</div> */}
 			<ReactEcharts option={option2} className='chart'/>
-			{/* <div className="firsttitle">政策公文数据资源</div> */}
 			<ReactEcharts option={option3}/>
 		</div>
 	)

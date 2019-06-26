@@ -11,6 +11,7 @@ import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRe
 import TWEEN from '@tweenjs/tween.js'
 // import DataElement from '../../components/DataElement'
 import DataAssets from '../../components/DataAssets'
+import DataElement from '../../components/DataElement'
 
 function FinalPage () {
 	useEffect(() => {
@@ -937,8 +938,8 @@ function FinalPage () {
 			{isShowDiv ? (
 				<div className='plane_container'>
 					<div className='plane_left'>
-						{/* <DataElement /> */}
-						<DataAssets />
+						<DataElement />
+						{/* <DataAssets /> */}
 					</div>
 					<div className='plane_right'>
 						<div className='operationBar'>
