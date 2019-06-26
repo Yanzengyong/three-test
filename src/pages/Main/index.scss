@@ -157,7 +157,7 @@
     width: 500px;
     height: 100vh;
     position: absolute;
-    overflow: hidden;
+    // overflow: hidden;
     left: 0;
     top: 0px;
     z-index: 666;
@@ -166,10 +166,10 @@
   .plane_right{
     position: absolute;
     right: 0;
-    top: 50px;
+    top: 0;
     z-index: 666;
     .operationBar {
-      height: 500px;
+      // height: 500px;
       width: 400px;
       display: flex;
       flex-direction: column;
