@@ -942,28 +942,28 @@ function FinalPage () {
 					</div>
 					<div className='plane_right'>
 						<div className='operationBar'>
-							<button onClick={onClickStep}>
-								<div className='buttonDiv'>
-									<img src='assets/images/1.svg' className='opr_icon'/>
-									<span>1. 数据资源</span>
-								</div>
-							</button>
+							<div className='title'>
+								<p>数据流程</p>
+							</div>
+							<div className='divider'/>
+							<div onClick={onClickStep} className='stepButton'>
+								<img src='assets/images/1.svg' className='opr_icon'/>
+								<span>1. 数据资源</span>
+							</div>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
-							<button onClick={onClickStep}>
-								<div className='buttonDiv'>
-									<img src='assets/images/1.svg' className='opr_icon'/>
-									<span>2. 数据元</span>
-								</div>
-							</button>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<div onClick={onClickStep} className='stepButton'>
+								<img src='assets/images/1.svg' className='opr_icon'/>
+								<span>2. 数据元</span>
+							</div>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
-							<button onClick={onClickStep}>
-								<div className='buttonDiv'>
-									<img src='assets/images/1.svg' className='opr_icon'/>
-									<span>3. 数据资产</span>
-								</div>
-							</button>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<div onClick={onClickStep} className='stepButton'>
+								<img src='assets/images/1.svg' className='opr_icon'/>
+								<span>3. 数据资产</span>
+							</div>
 						</div>
 					</div>
 				</div>
