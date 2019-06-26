@@ -1,11 +1,9 @@
 import React from 'react'
 import ReactEcharts from 'echarts-for-react'
-import './scss/pie.scss'
+// import './scss/pie.scss'
 
 export default function DataAssets () {
-	var color=['#007eff', '#00ff66', '#c0ff00', '#fff700', '#00ffd0']
 	const option = {
-		color,
 		tooltip: {
 			trigger: 'item',
 			formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -13,10 +11,7 @@ export default function DataAssets () {
 		legend: {
 			orient: 'vertical',
 			x: 'left',
-			data:['信产中心', '贵阳市', '成都市', '重庆市', '其他'],
-			textStyle :{
-				color:'#fff'
-			}
+			data:['信产中心', '贵阳市', '成都市', '重庆市', '信产中心', '其他']
 		},
 		series: [
 			{
@@ -46,6 +41,38 @@ export default function DataAssets () {
 				name:'数据来源',
 				type:'pie',
 				radius: ['40%', '55%'],
+				label: {
+					normal: {
+						formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+						backgroundColor: '#eee',
+						borderColor: '#aaa',
+						borderWidth: 1,
+						borderRadius: 4,
+						rich: {
+							a: {
+								color: '#999',
+								lineHeight: 22,
+								align: 'center'
+							},
+							hr: {
+								borderColor: '#aaa',
+								width: '100%',
+								borderWidth: 0.5,
+								height: 0
+							},
+							b: {
+								fontSize: 16,
+								lineHeight: 33
+							},
+							per: {
+								color: '#eee',
+								backgroundColor: '#334455',
+								padding: [2, 4],
+								borderRadius: 2
+							}
+						}
+					}
+				},
 				data:[
 					{ value:335, name:'政府数据开放平台' },
 					{ value:310, name:'贵阳市' },
@@ -70,34 +97,18 @@ export default function DataAssets () {
 			]
 		},
 		grid: { containLabel: true },
-		xAxis: {
-			name: '万条',
-			nameTextStyle :{
-				color:'#fff'
-			},
-			axisLabel:{
-				color:'#fff'
-			}
-		},
-		yAxis: {
-			type: 'category',
-			axisLabel:{
-				color:'#fff'
-			}
-		},
+		xAxis: { name: 'amount' },
+		yAxis: { type: 'category' },
 		visualMap: {
 			orient: 'horizontal',
 			left: 'center',
 			min: 10,
 			max: 100,
-			text: ['高', '低'],
+			text: ['High Score', 'Low Score'],
 			// Map the score column to color
 			dimension: 0,
 			inRange: {
-				color: ['#007eff', '#00ff66']
-			},
-			textStyle :{
-				color:'#fff'
+				color: ['#D7DA8B', '#E15457']
 			}
 		},
 		series: [
@@ -113,7 +124,7 @@ export default function DataAssets () {
 		]
 	}
 
-	var colors = ['#00ffd0', '#c0ff00']
+	var colors = ['#5793f3', '#d14a61', '#675bba']
 	const option3 = {
 		color: colors,
 
@@ -135,10 +146,7 @@ export default function DataAssets () {
 				axisTick: {
 					alignWithLabel: true
 				},
-				data: ['成都市', '四川省', '中央', '北京市', '重庆市', '上海市', '贵州省', '贵阳市', '全国各级-科技口'],
-				axisLabel:{
-					color:'#fff'
-				}
+				data: ['成都市', '四川省', '中央', '北京市', '重庆市', '上海市', '贵州省', '贵阳市', '全国各级-科技口']
 			}
 		],
 		yAxis: [
@@ -189,7 +197,7 @@ export default function DataAssets () {
 		]
 	}
 	return (
-		<div className="dataAssets" >
+		<div >
 			<div className="maintitle">平台数据资产概况</div>
 			<div className="firsttitle">政府数据资源</div>
 			<ReactEcharts option={option}/>
