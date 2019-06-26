@@ -100,6 +100,7 @@ function FinalPage () {
 	scene.add(group_flyLine)
 
 	// 初始化轨道控制
+	let trackballControls
 	const initTrackballControls = (camera, renderer) => {
 		const trackballControls = new TrackballControls(
 			camera,
@@ -116,44 +117,6 @@ function FinalPage () {
 
 		return trackballControls
 	}
-
-	const generateSprite = () => {
-		var canvas = document.createElement('canvas')
-
-		canvas.width = 16
-
-		canvas.height = 16
-
-		var context = canvas.getContext('2d')
-
-		var gradient = context.createRadialGradient(
-			canvas.width / 2,
-			canvas.height / 2,
-			0,
-			canvas.width / 2,
-			canvas.height / 2,
-			canvas.width / 2
-		)
-
-		gradient.addColorStop(0, 'rgba(255,255,255,1)')
-
-		gradient.addColorStop(0.2, 'rgba(0,255,255,1)')
-
-		gradient.addColorStop(0.4, 'rgba(0,0,64,1)')
-
-		gradient.addColorStop(1, 'rgba(0,0,0,1)')
-
-		context.fillStyle = gradient
-
-		context.fillRect(0, 0, canvas.width, canvas.height)
-
-		var texture = new THREE.Texture(canvas)
-
-		texture.needsUpdate = true
-
-		return texture
-	}
-
 
 	// 数据源 小方块在球体中的循环转动的效果 ---- 不规则旋转
 	const animateCubeTranslate = (current, target, type1, type2, cube) => {
@@ -592,9 +555,11 @@ function FinalPage () {
 
 	// 这是数据源头 --- 缩小为一个点后 ---- 扩散成数据元的动画过程
 	const sourceChangeField = async () => {
-		await shrinkDataHandle(3000)
-		showFieldHandle(3000)
-		hasSource = false
+		let a = await meteorHandle()
+		console.log(a)
+		// await shrinkDataHandle(3000)
+		// showFieldHandle(3000)
+		// hasSource = false
 	}
 
 	// 切回到观察中心圆球的视角
@@ -655,6 +620,23 @@ function FinalPage () {
 		} else {
 			filedChangeTransform(irregular_field, 2000)
 		}
+	}
+
+	// 流星雨的特效 函数
+	const meteorHandle = () => {
+		const flData = new Array(5).fill(0).map(()=>{
+			return [new THREE.Vector3(1000, 1000, 0), new THREE.Vector3(0, 0, 0), group_flyLine]
+		})
+		const flList = flData.map(v => new FlyLine(...v, { controlPointText:false }))
+		return flList.map((v, k) =>
+			new Promise((resolve) => {
+				v.fly({ loop: false, delay: (k + 1) * 2000, duration: 1500 })
+				let timer = setTimeout(() => {
+					resolve('success')
+					clearTimeout(timer)
+				}, (k + 1) * 2000)
+			})
+		)
 	}
 
 	// 查看生成详情的字段信息 --- 点击
@@ -741,16 +723,8 @@ function FinalPage () {
 		// 获取盒子的dom元素
 		const container = document.getElementById('box')
 
-		// 流星效果 ---- 引用flyline文件
-		const trackballControls = initTrackballControls(camera, renderer)
-		const flData = new Array(5).fill(0).map(()=>{
-			return [new THREE.Vector3(1000, 1000, 0), new THREE.Vector3(0, 0, 0), group_flyLine]
-		})
-		const flList = flData.map(v => new FlyLine(...v, { controlPointText:false }))
-		const flAnimeList = flList.map((v, k) =>
-			v.fly({ loop: false, delay: (k + 1) * 2000, duration: 1500 })
-		)
-		console.log(flAnimeList)
+		// 加入轨道控制器
+		trackballControls = initTrackballControls(camera, renderer)
 
 		// 监听点击模型事件
 		container.addEventListener('click', (event) => {
@@ -766,12 +740,13 @@ function FinalPage () {
 				// 如果被点击的是中心圆球的话执行动画的切换
 				if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && hasSource) {
 					// 调用数据源切换到数据元场景的动画合集
-					switch (currentData) {
-					case 1: classifyDataHandle(3000)
-						break
-					case 2: sourceChangeField()
-						break
-					}
+					// switch (currentData) {
+					// case 1: classifyDataHandle(3000)
+					// 	break
+					// case 2: sourceChangeField()
+					// 	break
+					// }
+					sourceChangeField()
 				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && !event.target.getAttribute('id')) {
 					// 调用数据模型切换的动画
 					switch (currentField) {
