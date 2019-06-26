@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactEcharts from 'echarts-for-react'
-import './scss/pie.scss'
+// import './scss/pie.scss'
 
 export default function DataAssets () {
 	const option = {
@@ -11,10 +11,7 @@ export default function DataAssets () {
 		legend: {
 			orient: 'vertical',
 			x: 'left',
-			data:['信产中心', '贵阳市', '成都市', '重庆市', '其他'],
-			textStyle :{
-				color:'#fff'
-			}
+			data:['信产中心', '贵阳市', '成都市', '重庆市', '信产中心', '其他']
 		},
 		series: [
 			{
@@ -44,6 +41,38 @@ export default function DataAssets () {
 				name:'数据来源',
 				type:'pie',
 				radius: ['40%', '55%'],
+				label: {
+					normal: {
+						formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+						backgroundColor: '#eee',
+						borderColor: '#aaa',
+						borderWidth: 1,
+						borderRadius: 4,
+						rich: {
+							a: {
+								color: '#999',
+								lineHeight: 22,
+								align: 'center'
+							},
+							hr: {
+								borderColor: '#aaa',
+								width: '100%',
+								borderWidth: 0.5,
+								height: 0
+							},
+							b: {
+								fontSize: 16,
+								lineHeight: 33
+							},
+							per: {
+								color: '#eee',
+								backgroundColor: '#334455',
+								padding: [2, 4],
+								borderRadius: 2
+							}
+						}
+					}
+				},
 				data:[
 					{ value:335, name:'政府数据开放平台' },
 					{ value:310, name:'贵阳市' },
@@ -168,7 +197,7 @@ export default function DataAssets () {
 		]
 	}
 	return (
-		<div className="dataAssets" >
+		<div >
 			<div className="maintitle">平台数据资产概况</div>
 			<div className="firsttitle">政府数据资源</div>
 			<ReactEcharts option={option}/>
