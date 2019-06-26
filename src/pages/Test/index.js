@@ -9,8 +9,9 @@ function Test () {
 
 	return (
 		<div className="Test">
-			<DataAssets></DataAssets>
-			{/* <DataSource></DataSource> */}
+			{/* <DataAssets/> */}
+			<DataElement/>
+			{/* <DataSource/> */}
 		</div>
 	)
 }

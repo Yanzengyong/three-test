@@ -1,12 +1,27 @@
 import React from 'react'
 import ReactEcharts from 'echarts-for-react'
+import './scss/dataelement.scss'
 
 export default function DataAssets () {
+	var color=['#00ffd0', '#D8833D', '#fff700', '#6480DA']
 	const option = {
-		legend: {},
+		title: {
+			text: '数据元审核情况',
+			textStyle: {
+				color: '#ffffff'
+			}
+		},
+		legend: {
+			x: 'center',
+			y: 'bottom',
+			textStyle :{
+				color:'#fff'
+			}
+		},
+		color,
 		tooltip: {
 			trigger: 'axis',
-			showContent: false
+			showContent: true
 		},
 		dataset: {
 			source: [
@@ -17,14 +32,22 @@ export default function DataAssets () {
 				['审核通过', 55, 67, 69, 72, 53, 39]
 			]
 		},
-		xAxis: { type: 'category' },
-		yAxis: { gridIndex: 0 },
-		grid: { top: '55%' },
+		xAxis: { 
+			type: 'category',
+			axisLabel:{ color:'#fff' }
+		},
+		yAxis: { 
+			gridIndex: 0,
+			axisLabel:{ color:'#fff' }
+		},
+		grid: { 
+			top: '45%', 
+		},
 		series: [
-			{ type: 'line', smooth: true, seriesLayoutBy: 'row' },
-			{ type: 'line', smooth: true, seriesLayoutBy: 'row' },
-			{ type: 'line', smooth: true, seriesLayoutBy: 'row' },
-			{ type: 'line', smooth: true, seriesLayoutBy: 'row' },
+			{ type: 'line', seriesLayoutBy: 'row', smooth: true },
+			{ type: 'line', seriesLayoutBy: 'row', smooth: true },
+			{ type: 'line', seriesLayoutBy: 'row', smooth: true },
+			{ type: 'line', seriesLayoutBy: 'row', smooth: true },
 			{
 				type: 'pie',
 				id: 'pie',
@@ -64,9 +87,9 @@ export default function DataAssets () {
 
 	// myChart.setOption(option)
 	return (
-
-		<div >
-			<div className="maintitle">平台数据元审核情况</div>
+		<div className='DataElement'>
+			<div className="maintitle">平台数据元</div>
+			<div className='divider'/>
 			<ReactEcharts
 				option={option}
 				onEvents={onclick}

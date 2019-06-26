@@ -1,4 +1,26 @@
 .DataElement{
-  width: 600px;
-  height: 400px;
+  height: 100%;
+  width: 100%;
+  border: #ffffff 1px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  .divider {
+    height: 3px;
+    width: 100%;
+    background-image: url('../../../assets/images/细分隔线.png');
+    background-size:100% 100%;
+    background-repeat: no-repeat;
+    margin: 10px;
+  }
+  .maintitle{
+    width: 100%;
+    height: 50px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #1f89b5;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
