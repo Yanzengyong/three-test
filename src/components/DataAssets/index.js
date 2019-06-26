@@ -3,7 +3,9 @@ import ReactEcharts from 'echarts-for-react'
 import './scss/pie.scss'
 
 export default function DataAssets () {
+	var color=['#007eff', '#00ff66', '#c0ff00', '#fff700', '#00ffd0']
 	const option = {
+		color,
 		tooltip: {
 			trigger: 'item',
 			formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -68,18 +70,34 @@ export default function DataAssets () {
 			]
 		},
 		grid: { containLabel: true },
-		xAxis: { name: 'amount' },
-		yAxis: { type: 'category' },
+		xAxis: {
+			name: '万条',
+			nameTextStyle :{
+				color:'#fff'
+			},
+			axisLabel:{
+				color:'#fff'
+			}
+		},
+		yAxis: {
+			type: 'category',
+			axisLabel:{
+				color:'#fff'
+			}
+		},
 		visualMap: {
 			orient: 'horizontal',
 			left: 'center',
 			min: 10,
 			max: 100,
-			text: ['High Score', 'Low Score'],
+			text: ['高', '低'],
 			// Map the score column to color
 			dimension: 0,
 			inRange: {
-				color: ['#D7DA8B', '#E15457']
+				color: ['#007eff', '#00ff66']
+			},
+			textStyle :{
+				color:'#fff'
 			}
 		},
 		series: [
@@ -95,7 +113,7 @@ export default function DataAssets () {
 		]
 	}
 
-	var colors = ['#5793f3', '#d14a61', '#675bba']
+	var colors = ['#00ffd0', '#c0ff00']
 	const option3 = {
 		color: colors,
 
@@ -117,7 +135,10 @@ export default function DataAssets () {
 				axisTick: {
 					alignWithLabel: true
 				},
-				data: ['成都市', '四川省', '中央', '北京市', '重庆市', '上海市', '贵州省', '贵阳市', '全国各级-科技口']
+				data: ['成都市', '四川省', '中央', '北京市', '重庆市', '上海市', '贵州省', '贵阳市', '全国各级-科技口'],
+				axisLabel:{
+					color:'#fff'
+				}
 			}
 		],
 		yAxis: [
