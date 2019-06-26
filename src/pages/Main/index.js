@@ -5,12 +5,11 @@ import './index.scss'
 import Orbitcontrols from 'three-orbitcontrols'
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer'
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
-// import { GPUParticleSystem } from 'three/examples/jsm/objects/'
-// require('three/examples/js/GPUParticleSystem')
-// import 'three/examples/js/GPUParticleSystem'
+import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import TWEEN from '@tweenjs/tween.js'
 // import DataElement from '../../components/DataElement'
 import DataAssets from '../../components/DataAssets'
+import FlyLine from './flyLine'
 
 function FinalPage () {
 	useEffect(() => {
@@ -44,10 +43,6 @@ function FinalPage () {
 	// 为点击声明的变量 （广播 、 鼠标）
 	let raycaster = new THREE.Raycaster()
 	let mouse = new THREE.Vector2()
-	// console.log(GPUParticleSystem)
-	// let particleSystem = new GPUParticleSystem({
-	// 	maxParticles: 250000
-	// })
 
 	// 文字声明 / 详情面板（为了提供动态删除的可能性）
 	let field_info_plane
@@ -100,6 +95,65 @@ function FinalPage () {
 	let group_title = new THREE.Group()
 	group_title.position.set(0, 830, 0)
 	scene.add(group_title)
+
+	let group_flyLine = new THREE.Group()
+	scene.add(group_flyLine)
+
+	// 初始化轨道控制
+	const initTrackballControls = (camera, renderer) => {
+		const trackballControls = new TrackballControls(
+			camera,
+			renderer.domElement
+		)
+		trackballControls.rotateSpeed = 1.0
+		trackballControls.zoomSpeed = 1.2
+		trackballControls.panSpeed = 0.8
+		trackballControls.noZoom = false
+		trackballControls.noPan = false
+		trackballControls.staticMoving = true
+		trackballControls.dynamicDampingFactor = 0.3
+		trackballControls.keys = [65, 83, 68]
+
+		return trackballControls
+	}
+
+	const generateSprite = () => {
+		var canvas = document.createElement('canvas')
+
+		canvas.width = 16
+
+		canvas.height = 16
+
+		var context = canvas.getContext('2d')
+
+		var gradient = context.createRadialGradient(
+			canvas.width / 2,
+			canvas.height / 2,
+			0,
+			canvas.width / 2,
+			canvas.height / 2,
+			canvas.width / 2
+		)
+
+		gradient.addColorStop(0, 'rgba(255,255,255,1)')
+
+		gradient.addColorStop(0.2, 'rgba(0,255,255,1)')
+
+		gradient.addColorStop(0.4, 'rgba(0,0,64,1)')
+
+		gradient.addColorStop(1, 'rgba(0,0,0,1)')
+
+		context.fillStyle = gradient
+
+		context.fillRect(0, 0, canvas.width, canvas.height)
+
+		var texture = new THREE.Texture(canvas)
+
+		texture.needsUpdate = true
+
+		return texture
+	}
+
 
 	// 数据源 小方块在球体中的循环转动的效果 ---- 不规则旋转
 	const animateCubeTranslate = (current, target, type1, type2, cube) => {
@@ -686,6 +740,18 @@ function FinalPage () {
 		// const clock = new THREE.Clock()
 		// 获取盒子的dom元素
 		const container = document.getElementById('box')
+
+		// 流星效果 ---- 引用flyline文件
+		const trackballControls = initTrackballControls(camera, renderer)
+		const flData = new Array(5).fill(0).map(()=>{
+			return [new THREE.Vector3(1000, 1000, 0), new THREE.Vector3(0, 0, 0), group_flyLine]
+		})
+		const flList = flData.map(v => new FlyLine(...v, { controlPointText:false }))
+		const flAnimeList = flList.map((v, k) =>
+			v.fly({ loop: false, delay: (k + 1) * 2000, duration: 1500 })
+		)
+		console.log(flAnimeList)
+
 		// 监听点击模型事件
 		container.addEventListener('click', (event) => {
 			event.preventDefault()
@@ -729,31 +795,9 @@ function FinalPage () {
 			}
 		}, true)
 
-		// 给场景添加星空盒子纹理
-		// new THREE.CubeTextureLoader()
-		// 	.setPath('assets/images/')
-		// 	.load([
-		// 		'bg1.jpg',
-		// 		'bg1.jpg',
-		// 		'bg1.jpg',
-		// 		'bg1.jpg',
-		// 		'bg1.jpg',
-		// 		'bg1.jpg' 		// 六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
-		// 	], (texture) => {
-		// 		scene.background = texture // 添加背景到场景
-		// 	})
 		// 背景星空 ----- 调用函数
 		let backgroundCloud = createParticles(2, true, 0.7, 0xffffff, false, 0xffffff, 2000)
 		scene.add(backgroundCloud)
-
-		let geometry = new THREE.Geometry()
-		let material = new THREE.PointsMaterial({ size: 60, vertexColors: 0xffffff, color: 0xffffff })
-		geometry.vertices.push(new THREE.Vector3(1200, 800, 0))
-		geometry.colors.push(new THREE.Color(0xffffff))
-		scene.add(new THREE.Points(geometry, material))
-		// 轨道集
-		// let animationClip = new THREE.AnimationClip('lx', 1000, THREE.KeyframeTrack[])
-
 
 		// 相机所在位子
 		camera.position.set(0, 100, 1400)
@@ -812,7 +856,6 @@ function FinalPage () {
 			clickObjectArr.push(sphere_model)
 			sphere_model.name = 'centerSphereModel'
 			group_source_sphere.add(sphere_model)
-
 			// 为这个球体几何加上label文案
 			// dynamicAddText(sphere_model, '我是数据源', 0, 800, 0)
 
@@ -831,7 +874,7 @@ function FinalPage () {
 				cube_model.rotation.y = Math.random() * Math.PI
 				cube_model.rotation.z = Math.random() * Math.PI
 				cube_model.updateMatrix()
-				group_source.add(cube_model)
+				// group_source.add(cube_model)
 				group_source_array.push(cube_model)
 				// 球体中粒子的动画
 				animateCubeTranslate({}, {}, TWEEN.Easing.Linear.None, TWEEN.Easing.Back.Out, cube_model)
@@ -900,12 +943,6 @@ function FinalPage () {
 		css3DRenderer.domElement.style.top = 0 + 'px'
 		container.appendChild(css3DRenderer.domElement)
 		const animate = () => {
-			//星空效果
-			// let vertices = cloud.geometry.vertices
-			// vertices.forEach(function (v) {
-			// 	let distance = Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2))
-			// 	particleAnimate(v)
-			// })
 			// 球体中粒子的动画
 			// let time = clock.getDelta()
 			// update 推进混合器时间并更新动画
@@ -914,6 +951,7 @@ function FinalPage () {
 			// }
 			// 必须写的
 			requestAnimationFrame(animate)
+			trackballControls.update(new THREE.Clock().getDelta())
 			// 必须再此调用
 			TWEEN.update()
 			// 数据源展示中 圆球的转动效果
