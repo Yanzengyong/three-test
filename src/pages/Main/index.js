@@ -56,6 +56,9 @@ function FinalPage () {
 	// 可以被点击的模型对象数组
 	let clickObjectArr = []
 
+	// 是否是在查看数据元详情
+	let isCheckInfo = false
+
 	// 分类后（编目后）被分成了5分，每一份的几何声明
 	let thunk_one = []
 	let thunk_two = []
@@ -209,6 +212,11 @@ function FinalPage () {
 	// 这是分装的一个动画过程函数（调用即可） ----- 主题为编目
 	const classifyDataHandle = (time) => {
 		return new Promise((resolve) => {
+			thunk_one = []
+			thunk_two = []
+			thunk_three = []
+			thunk_four = []
+			thunk_five = []
 			for (let i = 0; i < group_source_array.length; i++) {
 				let unit = group_source_array.length / 5
 				if (i < unit) {
@@ -263,6 +271,7 @@ function FinalPage () {
 	// 这是将分类的数据资源缩小成一个小的球体的动画过程 ---- 并且在此时形成字段效果
 	const shrinkDataHandle = (time, delay) => {
 		return new Promise((resolve) => {
+			init_field = []
 			let timer_delay = setTimeout(() => {
 				for (let i = 0; i < thunk_one.length; i++) {
 					// 添加卡片
@@ -563,8 +572,6 @@ function FinalPage () {
 	const pushDataHandle = (num, current) => {
 		const unit = group_source_array.length / num
 		const unitNum = unit * current
-		console.log(unit)
-		console.log(unitNum)
 		for (let i = 0; i < group_source_array.length; i++) {
 			if (i < unitNum && i > unit * (current - 1)) {
 				group_source.add(group_source_array[i])
@@ -604,21 +611,6 @@ function FinalPage () {
 		group_field_info.remove(field_info_plane)
 	}
 
-	// 切换会最初状态
-	const resetFn = () => {
-		animateHandle({
-			x: 0,
-			y: 0,
-			z: 0
-		}, {
-			x: 0,
-			y: 100,
-			z: 1300
-		}, camera, TWEEN.Easing.Quadratic.Out)
-		cameraTarget = new THREE.Vector3(0, 0, 100)
-		group_field_info.remove(field_info_plane)
-	}
-
 	// 切换字段组成形状效果的 --------  过渡效果函数
 	const filedChangeTransform = (targets, duration) => {
 		for (let i = 0; i < 300; i ++) {
@@ -638,7 +630,7 @@ function FinalPage () {
 	// 切换字段效果的组成形状的 处理函数
 	const filedGeometryChangeFn = (name) => {
 		currentField = name
-		TWEEN.removeAll()
+		// TWEEN.removeAll()
 		if (name === 'Sphere') {
 			filedChangeTransform(sphere_field, 2000)
 		} else if (name === 'Cube') {
@@ -732,9 +724,51 @@ function FinalPage () {
 		return (new THREE.Points(geometry, material))
 	}
 
-	// 点击事件 --- 流程 --- div
-	const onClickStep = () => {
+	// init handle
+	const initFn = () => {
+		currentFlyNum = 0
+		hasSource = true
+		isCheckInfo = false
+		group_source.rotation.y = 0
+		currentField = 'init'
+		currentData = 1
+		for (let i = 0; i < group_source_array.length; i++) {
+			group_source.remove(group_source_array[i])
+		}
+		console.log(init_field)
+		for (let i = 0; i < init_field.length; i++) {
+			group_source.remove(init_field[i])
+		}
+		createDataHandle()
+		flyAndPush()
+	}
 
+	// 点击事件 --- 开始 --- 数据源导入
+	const startBtn = () => {
+		initFn()
+	}
+	// 创建 长宽高都为40的立方体
+	let cube = new THREE.BoxBufferGeometry(40, 40, 40)
+	// 创建数据资源的处理函数
+	const createDataHandle = () => {
+		group_source_array = []
+		// 循环渲染 400 个立方体盒子 为其添加上纹理
+		for (let i = 0; i < 300; i++) {
+        	// 材质进行设置
+			let cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x00ffd0 })
+			let cube_model = new THREE.Mesh(cube, cubeMaterial)
+			cube_model.position.x = 400 * (2.0 * Math.random() - 1.0)
+			cube_model.position.y = 400 * (2.0 * Math.random() - 1.0)
+			cube_model.position.z = 400 * (2.0 * Math.random() - 1.0)
+			cube_model.rotation.x = Math.random() * Math.PI
+			cube_model.rotation.y = Math.random() * Math.PI
+			cube_model.rotation.z = Math.random() * Math.PI
+			cube_model.updateMatrix()
+			// group_source.add(cube_model)
+			group_source_array.push(cube_model)
+			// 球体中粒子的动画
+			animateCubeTranslate({}, {}, TWEEN.Easing.Linear.None, TWEEN.Easing.Back.Out, cube_model)
+		}
 	}
 
 	// 初始化函数
@@ -786,12 +820,17 @@ function FinalPage () {
 				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && !hasSource && event.target.getAttribute('id') && event.target.getAttribute('id').indexOf('plane') !== -1) {
 					// 查看数据元详情
 					fieldInfoFn()
+					isCheckInfo = true
 					setIsShowDiv(false)
 				}
 			} else {
 				// 不存在被点击的模型
-				backSourceFn()
-				setIsShowDiv(true)
+				// 只有当存在数据模型详情的时候才可以产生效果
+				if (isCheckInfo) {
+					backSourceFn()
+					setIsShowDiv(true)
+					isCheckInfo = false
+				}
 			}
 		}, true)
 
@@ -803,8 +842,8 @@ function FinalPage () {
 		camera.position.set(0, 100, 1400)
 
 		// 相机作为orbitcontrol的参数，支持鼠标交互
-		let orbitControls = new Orbitcontrols(camera)
-		orbitControls.enableDamping = true
+		// let orbitControls = new Orbitcontrols(camera)
+		// orbitControls.enableDamping = true
 
 		// 设置环境光
 		let light = new THREE.AmbientLight(0x000000, 1)
@@ -859,26 +898,8 @@ function FinalPage () {
 			// 为这个球体几何加上label文案
 			// dynamicAddText(sphere_model, '我是数据源', 0, 800, 0)
 
-			// 创建 长宽高都为40的立方体
-			let cube = new THREE.BoxBufferGeometry(40, 40, 40)
-
-			// 循环渲染 400 个立方体盒子 为其添加上纹理
-			for (let i = 0; i < 300; i++) {
-        	// 材质进行设置
-				let cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x00ffd0 })
-				let cube_model = new THREE.Mesh(cube, cubeMaterial)
-				cube_model.position.x = 400 * (2.0 * Math.random() - 1.0)
-				cube_model.position.y = 400 * (2.0 * Math.random() - 1.0)
-				cube_model.position.z = 400 * (2.0 * Math.random() - 1.0)
-				cube_model.rotation.x = Math.random() * Math.PI
-				cube_model.rotation.y = Math.random() * Math.PI
-				cube_model.rotation.z = Math.random() * Math.PI
-				cube_model.updateMatrix()
-				// group_source.add(cube_model)
-				group_source_array.push(cube_model)
-				// 球体中粒子的动画
-				animateCubeTranslate({}, {}, TWEEN.Easing.Linear.None, TWEEN.Easing.Back.Out, cube_model)
-			}
+			// 调用创建数据资源的函数
+			createDataHandle()
 
 			// 动画的第二部 ---- 将这些方块变换成有文字的plan 进行组合
 			// 无规则的效果
@@ -984,28 +1005,28 @@ function FinalPage () {
 								<p>数据流程</p>
 							</div>
 							<div className='divider'/>
-							<div onClick={onClickStep} className='stepButton'>
+							<div onClick={startBtn} className='stepButton' style={{ cursor: 'pointer' }}>
 								<img src='assets/images/1.svg' className='opr_icon'/>
 								<span>1. 数据源导入</span>
 							</div>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
-							<div onClick={onClickStep} className='stepButton'>
+							<div className='stepButton'>
 								<img src='assets/images/1.svg' className='opr_icon'/>
 								<span>2. 数据资源编目</span>
 							</div>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
-							<div onClick={onClickStep} className='stepButton'>
+							<div className='stepButton'>
 								<img src='assets/images/1.svg' className='opr_icon'/>
 								<span>3. 数据元</span>
 							</div>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
-							<div onClick={onClickStep} className='stepButton'>
+							<div className='stepButton'>
 								<img src='assets/images/1.svg' className='opr_icon'/>
 								<span>4. 数据模型</span>
 							</div>
