@@ -177,9 +177,9 @@ export default class FlyLine {
 
   	gradient.addColorStop(0, 'rgba(255,255,255,1)')
 
-  	gradient.addColorStop(0.2, 'rgba(240,255,159,1)')
+  	gradient.addColorStop(0.2, 'rgba(0,0,0,1)')
 
-  	gradient.addColorStop(0.4, 'rgba(0,0,64,1)')
+  	gradient.addColorStop(0.4, 'rgba(0,0,0,1)')
 
   	gradient.addColorStop(1, 'rgba(0,0,0,.2)')
 

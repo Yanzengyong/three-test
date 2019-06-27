@@ -47,6 +47,12 @@ function FinalPage () {
 	// 文字声明 / 详情面板（为了提供动态删除的可能性）
 	let field_info_plane
 
+	// 这是飞入的第几个流星
+	let currentFlyNum = 0
+
+	// 飞行添加动作完全结束
+	let flyAnimateEnd = false
+
 	// 可以被点击的模型对象数组
 	let clickObjectArr = []
 
@@ -553,13 +559,35 @@ function FinalPage () {
 		})
 	}
 
+	// 这是一个向球体中push粒子的效果函数
+	const pushDataHandle = (num, current) => {
+		const unit = group_source_array.length / num
+		const unitNum = unit * current
+		console.log(unit)
+		console.log(unitNum)
+		for (let i = 0; i < group_source_array.length; i++) {
+			if (i < unitNum && i > unit * (current - 1)) {
+				group_source.add(group_source_array[i])
+			}
+		}
+	}
+
+	// 这是流行飞入后加入粒子数量的效果
+	const flyAndPush = async () => {
+		if (currentFlyNum < 3) {
+			currentFlyNum++
+			await meteorHandle()
+			pushDataHandle(3, currentFlyNum)
+			flyAndPush()
+			if (currentFlyNum === 3) flyAnimateEnd = true
+		}
+	}
+
 	// 这是数据源头 --- 缩小为一个点后 ---- 扩散成数据元的动画过程
 	const sourceChangeField = async () => {
-		let a = await meteorHandle()
-		console.log(a)
-		// await shrinkDataHandle(3000)
-		// showFieldHandle(3000)
-		// hasSource = false
+		await shrinkDataHandle(3000)
+		showFieldHandle(3000)
+		hasSource = false
 	}
 
 	// 切回到观察中心圆球的视角
@@ -623,20 +651,15 @@ function FinalPage () {
 	}
 
 	// 流星雨的特效 函数
-	const meteorHandle = () => {
-		const flData = new Array(5).fill(0).map(()=>{
-			return [new THREE.Vector3(1000, 1000, 0), new THREE.Vector3(0, 0, 0), group_flyLine]
+	const meteorHandle = (duration) => {
+		return new Promise((resolve) => {
+			let v = [new THREE.Vector3(1000, 1000, 0), new THREE.Vector3(0, 0, 0), group_flyLine]
+			new FlyLine(...v, { controlPointText:false }).fly({ loop: false, delay: 800, duration: duration || 1500 })
+			let timer = setTimeout(() => {
+				resolve('success')
+				clearTimeout(timer)
+			}, duration || 1500)
 		})
-		const flList = flData.map(v => new FlyLine(...v, { controlPointText:false }))
-		return flList.map((v, k) =>
-			new Promise((resolve) => {
-				v.fly({ loop: false, delay: (k + 1) * 2000, duration: 1500 })
-				let timer = setTimeout(() => {
-					resolve('success')
-					clearTimeout(timer)
-				}, (k + 1) * 2000)
-			})
-		)
 	}
 
 	// 查看生成详情的字段信息 --- 点击
@@ -738,16 +761,18 @@ function FinalPage () {
 			if (intersects.length > 0) {
 				// 说明存在被点击的模型
 				// 如果被点击的是中心圆球的话执行动画的切换
-				if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && hasSource) {
+				console.log(currentFlyNum)
+				if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && currentFlyNum === 0) {
+					flyAndPush()
+				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && hasSource && flyAnimateEnd) {
 					// 调用数据源切换到数据元场景的动画合集
-					// switch (currentData) {
-					// case 1: classifyDataHandle(3000)
-					// 	break
-					// case 2: sourceChangeField()
-					// 	break
-					// }
-					sourceChangeField()
-				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && !event.target.getAttribute('id')) {
+					switch (currentData) {
+					case 1: classifyDataHandle(3000)
+						break
+					case 2: sourceChangeField()
+						break
+					}
+				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && !event.target.getAttribute('id') && !hasSource) {
 					// 调用数据模型切换的动画
 					switch (currentField) {
 					case 'init': filedGeometryChangeFn('Cube')
@@ -758,7 +783,7 @@ function FinalPage () {
 						break
 					default: filedGeometryChangeFn('init')
 					}
-				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && event.target.getAttribute('id') && event.target.getAttribute('id').indexOf('plane') !== -1) {
+				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && !hasSource && event.target.getAttribute('id') && event.target.getAttribute('id').indexOf('plane') !== -1) {
 					// 查看数据元详情
 					fieldInfoFn()
 					setIsShowDiv(false)
@@ -961,21 +986,28 @@ function FinalPage () {
 							<div className='divider'/>
 							<div onClick={onClickStep} className='stepButton'>
 								<img src='assets/images/1.svg' className='opr_icon'/>
-								<span>1. 数据资源</span>
+								<span>1. 数据源导入</span>
 							</div>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<div onClick={onClickStep} className='stepButton'>
 								<img src='assets/images/1.svg' className='opr_icon'/>
-								<span>2. 数据元</span>
+								<span>2. 数据资源编目</span>
 							</div>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<div onClick={onClickStep} className='stepButton'>
 								<img src='assets/images/1.svg' className='opr_icon'/>
-								<span>3. 数据资产</span>
+								<span>3. 数据元</span>
+							</div>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<div onClick={onClickStep} className='stepButton'>
+								<img src='assets/images/1.svg' className='opr_icon'/>
+								<span>4. 数据模型</span>
 							</div>
 						</div>
 					</div>
