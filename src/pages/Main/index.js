@@ -11,6 +11,99 @@ import TWEEN from '@tweenjs/tween.js'
 import DataAssets from '../../components/DataAssets'
 import FlyLine from './flyLine'
 
+// 创建场景
+let scene = new THREE.Scene()
+
+// 创建透视相机
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000)
+
+// 创建渲染器
+let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
+
+// 创建向量
+let vector = new THREE.Vector3()
+
+// 相机镜头视野终点
+let cameraTarget = new THREE.Vector3(0, 0, 100)
+
+// 创建css2d渲染器
+let labelRenderer = new CSS2DRenderer()
+
+// 创建css3d渲染器
+let css3DRenderer = new CSS3DRenderer()
+
+// 为点击声明的变量 （广播 、 鼠标）
+let raycaster = new THREE.Raycaster()
+let mouse = new THREE.Vector2()
+
+// 文字声明 / 详情面板（为了提供动态删除的可能性）
+let field_info_plane
+
+// 这是飞入的第几个流星
+let currentFlyNum = 0
+
+// 飞行添加动作完全结束
+let flyAnimateEnd = false
+
+// 可以被点击的模型对象数组
+let clickObjectArr = []
+
+// 是否是在查看数据元详情
+let isCheckInfo = false
+
+// 分类后（编目后）被分成了5分，每一份的几何声明
+let thunk_one = []
+let thunk_two = []
+let thunk_three = []
+let thunk_four = []
+let thunk_five = []
+
+// filed组成的模型的名称声明 （目的提供全局使用该坐标） 当前的状态
+let irregular_field = []
+let cube_field = []
+let annular_field = []
+let sphere_field = []
+let init_field = []
+let currentField = 'init'
+let currentData = 1
+let group_source_array = []
+
+// 判断的关键字声明
+let hasSource = true
+
+// 创建数据源组 ----- 球形
+let group_source_sphere = new THREE.Group()
+scene.add(group_source_sphere)
+
+// 创建数据源组
+let group_source = new THREE.Group()
+scene.add(group_source)
+
+// 创建数据源filed的详情面板组
+let group_field_info = new THREE.Group()
+scene.add(group_field_info)
+
+// 创建数据源组 ----- 球体 --- 上方的文字
+let group_source_sphere_text = new THREE.Group()
+group_source_sphere_text.position.set(0, 800, 0)
+scene.add(group_source_sphere_text)
+
+// 创建围绕中新球体的球体
+let group_rotate = new THREE.Group()
+scene.add(group_rotate)
+
+// 创建标题组 ----- 球体 --- 整体的标题 3d效果
+let group_title = new THREE.Group()
+group_title.position.set(0, 830, 0)
+scene.add(group_title)
+
+// 创建飞线组
+let group_flyLine = new THREE.Group()
+scene.add(group_flyLine)
+
+// 初始化轨道控制
+let trackballControls
+
 function FinalPage () {
 	useEffect(() => {
 		init()
@@ -19,97 +112,7 @@ function FinalPage () {
 	// 一些判断是否显示div的state
 	const [isShowDiv, setIsShowDiv] = useState(true)
 
-	// 创建场景
-	let scene = new THREE.Scene()
-
-	// 创建透视相机
-	let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000)
-
-	// 创建渲染器
-	let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
-
-	// 创建向量
-	let vector = new THREE.Vector3()
-
-	// 相机镜头视野终点
-	let cameraTarget = new THREE.Vector3(0, 0, 100)
-
-	// 创建css2d渲染器
-	let labelRenderer = new CSS2DRenderer()
-
-	// 创建css3d渲染器
-	let css3DRenderer = new CSS3DRenderer()
-
-	// 为点击声明的变量 （广播 、 鼠标）
-	let raycaster = new THREE.Raycaster()
-	let mouse = new THREE.Vector2()
-
-	// 文字声明 / 详情面板（为了提供动态删除的可能性）
-	let field_info_plane
-
-	// 这是飞入的第几个流星
-	let currentFlyNum = 0
-
-	// 飞行添加动作完全结束
-	let flyAnimateEnd = false
-
-	// 可以被点击的模型对象数组
-	let clickObjectArr = []
-
-	// 是否是在查看数据元详情
-	let isCheckInfo = false
-
-	// 分类后（编目后）被分成了5分，每一份的几何声明
-	let thunk_one = []
-	let thunk_two = []
-	let thunk_three = []
-	let thunk_four = []
-	let thunk_five = []
-
-	// filed组成的模型的名称声明 （目的提供全局使用该坐标） 当前的状态
-	let irregular_field = []
-	let cube_field = []
-	let annular_field = []
-	let sphere_field = []
-	let init_field = []
-	let currentField = 'init'
-	let currentData = 1
-	let group_source_array = []
-
-	// 判断的关键字声明
-	let hasSource = true
-
-	// 创建数据源组 ----- 球形
-	let group_source_sphere = new THREE.Group()
-	scene.add(group_source_sphere)
-
-	// 创建数据源组
-	let group_source = new THREE.Group()
-	scene.add(group_source)
-
-	// 创建数据源filed的详情面板组
-	let group_field_info = new THREE.Group()
-	scene.add(group_field_info)
-
-	// 创建数据源组 ----- 球体 --- 上方的文字
-	let group_source_sphere_text = new THREE.Group()
-	group_source_sphere_text.position.set(0, 800, 0)
-	scene.add(group_source_sphere_text)
-
-	// 创建围绕中新球体的球体
-	let group_rotate = new THREE.Group()
-	scene.add(group_rotate)
-
-	// 创建标题组 ----- 球体 --- 整体的标题 3d效果
-	let group_title = new THREE.Group()
-	group_title.position.set(0, 830, 0)
-	scene.add(group_title)
-
-	let group_flyLine = new THREE.Group()
-	scene.add(group_flyLine)
-
-	// 初始化轨道控制
-	let trackballControls
+	// 初始化轨道控制器函数
 	const initTrackballControls = (camera, renderer) => {
 		const trackballControls = new TrackballControls(
 			camera,
@@ -854,7 +857,6 @@ function FinalPage () {
 		dirLight.position.set(100, 1000, 1600)
 		scene.add(dirLight)
 
-		// let mixer
 		// 添加整体标题
 		new THREE.FontLoader().load('assets/font/FangSong_GB2312_Regular.json', (font) => {
 			let geometry = new THREE.TextGeometry('实验室数据治理平台', {
@@ -964,14 +966,9 @@ function FinalPage () {
 		css3DRenderer.domElement.style.top = 0 + 'px'
 		container.appendChild(css3DRenderer.domElement)
 		const animate = () => {
-			// 球体中粒子的动画
-			// let time = clock.getDelta()
-			// update 推进混合器时间并更新动画
-			// if (mixer) {
-			// 	mixer.update(time)
-			// }
 			// 必须写的
 			requestAnimationFrame(animate)
+			// 飞线的动画
 			trackballControls.update(new THREE.Clock().getDelta())
 			// 必须再此调用
 			TWEEN.update()
