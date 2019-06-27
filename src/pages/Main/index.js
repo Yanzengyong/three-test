@@ -111,6 +111,7 @@ function FinalPage () {
 
 	// 一些判断是否显示div的state
 	const [isShowDiv, setIsShowDiv] = useState(true)
+	const [currentStep, setCurrentStep] = useState(null)
 
 	// 初始化轨道控制器函数
 	const initTrackballControls = (camera, renderer) => {
@@ -777,8 +778,8 @@ function FinalPage () {
 	// 初始化函数
 	const init = () => {
 		// scene.add(particleSystem)
-		let helper = new THREE.AxesHelper(3000)
-		scene.add(helper)
+		// let helper = new THREE.AxesHelper(3000)
+		// scene.add(helper)
 		// const clock = new THREE.Clock()
 		// 获取盒子的dom元素
 		const container = document.getElementById('box')
@@ -801,12 +802,13 @@ function FinalPage () {
 				console.log(currentFlyNum)
 				if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && currentFlyNum === 0) {
 					flyAndPush()
+					setCurrentStep(1)
 				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && hasSource && flyAnimateEnd) {
 					// 调用数据源切换到数据元场景的动画合集
 					switch (currentData) {
-					case 1: classifyDataHandle(3000)
+					case 1: classifyDataHandle(3000); setCurrentStep(2)
 						break
-					case 2: sourceChangeField()
+					case 2: sourceChangeField(); setCurrentStep(3)
 						break
 					}
 				} else if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && !event.target.getAttribute('id') && !hasSource) {
@@ -889,7 +891,7 @@ function FinalPage () {
 		const souce_show_handle = () => {
 
 			// 在中心创建一个原型包裹这些立方体
-			let sphere = new THREE.SphereGeometry(700, 35, 35)
+			let sphere = new THREE.SphereGeometry(700, 20, 20)
 			let sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x1d87c4, wireframe: true })
 			let sphere_model = new THREE.Mesh(sphere, sphereMaterial)
 			console.log(sphereMaterial.color.getStyle())
@@ -999,33 +1001,33 @@ function FinalPage () {
 					<div className='plane_right'>
 						<div className='operationBar'>
 							<div className='title'>
-								<p>数据流程</p>
+								<p>数据治理流程</p>
 							</div>
 							<div className='divider'/>
-							<div onClick={startBtn} className='stepButton' style={{ cursor: 'pointer' }}>
+							<div onClick={startBtn} className={currentStep === 1 ? 'stepButton currentStepStyle' : 'stepButton'} style={{ cursor: 'pointer' }}>
 								<img src='assets/images/1.svg' className='opr_icon'/>
-								<span>1. 数据源导入</span>
+								<span>1. 数据源</span>
+							</div>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<div className={currentStep === 2 ? 'stepButton currentStepStyle' : 'stepButton'}>
+								<img src='assets/images/1.svg' className='opr_icon'/>
+								<span>2. 数据资源目录</span>
+							</div>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<img src='assets/images/arrow.svg' className='opr_arrow'/>
+							<div className={currentStep === 3 ? 'stepButton currentStepStyle' : 'stepButton'}>
+								<img src='assets/images/1.svg' className='opr_icon'/>
+								<span>3. 数据元/模型</span>
 							</div>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<img src='assets/images/arrow.svg' className='opr_arrow'/>
 							<div className='stepButton'>
 								<img src='assets/images/1.svg' className='opr_icon'/>
-								<span>2. 数据资源编目</span>
-							</div>
-							<img src='assets/images/arrow.svg' className='opr_arrow'/>
-							<img src='assets/images/arrow.svg' className='opr_arrow'/>
-							<img src='assets/images/arrow.svg' className='opr_arrow'/>
-							<div className='stepButton'>
-								<img src='assets/images/1.svg' className='opr_icon'/>
-								<span>3. 数据元</span>
-							</div>
-							<img src='assets/images/arrow.svg' className='opr_arrow'/>
-							<img src='assets/images/arrow.svg' className='opr_arrow'/>
-							<img src='assets/images/arrow.svg' className='opr_arrow'/>
-							<div className='stepButton'>
-								<img src='assets/images/1.svg' className='opr_icon'/>
-								<span>4. 数据模型</span>
+								<span>4. 数据资产</span>
 							</div>
 						</div>
 					</div>
