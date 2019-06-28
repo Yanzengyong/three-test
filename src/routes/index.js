@@ -14,7 +14,7 @@ const routes = () => (
 	<Router>
 		<Switch>
 			<Route exact path="/" render={() => (
-				<Redirect to="/main"/>
+				<Redirect to="/prod"/>
 			)}/>
 			<Route path='/main' component={Main}/>
 			<Route path='/Test' component={Test}/>
