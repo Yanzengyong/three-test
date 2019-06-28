@@ -1,6 +1,45 @@
 import React, { useEffect, useState } from 'react'
+import * as THREE from 'three'
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer'
+import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import anime from 'animejs'
 import './index.scss'
+
+// 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
+
+// 创建场景
+let scene = new THREE.Scene()
+
+// 创建透视相机
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+
+// 相机镜头视野终点
+let cameraTarget = new THREE.Vector3(0, 0, 0)
+
+// 创建渲染器
+let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
+
+// 创建css2d渲染器
+let labelRenderer = new CSS2DRenderer()
+
+// 创建css3d渲染器
+let css3DRenderer = new CSS3DRenderer()
+
+// 为点击声明的变量 （广播 、 鼠标）
+let raycaster = new THREE.Raycaster()
+let mouse = new THREE.Vector2()
+
+// 创建应用平台组 ----- 展示在中心部位 （坐标处于 0 0 0位置）
+let group_apply = new THREE.Group()
+scene.add(group_apply)
+
+// 创建源组 ---- 展示平台获取数据的源头 （坐标处于0 -y -z位置）
+let group_source = new THREE.Group()
+scene.add(group_source)
+
+// 创建使用加工后的组 ----- 展示平台把数据加工后应用展示 （坐标处于0 y z位置）
+let group_use = new THREE.Group()
+scene.add(group_use)
 
 function ProdPage () {
 	useEffect(() => {
@@ -10,7 +49,10 @@ function ProdPage () {
 			duration: 1500,
 			easing: 'linear'
 		})
+		init()
 	}, [])
+
+	// 切换到详情时滑块的处理函数
 	const slideOutHandle = () => {
 		let tl = anime.timeline({
 			easing: 'easeOutExpo',
@@ -29,6 +71,8 @@ function ProdPage () {
 			delay: 750
 		})
 	}
+
+	// 返回到初始化的处理函数
 	const backInitHandle = () => {
 		let tl = anime.timeline({
 			easing: 'easeOutExpo',
@@ -46,6 +90,11 @@ function ProdPage () {
 			duration: 1500,
 			easing: 'linear'
 		})
+	}
+
+	// 加载3d效果的初始函数
+	const init = () => {
+
 	}
 	return (
 		<div className='prod_container'>
@@ -65,6 +114,7 @@ function ProdPage () {
 				<div className='prod_bottom_line'></div>
 			</div>
 			<div className='prod_content'>
+				<div id='canvas'></div>
 				<div id='init1' className='prod_content_left'>
           这里是一些饼状图、折线图、雷达图等
 				</div>
