@@ -1,0 +1,21 @@
+.title{
+  color: white;
+  font-size: 25px;
+  padding-bottom: 20px;
+}
+.newsMain{
+  max-width: 300px
+}
+.newsBox{
+  color: white;
+  min-width: 280px;
+}
+.bigBox{
+  height: 270px;
+  overflow: scroll;
+}
+
+ /* for Chrome */
+ .bigBox::-webkit-scrollbar {
+  display: none;
+}
