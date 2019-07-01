@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer'
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import anime from 'animejs'
+import SphereModel from '../../components/ThreeObject/sphereCenterModel'
 import './index.scss'
 
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
@@ -11,7 +12,7 @@ import './index.scss'
 let scene = new THREE.Scene()
 
 // 创建透视相机
-let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+let camera
 
 // 相机镜头视野终点
 let cameraTarget = new THREE.Vector3(0, 0, 0)
@@ -49,6 +50,7 @@ function ProdPage () {
 			duration: 1500,
 			easing: 'linear'
 		})
+		camera = new THREE.PerspectiveCamera(75, document.getElementById('content').offsetWidth / document.getElementById('content').offsetHeight, 0.1, 1000)
 		init()
 	}, [])
 
@@ -67,8 +69,8 @@ function ProdPage () {
 			left: 0
 		}).add({
 			targets: '#info2',
-			bottom: 0,
-			delay: 750
+			opacity: '1',
+			delay: 250
 		})
 	}
 
@@ -83,7 +85,7 @@ function ProdPage () {
 			left: '-50%'
 		}).add({
 			targets: '#info2',
-			bottom: '-20%',
+			opacity: '0',
 		}).add({
 			targets: ['#init1', '#init2', '#init3', '#init4', '#init5'],
 			opacity: '1',
@@ -94,7 +96,54 @@ function ProdPage () {
 
 	// 加载3d效果的初始函数
 	const init = () => {
-
+		// 获取盒子的dom元素
+		const container = document.getElementById('canvas')
+		// 相机所在位子
+		camera.position.set(0, 0, 600)
+		// 设置环境光
+		let light = new THREE.AmbientLight(0x000000, 1)
+		scene.add(light)
+		// 设置平行光
+		let dirLight = new THREE.DirectionalLight(0xffffff, 1)
+		dirLight.position.set(300, 300, 600)
+		scene.add(dirLight)
+		// 中心圆球的
+		const sphere_options = {
+			sphereRadius: 100,
+			widthSegments: 20,
+			heightSegments: 20,
+			meshObj: { color: 0xffffff, wireframe: true }
+		}
+		let sphereModel = new SphereModel({
+			...sphere_options
+		})
+		group_source.add(sphereModel.group)
+		// 像素点
+		renderer.setPixelRatio(window.devicePixelRatio)
+		// 场景尺寸
+		renderer.setSize(document.getElementById('content').offsetWidth, document.getElementById('content').offsetHeight)
+		container.appendChild(renderer.domElement)
+		// 2d渲染器
+		labelRenderer.setSize(document.getElementById('content').offsetWidth, document.getElementById('content').offsetHeight)
+		labelRenderer.domElement.style.position = 'absolute'
+		labelRenderer.domElement.style.top = 0 + 'px'
+		container.appendChild(labelRenderer.domElement)
+		// 3d文字渲染器
+		css3DRenderer.setSize(document.getElementById('content').offsetWidth, document.getElementById('content').offsetHeight)
+		css3DRenderer.domElement.style.position = 'absolute'
+		css3DRenderer.domElement.style.top = 0 + 'px'
+		container.appendChild(css3DRenderer.domElement)
+		const animate = () => {
+			// 必须写的
+			requestAnimationFrame(animate)
+			// 设置相机镜头的朝向
+			camera.lookAt(cameraTarget)
+			// 渲染
+			renderer.render(scene, camera)
+			labelRenderer.render(scene, camera)
+			css3DRenderer.render(scene, camera)
+		}
+		animate()
 	}
 	return (
 		<div className='prod_container'>
@@ -113,7 +162,7 @@ function ProdPage () {
 				</div>
 				<div className='prod_bottom_line'></div>
 			</div>
-			<div className='prod_content'>
+			<div id='content' className='prod_content'>
 				<div id='canvas'></div>
 				<div id='init1' className='prod_content_left'>
           这里是一些饼状图、折线图、雷达图等
