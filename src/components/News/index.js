@@ -73,9 +73,7 @@ export default class News extends React.Component {
   		},
   		{
   			title: '所属部门',
-  			dataIndex: 'department',
-  			defaultSortOrder: 'descend',
-  			sorter: (a, b) => a.data - b.data,
+  			dataIndex: 'department'
   		},
   	]
   	const columnsProject=[
