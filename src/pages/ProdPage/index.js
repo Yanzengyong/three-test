@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import anime from 'animejs'
 import './index.scss'
+import News from '../../components/News'
+
 
 function ProdPage () {
 	useEffect(() => {
@@ -75,7 +77,7 @@ function ProdPage () {
           这里此平台的文字介绍（介绍过多可以加入滚动效果）
 				</div>
 				<div id='init4' className='prod_content_right'>
-          这里是一些会实时滚动的信息统计
+					<News></News>
 				</div>
 				<div id='init5' className='prod_content_rightBottom'>
           这里是一个无框的表格统计图

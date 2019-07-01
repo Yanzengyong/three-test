@@ -1,77 +1,136 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './scss/news.scss'
-import $ from 'jquery'
-export default function News () {
-	useEffect(() => {
-		init()
-	}, [])
-	const init=()=>{
-		$('#express').ready(function () {
-			//书讯快递循环垂直向上滚动
-			function movedome () {
-				var margintop=0//上边距的偏移量
-				var stop=false
-				setInterval(function () {
-					if(stop==true) {
-						return
-					}
-					$('#express').children('li').first().animate({ 'margin-top':margintop-- }, 0, function () {
-						var $li=$(this)
-						if(!$li.is(':animated')) { //第一个li的动画结束时
-							if(-margintop>$li.height()) {
-								$li.css('margin-top', '0px').appendTo($('#express'))
-								margintop=0
-							}
-						}
-					})
-				}, 50)
-				//鼠标放到快递信息(ul)上时
-				$('#express').hover(function () {
-					$(this).css('cursor', 'pointer')
-					stop=true//停止动画
-				}, function () {
-					stop=false//开始动画
-				})
-			}
-			movedome()
-		})
+import { Carousel, Table } from 'antd'
+import 'antd/dist/antd.css'
+
+export default class News extends React.Component {
+	constructor (props) {
+		super(props)
 	}
-	return(
-		<div className="newsMain">
-			<div className="title">
-        数据源实时获取信息
-			</div>
-			<div className="bigBox">
-				<div className="newsBox">
-					<ul id="express">
-						<li>・2010考研英语大纲到货75折...</li>
-						<li>・权威定本四大名著（人民文...</li>
-						<li>・口述历史权威唐德刚先生国...</li>
-						<li>・袁伟民与体坛风云：实话实...</li>
-						<li>・我们台湾这些年：轰动两岸...</li>
-						<li>・畅销教辅推荐：精品套书50...</li>
-						<li>・2010版法律硕士联考大纲75...</li>
-						<li>・计算机新书畅销书75折抢购</li>
-						<li>・2009年孩子最喜欢的书&gt;&gt;</li>
-						<li>・弗洛伊德作品精选集59折</li>
-						<li>・2010考研英语大纲到货75折...</li>
-						<li>・权威定本四大名著（人民文...</li>
-						<li>・口述历史权威唐德刚先生国...</li>
-						<li>・2009年孩子最喜欢的书&gt;&gt;</li>
-						<li>・弗洛伊德作品精选集59折</li>
-						<li>・2010考研英语大纲到货75折...</li>
-						<li>・权威定本四大名著（人民文...</li>
-						<li>・口述历史权威唐德刚先生国gagagag...</li>
-						<li>・2009年孩子最喜欢的书&gt;&gt;</li>
-						<li>・弗洛伊德作品精选集59折</li>
-						<li>・2010考研英语大纲到货75折...</li>
-						<li>・权威定本四大名著（人民文...</li>
-						<li>・口述历史权威唐德刚先生国...</li>
-					</ul>
+	onChange (pagination, filters, sorter) {
+		console.log('params', pagination, filters, sorter)
+	}
+	render () {
+		const columns = [
+			{
+				title: '区域',
+				dataIndex: 'area'
+			},
+			{
+				title: '委办局',
+				dataIndex: 'government',
+				defaultSortOrder: 'descend',
+				sorter: (a, b) => a.government - b.government,
+			},
+			{
+				title: '数据量',
+				dataIndex: 'num',
+				defaultSortOrder: 'descend',
+				sorter: (a, b) => a.num - b.num,
+			},
+		]
+		const data = [
+			{
+				key: '1',
+				area: '成都市',
+				government: 53,
+				num: 34664,
+			},
+			{
+				key: '2',
+				area: '四川省',
+				government: 54,
+				num: 106486,
+			},
+			{
+				key: '3',
+				area: '中央',
+				government: 54,
+				num: 268724,
+			},
+			{
+				key: '4',
+				area: '北京市',
+				government: 34,
+				num: 64865,
+			},
+			{
+				key: '5',
+				area: '重庆市',
+				government: 32,
+				num: 59287,
+			},
+			{
+				key: '6',
+				area: '上海市',
+				government: 41,
+				num: 78762,
+			},
+			{
+				key: '7',
+				area: '贵州省',
+				government: 56,
+				num: 103024,
+			},
+			{
+				key: '8',
+				area: '贵阳市',
+				government: 54,
+				num: 19287,
+			},
+			{
+				key: '9',
+				area: '全国各级.科技口',
+				government: 38,
+				num: 73975,
+			}
+		]
+  	return(
+			<div >
+				<div className="newsTitle">
+          平台概况
+				</div>
+				<div className="newsMain" >
+  			<Carousel dotPosition="left" autoplay autoplayInterval={300} dots={false} >
+						<div className="BOX">
+						1. 收到XX委办局XX相关数据XX条。
+						</div>
+						<div className="BOX">
+						2. 1-3月平台数据源新增XX条。
+						</div>
+						<div className="BOX">
+					  3. 1-3月平台数据资源新增XX条。
+						</div>
+						<div className="BOX">
+					  4. 1-3平台数据资源总量同比前期涨幅为3.5%
+						</div>
+						<div className="BOX">
+            5. 2018年平台数据共支撑38个项目，其中包含全国一体化项目等...
+						</div>
+						<div className="BOX">
+					  6. 2018年平台共建有效数据模型189个。其中用于平台支撑的有80个，科研支撑有20个。
+						</div>
+						<div className="BOX">
+						7. 2018年平台使用人数达1.5w。
+						</div>
+						<div className="BOX">
+					  8. 2019上半年平台新增数据量高达3.5G。
+						</div>
+						<div className="BOX">
+					  9. 2019上半年平台安全质量通过国家标准检测。
+						</div>
+  			</Carousel>
+  		</div>
+				<div className="newsTitleTwo">
+          政策公文数据概览
+				</div>
+				<div className="tableMain">
+					<Table size="small" columns={columns} dataSource={data} onChange={this.onChange} pagination={{ defaultPageSize:3 }} />
+
 				</div>
 			</div>
 
-		</div>
+  	)
+	}
 
-	)
 }
