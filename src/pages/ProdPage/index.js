@@ -184,9 +184,9 @@ function ProdPage () {
 				<div id='info1' className='prod_info_left'>
           这里是单个详情时候的饼图、折线图、雷达图等
 				</div>
-				<div id='info2' className='prod_info_rightBottom'>
+				{/* <div id='info2' className='prod_info_rightBottom'>
           这里是单个详情时候的无框的表格统计图
-				</div>
+				</div> */}
 			</div>
 		</div>
 	)

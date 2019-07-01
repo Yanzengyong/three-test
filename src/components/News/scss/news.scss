@@ -3,11 +3,14 @@
   // color: white;
   overflow: hidden;
   border-bottom:1px solid #808080;
-
+  margin-bottom: 5px;
   .slick-list{
-    height: 190px !important;
+    height: 120px !important;
     color: #bdb8b8;
   }
+}
+.News{
+  padding-left: 5px
 }
 
 .BOX{
@@ -21,9 +24,9 @@
 .newsTitleTwo{
   font-weight: 550;
   width: 320px;
-  font-size: 18px;
+  font-size: 16px;
   // font-weight: 550;
-  padding: 8px 0px;
+  // padding: 8px 0px;
   margin-bottom: 8px;
   color: white;
 }
@@ -31,10 +34,10 @@
   font-weight: 550;
   width: 320px;
   border-bottom:1px solid #bdb8b8;
-  font-size: 18px;
+  font-size: 16px;
   // font-weight: 550;
-  padding: 8px 0px;
-  margin-bottom: 8px;
+  padding: 5px 0px;
+  // margin-bottom: 5px;
   color: white;
 }
 .tableMain{
