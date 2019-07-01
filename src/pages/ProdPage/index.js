@@ -5,6 +5,8 @@ import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRe
 import anime from 'animejs'
 import SphereModel from '../../components/ThreeObject/sphereCenterModel'
 import './index.scss'
+import News from '../../components/News'
+
 
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
 
@@ -174,7 +176,7 @@ function ProdPage () {
           这里此平台的文字介绍（介绍过多可以加入滚动效果）
 				</div>
 				<div id='init4' className='prod_content_right'>
-          这里是一些会实时滚动的信息统计
+					<News></News>
 				</div>
 				<div id='init5' className='prod_content_rightBottom'>
           这里是一个无框的表格统计图
@@ -182,9 +184,9 @@ function ProdPage () {
 				<div id='info1' className='prod_info_left'>
           这里是单个详情时候的饼图、折线图、雷达图等
 				</div>
-				<div id='info2' className='prod_info_rightBottom'>
+				{/* <div id='info2' className='prod_info_rightBottom'>
           这里是单个详情时候的无框的表格统计图
-				</div>
+				</div> */}
 			</div>
 		</div>
 	)
