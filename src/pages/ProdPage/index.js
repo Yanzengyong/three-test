@@ -6,6 +6,9 @@ import anime from 'animejs'
 import SphereModel from '../../components/ThreeObject/sphereCenterModel'
 import Orbitcontrols from 'three-orbitcontrols'
 import './index.scss'
+import News from '../../components/News'
+import Statistics from '../../components/Statistics'
+import LineChart from '../../components/LineChart'
 
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
 
@@ -973,23 +976,23 @@ function ProdPage () {
           这里是一些饼状图、折线图、雷达图等
 				</div>
 				<div id='init2' className='prod_content_leftBottom'>
-          这里一个实时统计的接入数据量与转换量的数值
+					<Statistics></Statistics>
 				</div>
 				<div id='init3' className='prod_content_leftTop'>
           这里此平台的文字介绍（介绍过多可以加入滚动效果）
 				</div>
 				<div id='init4' className='prod_content_right'>
-          这里是一些会实时滚动的信息统计
+					<News></News>
 				</div>
 				<div id='init5' className='prod_content_rightBottom'>
-          这里是一个无框的表格统计图
+					<LineChart></LineChart>
 				</div>
 				<div id='info1' className='prod_info_left'>
           这里是单个详情时候的饼图、折线图、雷达图等
 				</div>
-				<div id='info2' className='prod_info_rightBottom'>
+				{/* <div id='info2' className='prod_info_rightBottom'>
           这里是单个详情时候的无框的表格统计图
-				</div>
+				</div> */}
 			</div>
 		</div>
 	)
