@@ -5,6 +5,7 @@ import DataElement from '../../components/DataElement'
 import DataSource from '../../components/DataSource'
 import News from '../../components/News'
 import './scss/test.scss'
+import Statistics from '../../components/Statistics'
 
 function Test () {
 
@@ -12,7 +13,7 @@ function Test () {
 		<div className="Test">
 			{/* <DataAssets/> */}
 			{/* <DataElement/> */}
-			<News></News>
+			<Statistics></Statistics>
 			{/* <DataSource/> */}
 		</div>
 	)
