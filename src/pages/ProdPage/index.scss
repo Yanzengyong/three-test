@@ -120,16 +120,15 @@
       width: 50%;
       height: 100%;
       background-color: #faa662ce;
-      opacity: 1;
     }
     .prod_info_rightBottom{
       position: absolute;
       right: 0;
-      bottom: -20%;
+      bottom: 0;
       width: 50%;
       height: 20%;
       background-color: #fa7962ce;
-      opacity: 1;
+      opacity: 0;
     }
   }
 }
