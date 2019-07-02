@@ -9,6 +9,7 @@ import './index.scss'
 import News from '../../components/News'
 import Statistics from '../../components/Statistics'
 import LineChart from '../../components/LineChart'
+import BriefIntroduction from '../../components/BriefIntroduction'
 
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
 
@@ -381,7 +382,7 @@ function ProdPage () {
 					<Statistics></Statistics>
 				</div>
 				<div id='init3' className='prod_content_leftTop'>
-          这里此平台的文字介绍（介绍过多可以加入滚动效果）
+					<BriefIntroduction></BriefIntroduction>
 				</div>
 				<div id='init4' className='prod_content_right'>
 					<News></News>

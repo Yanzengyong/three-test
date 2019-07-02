@@ -6,15 +6,16 @@ import DataSource from '../../components/DataSource'
 import News from '../../components/News'
 import './scss/test.scss'
 import Statistics from '../../components/Statistics'
-
+import BriefIntroduction from '../../components/BriefIntroduction'
 function Test () {
 
 	return (
 		<div className="Test">
 			{/* <DataAssets/> */}
 			{/* <DataElement/> */}
-			<Statistics></Statistics>
+			{/* <Statistics></Statistics> */}
 			{/* <DataSource/> */}
+			<BriefIntroduction></BriefIntroduction>
 		</div>
 	)
 }
