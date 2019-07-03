@@ -7,6 +7,7 @@ import News from '../../components/News'
 import './scss/test.scss'
 import Statistics from '../../components/Statistics'
 import BriefIntroduction from '../../components/BriefIntroduction'
+import LeftIntroduction from '../../components/LeftIntroduction'
 function Test () {
 
 	return (
@@ -15,7 +16,7 @@ function Test () {
 			{/* <DataElement/> */}
 			{/* <Statistics></Statistics> */}
 			{/* <DataSource/> */}
-			<BriefIntroduction></BriefIntroduction>
+			<LeftIntroduction></LeftIntroduction>
 		</div>
 	)
 }

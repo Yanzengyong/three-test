@@ -15,6 +15,7 @@ import CreateCloud from './createCloud'
 import CreateModel from './createModel'
 import Positions from './getPosition'
 import BriefIntroduction from '../../components/BriefIntroduction'
+import LeftIntroduction from '../../components/LeftIntroduction'
 import { groupSource, animateSource } from './sourceChunk'
 
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
@@ -275,7 +276,7 @@ function ProdPage () {
 			<div id='content' className='prod_content'>
 				<div id='canvas'></div>
 				<div id='init1' className='prod_content_left'>
-          这里是一些饼状图、折线图、雷达图等
+					<LeftIntroduction></LeftIntroduction>
 				</div>
 				<div id='init2' className='prod_content_leftBottom'>
 					<Statistics></Statistics>

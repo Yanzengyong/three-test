@@ -1,0 +1,39 @@
+.leftIntroduction{
+  color: white;
+  // width: 100;
+  padding: 15px
+}
+.introSourceBox{
+  display: flex;
+  flex-direction: column;
+  // height: 230px;
+  width: 100%;
+  // left: -1px;
+  // right: -1px;
+  // top: -1px;
+  // bottom: -1px;
+  // margin: 10px;
+  background: url('../../../assets/images/top_left.png') 0 0,
+    url('../../../assets/images/top_right.png') 100% 0,
+    url('../../../assets/images/bottom_left.png') 0 100%,
+    url('../../../assets/images/bottom_right.png') 100% 100%;
+  background-repeat: no-repeat;
+  border:1px solid #4AFFFE;
+  margin-top: 20px;
+}
+.mainbox{
+  padding:6px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4AFFFE;
+}
+.arrowGroup{
+  display: flex;
+  flex-direction: column;
+}
+.arrow {
+  height: 48px;
+  width: 100%;
+}
