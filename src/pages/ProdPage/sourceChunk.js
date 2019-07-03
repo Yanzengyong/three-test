@@ -196,6 +196,7 @@ const animateSource = () => {
 	scatterRing.rotation.z -= Math.PI / 2 * 0.01
 	core.rotation.z += Math.PI / 2 * 0.01
 }
+
 export {
 	groupSource,
 	animateSource
