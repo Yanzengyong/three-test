@@ -3,7 +3,7 @@ import * as THREE from 'three'
 export default class CreateParticle {
 	constructor (particles) {
 		this.BLINT_SPEED = 0.05
-		this.radius = 100
+		this.radius = 150
 		this.dotTexture = new THREE.TextureLoader().load('assets/images/dot.png')
 		this.particles = particles
 	}

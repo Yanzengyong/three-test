@@ -3,8 +3,8 @@ import * as THREE from 'three'
 export default class CreateOaaa {
 	constructor (rocket_position, group) {
 		this.CITY_MARGIN = 1
-		this.HEXAGON_RADIUS = 5
-		this.radius = 100
+		this.HEXAGON_RADIUS = 6
+		this.radius = 150
 		this.hexagon = new THREE.Object3D()
 		this.coneImg = ['assets/images/lightray.jpg', 'assets/images/lightray_yellow.jpg']
 		this.hexagonColor = [0xffffff, 0xffff00]
