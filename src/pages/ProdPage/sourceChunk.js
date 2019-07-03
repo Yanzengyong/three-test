@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import Positions from './getPosition'
 
 let groupSource = new THREE.Group()
-let z = -280
+let z = -80
 //1. 三球环绕旋转
 let threeBallRotate = new THREE.Group()
 new Positions().getRingPosition(40, 0, 0, z, 3).forEach(item => {
@@ -153,14 +153,38 @@ groupSource.add(specialGroup4)
 //16.圆环与钉子
 let torusWithNail = new THREE.Group()
 let nailPart = new THREE.Group()
-new Positions().getRingPosition(66, 0, 0, z, 3).forEach(item => {
-	nailPart.add(new CreateModel().createNormalCylinder(5, 20, 0.6, item.x, item.y, item.z - 492, 0x4AFFFE))
-	nailPart.add(new CreateModel().createNormalCylinder(10, 5, 0.6, item.x, item.y, item.z - 480, 0x4AFFFE))
+new Positions().getRingPosition(80, 0, 0, z, 3).forEach(item => {
+	nailPart.add(new CreateModel().createNormalCylinder(5, 20, 0.6, item.x, item.y, item.z - 472, 0x4AFFFE))
+	nailPart.add(new CreateModel().createNormalCylinder(10, 5, 0.6, item.x, item.y, item.z - 460, 0x4AFFFE))
 })
-let torusPart = new CreateModel().createNormalTorus(66, 5, 0.6, 0, 0, z - 495, 0x4AFFFE)
+let torusPart = new CreateModel().createNormalTorus(80, 5, 0.6, 0, 0, z - 475, 0x4AFFFE)
 torusWithNail.add(torusPart)
 torusWithNail.add(nailPart)
 groupSource.add(torusWithNail)
+
+//17. 核心部分
+// 左侧黄色部分
+let core = new THREE.Group()
+new Positions().getRingPosition(80, 0, 0, z, 10).forEach(item => {
+	core.add(new CreateModel().createNormalCylinder(2, 200, 0.8, item.x, item.y, item.z - 616, 0xF3D225))
+})
+new Positions().getRingPosition(75, 0, 0, z, 10).forEach(item => {
+	core.add(new CreateModel().createCube(4, 20, 4, 0.6, item.x, item.y, item.z - 516, 0xF3D225))
+	core.add(new CreateModel().createCube(4, 20, 4, 0.6, item.x, item.y, item.z - 716, 0xF3D225))
+})
+new Positions().getRingPosition(85, 0, 0, z, 10).forEach(item => {
+	core.add(new CreateModel().createNormalCylinder(2, 100, 0.8, item.x, item.y, item.z - 566, 0x4AFFFE))
+})
+new Positions().getRingPosition(85, 0, 0, z, 50).forEach(item => {
+	core.add(new CreateModel().createCube(5, 5, 10, 0.5, item.x, item.y, item.z - 500, 0x4AFFFE))
+})
+new Positions().getRingPosition(100, 0, 0, z, 60).forEach(item => {
+	core.add(new CreateModel().createCube(3, 3, 3, 0.4, item.x, item.y, item.z - 510, 0xCC0001))
+})
+new Positions().getRingPosition(110, 0, 0, z, 60).forEach(item => {
+	core.add(new CreateModel().createCube(3, 3, 3, 0.4, item.x, item.y, item.z - 526, 0x4AFFFE))
+})
+groupSource.add(core)
 
 const animateSource = () => {
 	threeBallRotate.rotation.z -= Math.PI / 2 * 0.01
@@ -170,7 +194,9 @@ const animateSource = () => {
 	transparentCircleGroup.rotation.z += Math.PI / 2 * 0.01
 	specialGroup2.rotation.z -= Math.PI / 2 * 0.01
 	scatterRing.rotation.z -= Math.PI / 2 * 0.01
+	core.rotation.z += Math.PI / 2 * 0.01
 }
+
 export {
 	groupSource,
 	animateSource

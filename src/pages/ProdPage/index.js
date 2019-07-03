@@ -215,10 +215,10 @@ function ProdPage () {
 			}
 			return (new THREE.Points(geometry, material))
 		}
-		let aa = generatePointCloudGeometry2()
-		scene.add(aa)
+		scene.add(generatePointCloudGeometry2())
 		// 导入源头模型
 		group_source.add(groupSource)
+
 
 		// 像素点
 		renderer.setPixelRatio(window.devicePixelRatio)
