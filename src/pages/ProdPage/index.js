@@ -12,9 +12,12 @@ import LineChart from '../../components/LineChart'
 import CreateObject from './createObjects'
 import CreateParticle from './createParticles'
 import CreateCloud from './createCloud'
+import CreateModel from './createModel'
 import Positions from './getPosition'
 import BriefIntroduction from '../../components/BriefIntroduction'
 import LeftIntroduction from '../../components/LeftIntroduction'
+import { groupSource, animateSource } from './sourceChunk'
+
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
 
 // 创建场景
@@ -45,6 +48,7 @@ scene.add(group_apply)
 
 // 创建源组 ---- 展示平台获取数据的源头 （坐标处于0 -y -z位置）
 let group_source = new THREE.Group()
+group_source.position.set(0, 0, 1000)
 scene.add(group_source)
 
 // 创建源组 ---- 展示平台获取数据的源头 ----- 外环
@@ -75,7 +79,7 @@ function ProdPage () {
 			duration: 1500,
 			easing: 'linear'
 		})
-		camera = new THREE.PerspectiveCamera(75, document.getElementById('content').offsetWidth / document.getElementById('content').offsetHeight, 0.1, 1000)
+		camera = new THREE.PerspectiveCamera(75, document.getElementById('content').offsetWidth / document.getElementById('content').offsetHeight, 0.1, 3000)
 		init()
 	}, [])
 
@@ -148,28 +152,48 @@ function ProdPage () {
 		}, true)
 
 		// 相机所在位子
-		camera.position.set(600, 200, 100)
+		camera.position.set(600, 800, 300)
+
 		// 设置环境光
-		let light = new THREE.AmbientLight(0x000000, 1)
+		let light = new THREE.AmbientLight(0xffffff, 1)
 		scene.add(light)
+
 		// 设置平行光
-		let dirLight = new THREE.DirectionalLight(0xffffff, 5)
-		dirLight.position.set(400, 400, 1000)
-		scene.add(dirLight)
+		// let dirLight = new THREE.DirectionalLight(0xffffff, 5)
+		// dirLight.position.set(400, 400, 1000)
+		// scene.add(dirLight)
 
 		// 相机作为orbitcontrol的参数，支持鼠标交互
 		let orbitControls = new Orbitcontrols(camera)
 		orbitControls.enableDamping = true
 
 		// 创建光锥的位置
-		rocket_position = new Positions().getSpherePosition(100)
-		group_source.rotation.x = -0.5 * Math.PI
+		rocket_position = new Positions().getSpherePosition(150)
+		group_use.rotation.x = -0.5 * Math.PI
 
 		// 创建圆环的位置
-		let ring_position = new Positions().getRingPosition(100, 0, 0, 200, 100)
-		console.log(ring_position)
+		// let ring_position = new Positions().getRingPosition(100, 0, 0, 200, 100)
+		// console.log(ring_position)
 
-		let pointArray = []
+		// 球面打点
+		let particles = new CreateParticle(sphereParticles).createEarthParticles()
+		group_use.add(particles)
+
+		// 光锥
+		new CreateObject(rocket_position, group_use).createObjects()
+
+		// 外层 云层
+		let cloud = new CreateCloud().createCloudGrid()
+		cloud.name = 'centerSphereCloud'
+		clickObjectArr.push(cloud)
+		group_use.add(cloud)
+
+		// 外层环
+		let centerOutRing = new THREE.TorusGeometry(150 * 1.5, 3, 16, 100)
+		let materialRing = new THREE.MeshBasicMaterial({ color: 0xffff00 })
+		var torus = new THREE.Mesh(centerOutRing, materialRing)
+		group_source_ring.add(torus)
+
 		// const getcylposition = () => {
 		// 	let positions = []
 		// 	for (let i = 0; i < 150; i++) {
@@ -180,107 +204,21 @@ function ProdPage () {
 		// 	return positions
 		// }
 		// console.log(getcylposition())
-		// const generatePointCloudGeometry = () => {
-		// 	let geometry = new THREE.Geometry()
-		// 	let material = new THREE.PointsMaterial({ size: 1, color: 0xffff00 })
-		// 	let radians = (Math.PI / 180)
-		// 	for (let i = 0; i < 3000; i++) {
-		// 		//创建随机粒子并添加到geometry中
-		// 		let particle = new THREE.Vector3(parseInt(Math.random()*(100 * Math.sin(radians * i) - (-100 * Math.sin(radians * i)) + 1) + (-100 * Math.sin(radians * i)), 10), parseInt(Math.random()*(100 * Math.cos(radians * i) - (-100 * Math.cos(radians * i)) + 1) + (-100 * Math.cos(radians * i)), 10), parseInt(Math.random()*(350 - 120 + 1) + 130, 10))
-		// 		geometry.vertices.push(particle)
-		// 		// pointArray.push(geometry)
-		// 	}
-		// 	return (new THREE.Points(geometry, material))
-		// }
-		// let aa = generatePointCloudGeometry()
-		// aa.geometry.verticesNeedUpdate = true
-		// scene.add(aa)
-		// console.log(generatePointCloudGeometry())
-		// for (let i = 0; i < aa.geometry.vertices.length; i++) {
-		// 	new TWEEN.Tween({
-		// 		x: aa.geometry.vertices[i].x,
-		// 		y: aa.geometry.vertices[i].y,
-		// 		z: aa.geometry.vertices[i].z,
-		// 	})
-		// 		.to({
-		// 			x: 0,
-		// 			y: 0,
-		// 			z: 0
-		// 		}, 5000)
-		// 		.easing(TWEEN.Easing.Linear.None)
-		// 		.onUpdate(obj => {
-		// 			aa.geometry.vertices[i].x = obj.x
-		// 			aa.geometry.vertices[i].y = obj.y
-		// 			aa.geometry.vertices[i].z = obj.z
-		// 		}).start()
-		// }
-
-		// 球面打点
-		let particles = new CreateParticle(sphereParticles).createEarthParticles()
-		group_source.add(particles)
-
-		// 光锥
-		new CreateObject(rocket_position, group_source).createObjects()
-
-		// 外层 云层
-		let cloud = new CreateCloud().createCloudGrid()
-		cloud.name = 'centerSphereCloud'
-		clickObjectArr.push(cloud)
-		group_source.add(cloud)
-
-		// 外层环
-		let centerOutRing = new THREE.TorusGeometry(100 * 1.6, 3, 16, 100)
-		let materialRing = new THREE.MeshBasicMaterial({ color: 0xffff00 })
-		var torus = new THREE.Mesh(centerOutRing, materialRing)
-		group_source_ring.add(torus)
-
-		const getPoint = (radius, ox, oy, count) => {
-			let points = []
-			let radians = (Math.PI / 180) * Math.round(360 / count) //弧度
-			for (let i = 0; i < count; i++) {
-				let x = ox + radius * Math.sin(radians * i)
-				let y = oy + radius * Math.cos(radians * i)
-				points.unshift({ x:x, y:y }) //保持数据顺时针
+		const generatePointCloudGeometry2 = () => {
+			let geometry = new THREE.Geometry()
+			let material = new THREE.PointsMaterial({ size: 1, color: 0xffff00 })
+			let radians = (Math.PI / 180)
+			for (let i = 0; i < 3000; i++) {
+				//创建随机粒子并添加到geometry中
+				let particle = new THREE.Vector3(parseInt(Math.random()*(100 * Math.sin(radians * i) - (-100 * Math.sin(radians * i)) + 1) + (-100 * Math.sin(radians * i)), 10), parseInt(Math.random()*(100 * Math.cos(radians * i) - (-100 * Math.cos(radians * i)) + 1) + (-100 * Math.cos(radians * i)), 10), parseInt(Math.random()*(350 - 120 + 1) + 130, 10))
+				geometry.vertices.push(particle)
 			}
-			return points
+			return (new THREE.Points(geometry, material))
 		}
-		// function generatePointCloudGeometry (color, width, length) {
-		// 	var geometry = new THREE.BufferGeometry()
-		// 	var numPoints = width * length
-		// 	var positions = new Float32Array(numPoints * 3)
-		// 	var colors = new Float32Array(numPoints * 3)
-		// 	var k = 0
-		// 	for (var i = 0; i < width; i ++) {
-		// 		for (var j = 0; j < length; j ++) {
-		// 			var u = i / width
-		// 			var v = j / length
-		// 			var x = u - 0.5
-		// 			var y = (Math.cos(u * Math.PI * 4) + Math.sin(v * Math.PI * 8)) / 20
-		// 			var z = v - 0.5
-		// 			positions[3 * k] = x
-		// 			positions[3 * k + 1] = y
-		// 			positions[3 * k + 2] = z
-		// 			var intensity = (y + 0.1) * 5
-		// 			colors[3 * k] = color.r * intensity
-		// 			colors[3 * k + 1] = color.g * intensity
-		// 			colors[3 * k + 2] = color.b * intensity
-		// 			k ++
-		// 		}
-		// 	}
-		// 	geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3))
-		// 	geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3))
-		// 	geometry.computeBoundingBox()
-		// 	return geometry
-		// }
-		// function generatePointcloud (color, width, length) {
-		// 	var geometry = generatePointCloudGeometry(color, width, length)
-		// 	var material = new THREE.PointsMaterial({ size: 5, vertexColors: THREE.VertexColors })
-		// 	return new THREE.Points(geometry, material)
-		// }
-		// var pcBuffer = generatePointcloud(new THREE.Color(1, 0, 0), 80, 160)
-		// pcBuffer.scale.set(5, 10, 10)
-		// pcBuffer.position.set(- 5, 0, 0)
-		// scene.add(pcBuffer)
+		let aa = generatePointCloudGeometry2()
+		scene.add(aa)
+		// 导入源头模型
+		group_source.add(groupSource)
 
 		// 像素点
 		renderer.setPixelRatio(window.devicePixelRatio)
@@ -300,27 +238,9 @@ function ProdPage () {
 		const animate = () => {
 			// 必须写的
 			requestAnimationFrame(animate)
-			// group_source.rotation.y += 0.002
+			animateSource()
+			// group_use.rotation.y += 0.002
 			let objects = sphereParticles.children
-			// aa.geometry.verticesNeedUpdate = true
-			// for (let i = 0; i < aa.geometry.vertices.length; i++) {
-			// 	new TWEEN.Tween({
-			// 		x: aa.geometry.vertices[i].x,
-			// 		y: aa.geometry.vertices[i].y,
-			// 		z: aa.geometry.vertices[i].z,
-			// 	})
-			// 		.to({
-			// 			x: 0,
-			// 			y: 0,
-			// 			z: 0
-			// 		}, 60)
-			// 		.easing(TWEEN.Easing.Linear.None)
-			// 		.onUpdate(obj => {
-			// 			aa.geometry.vertices[i].x = obj.x
-			// 			aa.geometry.vertices[i].y = obj.y
-			// 			aa.geometry.vertices[i].z = obj.z
-			// 		}).start()
-			// }
 			objects.forEach(obj => {
 				let material = obj.material
 				material.t_ += material.speed_

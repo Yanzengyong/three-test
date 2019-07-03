@@ -18,7 +18,7 @@
     url('../../../assets/images/bottom_left.png') 0 100%,
     url('../../../assets/images/bottom_right.png') 100% 100%;
   background-repeat: no-repeat;
-  border:1px solid #03689b;
+  border:1px solid #4AFFFE;
   margin-top: 20px;
 }
 .mainbox{
@@ -27,7 +27,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #bdb8b8;
+  color: #4AFFFE;
 }
 .arrowGroup{
   display: flex;
@@ -36,5 +36,4 @@
 .arrow {
   height: 48px;
   width: 100%;
-  color: red
 }

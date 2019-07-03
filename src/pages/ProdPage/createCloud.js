@@ -2,7 +2,7 @@ import * as THREE from 'three'
 
 export default class createCloud {
 	constructor () {
-		this.radius = 100
+		this.radius = 150
 	}
 	createCloudGrid () {
 		let geometry = new THREE.SphereGeometry(1.3 * this.radius, 66, 66)
