@@ -14,7 +14,7 @@ import CreateParticle from './createParticles'
 import CreateCloud from './createCloud'
 import Positions from './getPosition'
 import BriefIntroduction from '../../components/BriefIntroduction'
-
+import LeftIntroduction from '../../components/LeftIntroduction'
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
 
 // 创建场景
@@ -180,40 +180,40 @@ function ProdPage () {
 		// 	return positions
 		// }
 		// console.log(getcylposition())
-		const generatePointCloudGeometry = () => {
-			let geometry = new THREE.Geometry()
-			let material = new THREE.PointsMaterial({ size: 1, color: 0xffff00 })
-			let radians = (Math.PI / 180)
-			for (let i = 0; i < 3000; i++) {
-				//创建随机粒子并添加到geometry中
-				let particle = new THREE.Vector3(parseInt(Math.random()*(100 * Math.sin(radians * i) - (-100 * Math.sin(radians * i)) + 1) + (-100 * Math.sin(radians * i)), 10), parseInt(Math.random()*(100 * Math.cos(radians * i) - (-100 * Math.cos(radians * i)) + 1) + (-100 * Math.cos(radians * i)), 10), parseInt(Math.random()*(350 - 120 + 1) + 130, 10))
-				geometry.vertices.push(particle)
-				// pointArray.push(geometry)
-			}
-			return (new THREE.Points(geometry, material))
-		}
-		let aa = generatePointCloudGeometry()
-		aa.geometry.verticesNeedUpdate = true
-		scene.add(aa)
-		console.log(generatePointCloudGeometry())
-		for (let i = 0; i < aa.geometry.vertices.length; i++) {
-			new TWEEN.Tween({
-				x: aa.geometry.vertices[i].x,
-				y: aa.geometry.vertices[i].y,
-				z: aa.geometry.vertices[i].z,
-			})
-				.to({
-					x: 0,
-					y: 0,
-					z: 0
-				}, 5000)
-				.easing(TWEEN.Easing.Linear.None)
-				.onUpdate(obj => {
-					aa.geometry.vertices[i].x = obj.x
-					aa.geometry.vertices[i].y = obj.y
-					aa.geometry.vertices[i].z = obj.z
-				}).start()
-		}
+		// const generatePointCloudGeometry = () => {
+		// 	let geometry = new THREE.Geometry()
+		// 	let material = new THREE.PointsMaterial({ size: 1, color: 0xffff00 })
+		// 	let radians = (Math.PI / 180)
+		// 	for (let i = 0; i < 3000; i++) {
+		// 		//创建随机粒子并添加到geometry中
+		// 		let particle = new THREE.Vector3(parseInt(Math.random()*(100 * Math.sin(radians * i) - (-100 * Math.sin(radians * i)) + 1) + (-100 * Math.sin(radians * i)), 10), parseInt(Math.random()*(100 * Math.cos(radians * i) - (-100 * Math.cos(radians * i)) + 1) + (-100 * Math.cos(radians * i)), 10), parseInt(Math.random()*(350 - 120 + 1) + 130, 10))
+		// 		geometry.vertices.push(particle)
+		// 		// pointArray.push(geometry)
+		// 	}
+		// 	return (new THREE.Points(geometry, material))
+		// }
+		// let aa = generatePointCloudGeometry()
+		// aa.geometry.verticesNeedUpdate = true
+		// scene.add(aa)
+		// console.log(generatePointCloudGeometry())
+		// for (let i = 0; i < aa.geometry.vertices.length; i++) {
+		// 	new TWEEN.Tween({
+		// 		x: aa.geometry.vertices[i].x,
+		// 		y: aa.geometry.vertices[i].y,
+		// 		z: aa.geometry.vertices[i].z,
+		// 	})
+		// 		.to({
+		// 			x: 0,
+		// 			y: 0,
+		// 			z: 0
+		// 		}, 5000)
+		// 		.easing(TWEEN.Easing.Linear.None)
+		// 		.onUpdate(obj => {
+		// 			aa.geometry.vertices[i].x = obj.x
+		// 			aa.geometry.vertices[i].y = obj.y
+		// 			aa.geometry.vertices[i].z = obj.z
+		// 		}).start()
+		// }
 
 		// 球面打点
 		let particles = new CreateParticle(sphereParticles).createEarthParticles()
@@ -302,25 +302,25 @@ function ProdPage () {
 			requestAnimationFrame(animate)
 			// group_source.rotation.y += 0.002
 			let objects = sphereParticles.children
-			aa.geometry.verticesNeedUpdate = true
-			for (let i = 0; i < aa.geometry.vertices.length; i++) {
-				new TWEEN.Tween({
-					x: aa.geometry.vertices[i].x,
-					y: aa.geometry.vertices[i].y,
-					z: aa.geometry.vertices[i].z,
-				})
-					.to({
-						x: 0,
-						y: 0,
-						z: 0
-					}, 60)
-					.easing(TWEEN.Easing.Linear.None)
-					.onUpdate(obj => {
-						aa.geometry.vertices[i].x = obj.x
-						aa.geometry.vertices[i].y = obj.y
-						aa.geometry.vertices[i].z = obj.z
-					}).start()
-			}
+			// aa.geometry.verticesNeedUpdate = true
+			// for (let i = 0; i < aa.geometry.vertices.length; i++) {
+			// 	new TWEEN.Tween({
+			// 		x: aa.geometry.vertices[i].x,
+			// 		y: aa.geometry.vertices[i].y,
+			// 		z: aa.geometry.vertices[i].z,
+			// 	})
+			// 		.to({
+			// 			x: 0,
+			// 			y: 0,
+			// 			z: 0
+			// 		}, 60)
+			// 		.easing(TWEEN.Easing.Linear.None)
+			// 		.onUpdate(obj => {
+			// 			aa.geometry.vertices[i].x = obj.x
+			// 			aa.geometry.vertices[i].y = obj.y
+			// 			aa.geometry.vertices[i].z = obj.z
+			// 		}).start()
+			// }
 			objects.forEach(obj => {
 				let material = obj.material
 				material.t_ += material.speed_
@@ -356,7 +356,7 @@ function ProdPage () {
 			<div id='content' className='prod_content'>
 				<div id='canvas'></div>
 				<div id='init1' className='prod_content_left'>
-          这里是一些饼状图、折线图、雷达图等
+					<LeftIntroduction></LeftIntroduction>
 				</div>
 				<div id='init2' className='prod_content_leftBottom'>
 					<Statistics></Statistics>
