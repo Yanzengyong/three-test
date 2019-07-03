@@ -15,6 +15,7 @@ import CreateCloud from './createCloud'
 import CreateModel from './createModel'
 import Positions from './getPosition'
 import BriefIntroduction from '../../components/BriefIntroduction'
+import LeftIntroduction from '../../components/LeftIntroduction'
 import { groupSource, animateSource } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
 import { groupCenter, animateCenter } from './centerChunk'
@@ -280,7 +281,7 @@ function ProdPage () {
 			<div id='content' className='prod_content'>
 				<div id='canvas'></div>
 				<div id='init1' className='prod_content_left'>
-          这里是一些饼状图、折线图、雷达图等
+					<LeftIntroduction></LeftIntroduction>
 				</div>
 				<div id='init2' className='prod_content_leftBottom'>
 					<Statistics></Statistics>
