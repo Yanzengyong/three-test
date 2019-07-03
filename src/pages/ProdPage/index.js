@@ -16,6 +16,8 @@ import CreateModel from './createModel'
 import Positions from './getPosition'
 import BriefIntroduction from '../../components/BriefIntroduction'
 import { groupSource, animateSource } from './sourceChunk'
+import { groupApply,	animateApply } from './applyChunk'
+import { groupCenter, animateCenter } from './centerChunk'
 
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
 
@@ -56,6 +58,7 @@ scene.add(group_source_ring)
 
 // 创建使用加工后的组 ----- 展示平台把数据加工后应用展示 （坐标处于0 y z位置）
 let group_use = new THREE.Group()
+group_use.position.set(0, 0, -150 * 1.5)
 scene.add(group_use)
 
 // 创建球点对象
@@ -168,7 +171,7 @@ function ProdPage () {
 
 		// 创建光锥的位置
 		rocket_position = new Positions().getSpherePosition(150)
-		group_use.rotation.x = -0.5 * Math.PI
+		group_apply.rotation.x = -0.5 * Math.PI
 
 		// 创建圆环的位置
 		// let ring_position = new Positions().getRingPosition(100, 0, 0, 200, 100)
@@ -176,22 +179,23 @@ function ProdPage () {
 
 		// 球面打点
 		let particles = new CreateParticle(sphereParticles).createEarthParticles()
-		group_use.add(particles)
+		group_apply.add(particles)
 
 		// 光锥
-		new CreateObject(rocket_position, group_use).createObjects()
+		new CreateObject(rocket_position, group_apply).createObjects()
 
 		// 外层 云层
 		let cloud = new CreateCloud().createCloudGrid()
 		cloud.name = 'centerSphereCloud'
 		clickObjectArr.push(cloud)
-		group_use.add(cloud)
+		group_apply.add(cloud)
 
 		// 外层环
 		let centerOutRing = new THREE.TorusGeometry(150 * 1.5, 3, 16, 100)
 		let materialRing = new THREE.MeshBasicMaterial({ color: 0xffff00 })
-		var torus = new THREE.Mesh(centerOutRing, materialRing)
+		let torus = new THREE.Mesh(centerOutRing, materialRing)
 		group_source_ring.add(torus)
+		group_source_ring.add(groupCenter)
 
 		// const getcylposition = () => {
 		// 	let positions = []
@@ -217,7 +221,7 @@ function ProdPage () {
 		scene.add(generatePointCloudGeometry2())
 		// 导入源头模型
 		group_source.add(groupSource)
-
+		group_use.add(groupApply)
 
 		// 像素点
 		renderer.setPixelRatio(window.devicePixelRatio)
@@ -238,7 +242,8 @@ function ProdPage () {
 			// 必须写的
 			requestAnimationFrame(animate)
 			animateSource()
-			// group_use.rotation.y += 0.002
+			group_source_ring.rotation.z += Math.PI / 2 * 0.002
+			group_apply.rotation.y += 0.002
 			let objects = sphereParticles.children
 			objects.forEach(obj => {
 				let material = obj.material

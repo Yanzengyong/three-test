@@ -168,18 +168,18 @@ let core = new THREE.Group()
 new Positions().getRingPosition(80, 0, 0, z, 10).forEach(item => {
 	core.add(new CreateModel().createNormalCylinder(2, 200, 0.8, item.x, item.y, item.z - 616, 0xF3D225))
 })
-new Positions().getRingPosition(75, 0, 0, z, 10).forEach(item => {
+new Positions().getRingPosition(70, 0, 0, z, 10).forEach(item => {
 	core.add(new CreateModel().createCube(4, 20, 4, 0.6, item.x, item.y, item.z - 516, 0xF3D225))
 	core.add(new CreateModel().createCube(4, 20, 4, 0.6, item.x, item.y, item.z - 716, 0xF3D225))
 })
-new Positions().getRingPosition(85, 0, 0, z, 10).forEach(item => {
+new Positions().getRingPosition(85, 0, 0, z, 8).forEach(item => {
 	core.add(new CreateModel().createNormalCylinder(2, 100, 0.8, item.x, item.y, item.z - 566, 0x4AFFFE))
 })
 new Positions().getRingPosition(85, 0, 0, z, 50).forEach(item => {
 	core.add(new CreateModel().createCube(5, 5, 10, 0.5, item.x, item.y, item.z - 500, 0x4AFFFE))
 })
 new Positions().getRingPosition(100, 0, 0, z, 60).forEach(item => {
-	core.add(new CreateModel().createCube(3, 3, 3, 0.4, item.x, item.y, item.z - 510, 0xCC0001))
+	core.add(new CreateModel().createCube(3, 3, 3, 0.4, item.x, item.y, item.z - 566, 0xCC0001))
 })
 new Positions().getRingPosition(110, 0, 0, z, 60).forEach(item => {
 	core.add(new CreateModel().createCube(3, 3, 3, 0.4, item.x, item.y, item.z - 526, 0x4AFFFE))
