@@ -1,8 +1,49 @@
 .briefIntroduciton{
   color: #4AFFFE;
-  width: 320px;
+  width: 100%;
   font-size: 18px;
   padding: 20px;
   line-height: 35px;
-  // height: 500px;;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.textGroup{
+  width: 100%;
+}
+.leftIntroduction{
+  color: white;
+  width: 75%;
+}
+.introSourceBox{
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  background: url('../../../assets/images/top_left.png') 0 0,
+    url('../../../assets/images/top_right.png') 100% 0,
+    url('../../../assets/images/bottom_left.png') 0 100%,
+    url('../../../assets/images/bottom_right.png') 100% 100%;
+  background-repeat: no-repeat;
+  border:1px solid #4AFFFE;
+  margin-top: 20px;
+  align-items: center;
+}
+.mainbox{
+  // padding:6px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4AFFFE;
+}
+.arrowGroup{
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.arrow {
+  height: 50px;
+  width: 65px;
+  margin-top: 20px;
 }
