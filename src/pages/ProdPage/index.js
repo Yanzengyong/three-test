@@ -161,7 +161,11 @@ function ProdPage () {
 			x: 650,
 			y: 850,
 			z: 350
-		}, camera, TWEEN.Easing.Circular.InOut, 2400)
+		}, camera, TWEEN.Easing.Circular.InOut, 2400, {
+			x: 0,
+			y: 0,
+			z: 0
+		})
 		scene.add(group_source_ring)
 		scene.add(group_source)
 		scene.add(group_use)
@@ -235,16 +239,23 @@ function ProdPage () {
 				return animateHandle(camera.position, {
 					x: 0,
 					y: 0,
-					z: 550
+					z: 700
 				}, camera, TWEEN.Easing.Circular.InOut, 2400, {
-					x: 1500,
-					y: 1500,
-					z: 500
+					x: 0,
+					y: 0,
+					z: 700
 				})
 			})
 			.then(() => {
-				centerModel = new ApplyInfo().createMoreCube()
-				group_apply.add(centerModel)
+				return animateHandle(camera.position, {
+					x: 0,
+					y: 0,
+					z: 700
+				}, camera, TWEEN.Easing.Linear.None, 100, {
+					x: 500,
+					y: 500,
+					z: 700
+				})
 			})
 		scene.remove(group_source_ring)
 		scene.remove(group_apply)
@@ -270,7 +281,6 @@ function ProdPage () {
 		scene.add(helper)
 		// 获取盒子的dom元素
 		const container = document.getElementById('canvas')
-
 		// 监听点击模型事件
 		container.addEventListener('click', (event) => {
 			event.preventDefault()
