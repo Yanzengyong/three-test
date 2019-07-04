@@ -79,9 +79,18 @@
       top: 46%;
       opacity: 0;
       z-index: 666;
+      button{
+        width: 80px;
+        height: 40px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #5bf1dfc2;
+        border: none;
+        border-radius: 6px;
+      }
     }
     .prod_content_left{
-      width:17%;
+      width:18%;
       position: absolute;
       left: 0;
       top: 0;

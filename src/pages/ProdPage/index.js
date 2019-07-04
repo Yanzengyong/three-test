@@ -158,13 +158,14 @@ function ProdPage () {
 	// 返回到初始化的处理函数
 	const backInitHandle = () => {
 		animateHandle(camera.position, {
-			x: 600,
-			y: 800,
-			z: 300
+			x: 650,
+			y: 850,
+			z: 350
 		}, camera, TWEEN.Easing.Circular.InOut, 2400)
 		scene.add(group_source_ring)
 		scene.add(group_source)
 		scene.add(group_use)
+		scene.add(group_apply)
 		group_apply.add(cloud)
 		group_apply.remove(centerModel)
 		let tl = anime.timeline({
@@ -224,13 +225,13 @@ function ProdPage () {
 		animateHandle(camera.position, {
 			x: 0,
 			y: 0,
-			z: 500
+			z: 0
 		}, camera, TWEEN.Easing.Circular.InOut, 2400)
 			.then(() => {
 				return animateHandle(camera.position, {
 					x: 0,
-					y: 260,
-					z: 0
+					y: 0,
+					z: -500
 				}, camera, TWEEN.Easing.Circular.InOut, 2400)
 			})
 			.then(() => {
@@ -238,7 +239,7 @@ function ProdPage () {
 				group_apply.add(centerModel)
 			})
 		scene.remove(group_source_ring)
-		scene.remove(group_source)
+		scene.remove(group_apply)
 		scene.remove(group_use)
 		group_apply.remove(cloud)
 	}
@@ -284,7 +285,7 @@ function ProdPage () {
 		}, true)
 
 		// 相机所在位子
-		camera.position.set(600, 800, 300)
+		camera.position.set(650, 850, 350)
 
 		// 设置环境光
 		let light = new THREE.AmbientLight(0xffffff, 1)
@@ -411,7 +412,7 @@ function ProdPage () {
 			<div id='content' className='prod_content'>
 				<div id='canvas'></div>
 				<div id='backBtn' className='prod_info_backBtn'>
-					<button onClick={backInitHandle}>back</button>
+					<button onClick={backInitHandle}>返回</button>
 				</div>
 				<div id='init1' className='prod_content_left'>
 					<LeftIntroduction></LeftIntroduction>
