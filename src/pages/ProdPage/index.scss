@@ -73,6 +73,13 @@
       left: 0;
       top: 0;
     }
+    .prod_info_backBtn{
+      position: absolute;
+      right: 20px;
+      top: 46%;
+      opacity: 0;
+      z-index: 666;
+    }
     .prod_content_left{
       width:17%;
       position: absolute;

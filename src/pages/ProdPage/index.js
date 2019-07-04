@@ -149,6 +149,9 @@ function ProdPage () {
 			targets: '#info2',
 			opacity: '1',
 			delay: 250
+		}).add({
+			targets: '#backBtn',
+			opacity: '1'
 		})
 	}
 
@@ -175,6 +178,9 @@ function ProdPage () {
 			targets: '#info2',
 			opacity: '0',
 		}).add({
+			targets: '#backBtn',
+			opacity: '0'
+		}).add({
 			targets: '#canvas',
 			top: '0',
 			left: '0',
@@ -187,7 +193,8 @@ function ProdPage () {
 		})
 	}
 
-	const checkCenterHandle = () => {
+	// 查看中间模型详情的处理函数 ----- 视角切换、动画执行等
+	const checkOperateHandle = () => {
 		slideOutHandle()
 		animateHandle(camera.position, {
 			x: 0,
@@ -209,6 +216,43 @@ function ProdPage () {
 		scene.remove(group_source)
 		scene.remove(group_use)
 		group_apply.remove(cloud)
+	}
+
+	// 查看源模型详情的处理函数 ----- 视角切换、动画执行等
+	const checkSourceHandle = () => {
+		slideOutHandle()
+		animateHandle(camera.position, {
+			x: 0,
+			y: 0,
+			z: 500
+		}, camera, TWEEN.Easing.Circular.InOut, 2400)
+			.then(() => {
+				return animateHandle(camera.position, {
+					x: 0,
+					y: 260,
+					z: 0
+				}, camera, TWEEN.Easing.Circular.InOut, 2400)
+			})
+			.then(() => {
+				centerModel = new ApplyInfo().createMoreCube()
+				group_apply.add(centerModel)
+			})
+		scene.remove(group_source_ring)
+		scene.remove(group_source)
+		scene.remove(group_use)
+		group_apply.remove(cloud)
+	}
+
+	const checkInfoHandle = (name) => {
+		console.log(name)
+		switch (name) {
+		case 'source': checkSourceHandle()
+			break
+		case 'operate': checkOperateHandle()
+			break
+		case 'apply': checkSourceHandle()
+			break
+		}
 	}
 
 	// 加载3d效果的初始函数
@@ -354,12 +398,9 @@ function ProdPage () {
 			<div className='prod_header_box'>
 				<div className='prod_title_box'>
 					<div className='prod_title'>
-						<button onClick={backInitHandle}>返回到初始页面</button>
 						<div className='prod_title_fill'></div>
 						<div className='prod_title_center'>国家工程实验室</div>
 						<div className='prod_title_fill'></div>
-						<button onClick={slideOutHandle}>滑出的过渡效果</button>
-						<button onClick={checkCenterHandle}>查看加工详情</button>
 					</div>
 				</div>
 				<div className='prod_header_right'>
@@ -369,6 +410,9 @@ function ProdPage () {
 			</div>
 			<div id='content' className='prod_content'>
 				<div id='canvas'></div>
+				<div id='backBtn' className='prod_info_backBtn'>
+					<button onClick={backInitHandle}>back</button>
+				</div>
 				<div id='init1' className='prod_content_left'>
 					<LeftIntroduction></LeftIntroduction>
 				</div>
@@ -376,7 +420,7 @@ function ProdPage () {
 					<Statistics></Statistics>
 				</div>
 				<div id='init3' className='prod_content_leftTop'>
-					<BriefIntroduction></BriefIntroduction>
+					<BriefIntroduction onClick={checkInfoHandle}></BriefIntroduction>
 				</div>
 				<div id='init4' className='prod_content_right'>
 					<News></News>

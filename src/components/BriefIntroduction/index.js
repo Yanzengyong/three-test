@@ -51,20 +51,20 @@ export default class BriefIntroduction extends React.Component {
 				</div>
 
 				<div className="leftIntroduction">
-					<div className="introSourceBox">
+					<div onClick={() => this.props.onClick('source')} className="introSourceBox">
 						<div className="mainbox">数据从哪来？</div>
 					</div>
 					<div className="arrowGroup">
 						<img src='assets/images/arrowgroup.gif' className='arrow'/>
 					</div>
-					<div className="introSourceBox">
+					<div onClick={() => this.props.onClick('operate')} className="introSourceBox">
 						<div className="mainbox">数据怎么加工？</div>
 					</div>
 
 					<div className="arrowGroup">
 						<img src='assets/images/arrowgroup.gif' className='arrow'/>
 					</div>
-					<div className="introSourceBox">
+					<div onClick={() => this.props.onClick('apply')} className="introSourceBox">
 						<div className="mainbox"> 数据用到了哪儿？	</div>
 					</div>
 				</div>
