@@ -68,6 +68,11 @@
     position: relative;
     height: 90vh;
     color: #fff;
+    #canvas{
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
     .prod_content_left{
       width:17%;
       position: absolute;
