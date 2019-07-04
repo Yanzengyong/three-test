@@ -12,13 +12,13 @@ import LineChart from '../../components/LineChart'
 import CreateObject from './createObjects'
 import CreateParticle from './createParticles'
 import CreateCloud from './createCloud'
-import CreateModel from './createModel'
 import Positions from './getPosition'
 import BriefIntroduction from '../../components/BriefIntroduction'
 import LeftIntroduction from '../../components/LeftIntroduction'
 import { groupSource, animateSource } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
 import { groupCenter, animateCenter } from './centerChunk'
+import ApplyInfo from './applyInfo'
 
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
 
@@ -62,6 +62,10 @@ let group_use = new THREE.Group()
 group_use.position.set(0, 0, -150 * 1.5)
 scene.add(group_use)
 
+// 创建一个云层的变量 ---- 方便删除添加
+let cloud
+let centerModel
+
 // 创建球点对象
 let sphereParticles = new THREE.Object3D()
 
@@ -75,6 +79,7 @@ let rocket_position = []
 let clickObjectArr = []
 
 function ProdPage () {
+
 	useEffect(() => {
 		anime({
 			targets: ['#init1', '#init2', '#init3', '#init4', '#init5'],
@@ -85,6 +90,41 @@ function ProdPage () {
 		camera = new THREE.PerspectiveCamera(75, document.getElementById('content').offsetWidth / document.getElementById('content').offsetHeight, 0.1, 3000)
 		init()
 	}, [])
+
+	// 封装的一个 动画完成的函数 ----- promise函数
+	const animateHandle = (current, target, geometry, type, time, cameraTar) => {
+		return new Promise((resolve) => {
+			new TWEEN.Tween({
+				x: current.x,
+				y: current.y,
+				z: current.z,
+				xc: cameraTarget.x,
+				yc: cameraTarget.y,
+				zc: cameraTarget.z,
+			})
+				.to({
+					x: target.x,
+					y: target.y,
+					z: target.z,
+					xc: cameraTar ? cameraTar.x : cameraTarget.x,
+					yc: cameraTar ? cameraTar.y : cameraTarget.y,
+					zc: cameraTar ? cameraTar.z : cameraTarget.z,
+				}, time || 1000)
+				.easing(type || TWEEN.Easing.Linear.None)
+				.onUpdate(obj => {
+					geometry.position.x = obj.x
+					geometry.position.y = obj.y
+					geometry.position.z = obj.z
+					cameraTarget.x = obj.xc
+					cameraTarget.y = obj.yc
+					cameraTarget.z = obj.zc
+				}).start()
+			let timer = setTimeout(() => {
+				resolve('success')
+				clearTimeout(timer)
+			}, time + 100 || 1100)
+		})
+	}
 
 	// 切换到详情时滑块的处理函数
 	const slideOutHandle = () => {
@@ -97,6 +137,11 @@ function ProdPage () {
 			opacity: '0',
 			duration: 200
 		}).add({
+			targets: '#canvas',
+			top: '-25%',
+			left: '25%',
+			scale: 0.5
+		}).add({
 			targets: '#info1',
 			left: 0
 		}).add({
@@ -108,6 +153,16 @@ function ProdPage () {
 
 	// 返回到初始化的处理函数
 	const backInitHandle = () => {
+		animateHandle(camera.position, {
+			x: 600,
+			y: 800,
+			z: 300
+		}, camera, TWEEN.Easing.Circular.InOut, 2400)
+		scene.add(group_source_ring)
+		scene.add(group_source)
+		scene.add(group_use)
+		group_apply.add(cloud)
+		group_apply.remove(centerModel)
 		let tl = anime.timeline({
 			easing: 'easeOutExpo',
 			duration: 250
@@ -119,11 +174,40 @@ function ProdPage () {
 			targets: '#info2',
 			opacity: '0',
 		}).add({
+			targets: '#canvas',
+			top: '0',
+			left: '0',
+			scale: 1
+		}).add({
 			targets: ['#init1', '#init2', '#init3', '#init4', '#init5'],
 			opacity: '1',
 			duration: 1500,
 			easing: 'linear'
 		})
+	}
+
+	const checkCenterHandle = () => {
+		slideOutHandle()
+		animateHandle(camera.position, {
+			x: 0,
+			y: 0,
+			z: 500
+		}, camera, TWEEN.Easing.Circular.InOut, 2400)
+			.then(() => {
+				return animateHandle(camera.position, {
+					x: 0,
+					y: 260,
+					z: 0
+				}, camera, TWEEN.Easing.Circular.InOut, 2400)
+			})
+			.then(() => {
+				centerModel = new ApplyInfo().createMoreCube()
+				group_apply.add(centerModel)
+			})
+		scene.remove(group_source_ring)
+		scene.remove(group_source)
+		scene.remove(group_use)
+		group_apply.remove(cloud)
 	}
 
 	// 加载3d效果的初始函数
@@ -186,7 +270,7 @@ function ProdPage () {
 		new CreateObject(rocket_position, group_apply).createObjects()
 
 		// 外层 云层
-		let cloud = new CreateCloud().createCloudGrid()
+		cloud = new CreateCloud().createCloudGrid()
 		cloud.name = 'centerSphereCloud'
 		clickObjectArr.push(cloud)
 		group_apply.add(cloud)
@@ -242,7 +326,10 @@ function ProdPage () {
 		const animate = () => {
 			// 必须写的
 			requestAnimationFrame(animate)
+			// 必须再此调用
+			TWEEN.update()
 			animateSource()
+			animateApply()
 			group_source_ring.rotation.z += Math.PI / 2 * 0.002
 			group_apply.rotation.y += 0.002
 			let objects = sphereParticles.children
@@ -271,6 +358,7 @@ function ProdPage () {
 						<div className='prod_title_center'>国家工程实验室</div>
 						<div className='prod_title_fill'></div>
 						<button onClick={slideOutHandle}>滑出的过渡效果</button>
+						<button onClick={checkCenterHandle}>查看加工详情</button>
 					</div>
 				</div>
 				<div className='prod_header_right'>
