@@ -8,7 +8,7 @@ export default function LineChart () {
 		resourcedata:[3.9, 5.9, 11.1, 18.7, 48.3, 69.2, 231.6, 46.6, 55.4, 18.4, 10.3, 0.7],
 		sourcedata:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
 	}
-	var colors = ['#0095ff', '#00d5ff', '#00ffd5']
+	var colors = ['#58b0ef', '#00d5ff', '#00ffd5']
 
 	const	option = {
 		color: colors,

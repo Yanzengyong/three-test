@@ -179,10 +179,10 @@ new Positions().getRingPosition(85, 0, 0, z, 50).forEach(item => {
 	core.add(new CreateModel().createCube(5, 5, 10, 0.5, item.x, item.y, item.z - 500, 0x4AFFFE))
 })
 new Positions().getRingPosition(100, 0, 0, z, 60).forEach(item => {
-	core.add(new CreateModel().createCube(3, 3, 3, 0.4, item.x, item.y, item.z - 566, 0xCC0001))
+	core.add(new CreateModel().createCube(3, 3, 3, 0.4, item.x, item.y, item.z - 455, 0xCC0001))
 })
 new Positions().getRingPosition(110, 0, 0, z, 60).forEach(item => {
-	core.add(new CreateModel().createCube(3, 3, 3, 0.4, item.x, item.y, item.z - 526, 0x4AFFFE))
+	core.add(new CreateModel().createCube(3, 3, 3, 0.4, item.x, item.y, item.z - 486, 0x4AFFFE))
 })
 groupSource.add(core)
 
