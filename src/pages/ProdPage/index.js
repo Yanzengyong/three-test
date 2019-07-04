@@ -226,13 +226,21 @@ function ProdPage () {
 			x: 0,
 			y: 0,
 			z: 0
-		}, camera, TWEEN.Easing.Circular.InOut, 2400)
+		}, camera, TWEEN.Easing.Circular.InOut, 2400, {
+			x: 0,
+			y: 0,
+			z: 600
+		})
 			.then(() => {
 				return animateHandle(camera.position, {
 					x: 0,
 					y: 0,
-					z: -500
-				}, camera, TWEEN.Easing.Circular.InOut, 2400)
+					z: 550
+				}, camera, TWEEN.Easing.Circular.InOut, 2400, {
+					x: 1500,
+					y: 1500,
+					z: 500
+				})
 			})
 			.then(() => {
 				centerModel = new ApplyInfo().createMoreCube()
