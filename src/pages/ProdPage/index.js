@@ -15,6 +15,7 @@ import CreateCloud from './createCloud'
 import Positions from './getPosition'
 import BriefIntroduction from '../../components/BriefIntroduction'
 import LeftIntroduction from '../../components/LeftIntroduction'
+import DataSource from '../../components/DataSource'
 import { groupSource, animateSource } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
 import { groupCenter, animateCenter } from './centerChunk'
@@ -384,7 +385,7 @@ function ProdPage () {
 					<LineChart></LineChart>
 				</div>
 				<div id='info1' className='prod_info_left'>
-          这里是单个详情时候的饼图、折线图、雷达图等
+					<DataSource></DataSource>
 				</div>
 				{/* <div id='info2' className='prod_info_rightBottom'>
           这里是单个详情时候的无框的表格统计图

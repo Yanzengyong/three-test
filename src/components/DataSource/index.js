@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactEcharts from 'echarts-for-react'
-// import './scss/pie.scss'
+import './scss/index.scss'
 
 export default function DataAssets () {
 	const option = {
@@ -197,14 +197,13 @@ export default function DataAssets () {
 		]
 	}
 	return (
-		<div >
-			<div className="maintitle">平台数据资产概况</div>
-			<div className="firsttitle">政府数据资源</div>
-			<ReactEcharts option={option}/>
-			<div className="firsttitle">行业数据资源</div>
-			<ReactEcharts option={option2}/>
-			<div className="firsttitle">政策公文数据资源</div>
-			<ReactEcharts option={option3}/>
+		<div className="datasource">
+			<div className="title">政府数据</div>
+			<ReactEcharts className="firstPie" option={option}/>
+			<div className="title">行业数据</div>
+			<ReactEcharts className="secondChart" option={option2}/>
+			<div className="title">政策公文数据</div>
+			<ReactEcharts className="ThirdChart" option={option3}/>
 		</div>
 	)
 }

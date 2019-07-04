@@ -15,8 +15,8 @@ function Test () {
 			{/* <DataAssets/> */}
 			{/* <DataElement/> */}
 			{/* <Statistics></Statistics> */}
-			{/* <DataSource/> */}
-			<LeftIntroduction></LeftIntroduction>
+			<DataSource/>
+			{/* <LeftIntroduction></LeftIntroduction> */}
 		</div>
 	)
 }

@@ -1,0 +1,20 @@
+.datasource{
+  // background-color: ;
+  height: 100%;
+  overflow: scroll;
+
+}
+.datasource::-webkit-scrollbar {display:none}
+.firstPie{
+  max-height: 30%;
+}
+.secondChart{
+  max-height: 30%;
+}
+.ThirdChart{
+  max-height: 30%;
+}
+.title{
+  color: #4AFFFE;
+  font-size: 18px;
+}
