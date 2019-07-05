@@ -34,7 +34,7 @@ export default class News extends React.Component {
 		}, 5000)
 	}
 	componentWillUnmount () {
-		clearTimeout(this.timer)
+		clearInterval(this.timer)
 	}
 	pageonChange =(page)=> {
 		this.setState({

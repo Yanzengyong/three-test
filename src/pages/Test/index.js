@@ -8,6 +8,7 @@ import './scss/test.scss'
 import Statistics from '../../components/Statistics'
 import BriefIntroduction from '../../components/BriefIntroduction'
 import LeftIntroduction from '../../components/LeftIntroduction'
+import Clock from '../../components/Clock'
 function Test () {
 
 	return (
@@ -15,7 +16,7 @@ function Test () {
 			{/* <DataAssets/> */}
 			{/* <DataElement/> */}
 			{/* <Statistics></Statistics> */}
-			<DataSource/>
+			<Clock/>
 			{/* <LeftIntroduction></LeftIntroduction> */}
 		</div>
 	)
