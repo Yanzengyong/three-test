@@ -65,12 +65,15 @@ scene.add(group_use)
 
 // 创建一个查看使用详情的组 ---- 一个由片状组成的球体
 let group_use_info = new THREE.Group()
+group_use_info.position.set(0, 0, -400)
+group_use_info.rotation.x = -0.5 * Math.PI
 scene.add(group_use_info)
 
 // 创建一个云层的变量 ---- 方便删除添加
 let cloud
 let centerModel
-let sphere_field = []
+let infoModel_Arr = []
+let particlesArr
 
 // 创建球点对象
 let sphereParticles = new THREE.Object3D()
@@ -175,6 +178,8 @@ function ProdPage () {
 		scene.add(group_source)
 		scene.add(group_use)
 		scene.add(group_apply)
+		scene.add(particlesArr)
+		scene.add(group_use_info)
 		group_apply.add(cloud)
 		group_apply.remove(centerModel)
 		let tl = anime.timeline({
@@ -225,6 +230,7 @@ function ProdPage () {
 		scene.remove(group_source_ring)
 		scene.remove(group_source)
 		scene.remove(group_use)
+		scene.remove(group_use_info)
 		group_apply.remove(cloud)
 	}
 
@@ -265,17 +271,58 @@ function ProdPage () {
 		scene.remove(group_source_ring)
 		scene.remove(group_apply)
 		scene.remove(group_use)
+		scene.remove(group_use_info)
+		group_apply.remove(cloud)
+	}
+
+	// 查看使用模型详情的处理函数 ----- 视角切换、动画执行等
+	const checkUseHandle = () => {
+		slideOutHandle()
+		animateHandle(camera.position, {
+			x: 0,
+			y: 0,
+			z: 0
+		}, camera, TWEEN.Easing.Circular.InOut, 2400, {
+			x: 0,
+			y: 0,
+			z: -500
+		})
+			.then(() => {
+				return animateHandle(camera.position, {
+					x: 0,
+					y: 0,
+					z: -550
+				}, camera, TWEEN.Easing.Circular.InOut, 2400, {
+					x: 0,
+					y: 0,
+					z: -780
+				})
+			})
+			.then(() => {
+				return animateHandle(camera.position, {
+					x: 0,
+					y: 0,
+					z: -780
+				}, camera, TWEEN.Easing.Linear.None, 1000, {
+					x: 0,
+					y: -750,
+					z: -780
+				})
+			})
+		scene.remove(group_source_ring)
+		scene.remove(group_source)
+		scene.remove(group_apply)
+		scene.remove(particlesArr)
 		group_apply.remove(cloud)
 	}
 
 	const checkInfoHandle = (name) => {
-		console.log(name)
 		switch (name) {
 		case 'source': checkSourceHandle()
 			break
 		case 'operate': checkOperateHandle()
 			break
-		case 'apply': checkSourceHandle()
+		case 'apply': checkUseHandle()
 			break
 		}
 	}
@@ -354,19 +401,38 @@ function ProdPage () {
 			}
 			return (new THREE.Points(geometry, material))
 		}
-		scene.add(generatePointCloudGeometry2())
+		particlesArr = generatePointCloudGeometry2()
+		scene.add(particlesArr)
 
 		// 相关使用详情的模型
-		// 圆形球体的效果
-		// for (let i = 0; i < 300; i++) {
-		// 	let phi = Math.acos(- 1 + (2 * i) / 300)
-		// 	let theta = Math.sqrt(300 * Math.PI) * phi
-		// 	let object = new THREE.Object3D()
-		// 	object.position.setFromSphericalCoords(560, phi, theta)
-		// 	vector.copy(object.position).multiplyScalar(2)
-		// 	object.lookAt(vector)
-		// 	sphere_field.push(object)
-		// }
+		// 环形的效果
+		for (let i = 0; i < 6; i++) {
+			let souceDiv = document.createElement('div')
+			souceDiv.className = 'element_info'
+			souceDiv.style.backgroundColor = new THREE.Color('#c0ff00')
+			let symbol = document.createElement('img')
+			symbol.className = 'img_info'
+			symbol.src = 'assets/images/youku.jpg'
+			souceDiv.appendChild(symbol)
+			let details = document.createElement('div')
+			details.className = 'details_info'
+			details.innerHTML = '这是一段关于此应用伙伴的说明等'
+			souceDiv.appendChild(details)
+			let theta = i * (2 * Math.PI) / 6
+			let y = 376
+			let object = new CSS3DObject(souceDiv)
+			object.position.setFromCylindricalCoords(200, theta, y)
+			vector.x = object.position.x * -2
+			vector.y = object.position.y
+			vector.z = object.position.z * -2
+			object.lookAt(vector)
+			infoModel_Arr.push(object)
+		}
+		// 添加卡片到组内
+		for (let i = 0; i < infoModel_Arr.length; i++) {
+			group_use_info.add(infoModel_Arr[i])
+		}
+
 
 		// 导入源头模型
 		group_source.add(groupSource)
@@ -398,6 +464,7 @@ function ProdPage () {
 			animateApply()
 			group_source_ring.rotation.z += Math.PI / 2 * 0.002
 			group_apply.rotation.y += 0.002
+			group_use_info.rotation.y += 0.002
 			let objects = sphereParticles.children
 			objects.forEach(obj => {
 				let material = obj.material

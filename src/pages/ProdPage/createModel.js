@@ -26,6 +26,14 @@ export default class createModel {
 		cube.rotation.z = - Math.atan(x/y)
 		return cube
 	}
+	createCube2 (width, height, depth, opacity, x, y, z, color, rotation) {
+		let geometry = new THREE.BoxBufferGeometry(width, height, depth)
+		let material = new THREE.MeshToonMaterial({ color: color, opacity: opacity, transparent: true })
+		let cube = new THREE.Mesh(geometry, material)
+		cube.position.set(x, y, z)
+		cube.rotation.y = rotation * Math.PI
+		return cube
+	}
 	createCylinder (radius, height, opacity, x, y, z, color) {
 		let material = new THREE.MeshToonMaterial({ color: color, opacity: opacity, transparent: true, wireframe: true })
 		let geometry = new THREE.CylinderBufferGeometry(radius, radius, height, 100, 100, true)
@@ -50,5 +58,15 @@ export default class createModel {
 		cylinder.position.set(x, y, z)
 		cylinder.rotation.x = - Math.PI / 2
 		return cylinder
+	}
+	createTiltObj (width, depth, height, opacity, x, y, z, color) {
+		let material = new THREE.MeshToonMaterial({ color: color, opacity: opacity, transparent: true })
+		let geometry = new THREE.BoxBufferGeometry(width, depth, height)
+		let cube = new THREE.Mesh(geometry, material)
+		cube.position.set(x, y, z)
+		cube.rotation.x = -Math.atan(y/z)
+		cube.rotation.y = -Math.atan(x / Math.sqrt(Math.pow(z, 2) + Math.pow(y, 2)))
+		cube.rotation.z = -Math.atan(x/y) + Math.PI / 2
+		return cube
 	}
 }

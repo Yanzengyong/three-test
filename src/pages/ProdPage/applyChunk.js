@@ -1,6 +1,7 @@
 import CreateModel from './createModel'
 import * as THREE from 'three'
 import Positions from './getPosition'
+import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 
 let groupApply = new THREE.Group()
 let z = -30
@@ -50,11 +51,19 @@ new Positions().getRingPosition(170, 0, 0, z, 60).forEach(item => {
 	core.add(new CreateModel().createCube(3, 3, 5, 0.4, item.x, item.y, item.z - 245, 0xCC0001))
 })
 
+// 19.章鱼脚
+let rightFooter = new THREE.Group()
+new Positions().getRingPosition(165, 0, 0, z, 6).forEach(item => {
+	rightFooter.add(new CreateModel().createTiltObj(3, 80, 180, 0.6, item.x, item.y, item.z - 325, 0x4AFFFE))
+})
+
 
 groupApply.add(rightTorus)
+groupApply.add(rightFooter)
 
 const animateApply = () => {
 	core.rotation.z += Math.PI / 2 * 0.01
+	rightFooter.rotation.z -= 0.002
 }
 
 export {
