@@ -50,6 +50,7 @@ new Positions().getRingPosition(170, 0, 0, z, 60).forEach(item => {
 	core.add(new CreateModel().createCube(3, 3, 5, 0.4, item.x, item.y, item.z - 245, 0xCC0001))
 })
 
+
 groupApply.add(rightTorus)
 
 const animateApply = () => {

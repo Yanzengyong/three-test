@@ -63,9 +63,14 @@ let group_use = new THREE.Group()
 group_use.position.set(0, 0, -150 * 1.5)
 scene.add(group_use)
 
+// 创建一个查看使用详情的组 ---- 一个由片状组成的球体
+let group_use_info = new THREE.Group()
+scene.add(group_use_info)
+
 // 创建一个云层的变量 ---- 方便删除添加
 let cloud
 let centerModel
+let sphere_field = []
 
 // 创建球点对象
 let sphereParticles = new THREE.Object3D()
@@ -239,11 +244,11 @@ function ProdPage () {
 				return animateHandle(camera.position, {
 					x: 0,
 					y: 0,
-					z: 700
+					z: 600
 				}, camera, TWEEN.Easing.Circular.InOut, 2400, {
 					x: 0,
 					y: 0,
-					z: 700
+					z: 600
 				})
 			})
 			.then(() => {
@@ -251,8 +256,8 @@ function ProdPage () {
 					x: 0,
 					y: 0,
 					z: 700
-				}, camera, TWEEN.Easing.Linear.None, 100, {
-					x: 500,
+				}, camera, TWEEN.Easing.Linear.None, 2000, {
+					x: 0,
 					y: 500,
 					z: 700
 				})
@@ -309,11 +314,6 @@ function ProdPage () {
 		let light = new THREE.AmbientLight(0xffffff, 1)
 		scene.add(light)
 
-		// 设置平行光
-		// let dirLight = new THREE.DirectionalLight(0xffffff, 5)
-		// dirLight.position.set(400, 400, 1000)
-		// scene.add(dirLight)
-
 		// 相机作为orbitcontrol的参数，支持鼠标交互
 		let orbitControls = new Orbitcontrols(camera)
 		orbitControls.enableDamping = true
@@ -321,10 +321,6 @@ function ProdPage () {
 		// 创建光锥的位置
 		rocket_position = new Positions().getSpherePosition(150)
 		group_apply.rotation.x = -0.5 * Math.PI
-
-		// 创建圆环的位置
-		// let ring_position = new Positions().getRingPosition(100, 0, 0, 200, 100)
-		// console.log(ring_position)
 
 		// 球面打点
 		let particles = new CreateParticle(sphereParticles).createEarthParticles()
@@ -346,16 +342,7 @@ function ProdPage () {
 		group_source_ring.add(torus)
 		group_source_ring.add(groupCenter)
 
-		// const getcylposition = () => {
-		// 	let positions = []
-		// 	for (let i = 0; i < 150; i++) {
-		// 		let object = new THREE.Object3D()
-		// 		object.position.setFromCylindrical(new THREE.Cylindrical(100, 0, 100))
-		// 		positions.push(object)
-		// 	}
-		// 	return positions
-		// }
-		// console.log(getcylposition())
+		// 创建流动的例子位置
 		const generatePointCloudGeometry2 = () => {
 			let geometry = new THREE.Geometry()
 			let material = new THREE.PointsMaterial({ size: 1, color: 0xffff00 })
@@ -368,8 +355,23 @@ function ProdPage () {
 			return (new THREE.Points(geometry, material))
 		}
 		scene.add(generatePointCloudGeometry2())
+
+		// 相关使用详情的模型
+		// 圆形球体的效果
+		// for (let i = 0; i < 300; i++) {
+		// 	let phi = Math.acos(- 1 + (2 * i) / 300)
+		// 	let theta = Math.sqrt(300 * Math.PI) * phi
+		// 	let object = new THREE.Object3D()
+		// 	object.position.setFromSphericalCoords(560, phi, theta)
+		// 	vector.copy(object.position).multiplyScalar(2)
+		// 	object.lookAt(vector)
+		// 	sphere_field.push(object)
+		// }
+
 		// 导入源头模型
 		group_source.add(groupSource)
+
+		// 导入应用模型
 		group_use.add(groupApply)
 
 		// 像素点
