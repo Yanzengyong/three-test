@@ -100,8 +100,8 @@ new Positions().getRingPosition(120, 0, 0, z, 8).forEach(item => {
 	sg2_leftSlice.add(new CreateModel().createCube(4, 33, 66, 0.8, item.x, item.y, item.z - 220, 0x4AFFFE))
 	sg2_rightSlice.add(new CreateModel().createCube(4, 33, 66, 0.8, item.x, item.y, item.z - 220, 0x4AFFFE))
 })
-sg2_leftSlice.rotateOnAxis(new THREE.Vector3(0, 0, 250).normalize(), 40)
-sg2_rightSlice.rotateOnAxis(new THREE.Vector3(0, 0, 250).normalize(), 10)
+sg2_leftSlice.rotateOnAxis(new THREE.Vector3(0, 0, 250).normalize(), 30)
+sg2_rightSlice.rotateOnAxis(new THREE.Vector3(0, 0, 250).normalize(), 120)
 specialGroup2.add(sg2_cube)
 specialGroup2.add(sg2_leftSlice)
 specialGroup2.add(sg2_rightSlice)
@@ -197,7 +197,12 @@ const animateSource = () => {
 	core.rotation.z += Math.PI / 2 * 0.01
 }
 
+const animateSource2 = () => {
+	specialGroup2.rotation.z -= Math.PI / 2 * 0.001
+}
+
 export {
 	groupSource,
-	animateSource
+	animateSource,
+	animateSource2
 }

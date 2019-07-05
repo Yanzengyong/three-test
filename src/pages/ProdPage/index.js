@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import * as THREE from 'three'
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer'
@@ -16,7 +17,7 @@ import Positions from './getPosition'
 import BriefIntroduction from '../../components/BriefIntroduction'
 import LeftIntroduction from '../../components/LeftIntroduction'
 import DataSource from '../../components/DataSource'
-import { groupSource, animateSource } from './sourceChunk'
+import { groupSource, animateSource, animateSource2 } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
 import { groupCenter, animateCenter } from './centerChunk'
 import ApplyInfo from './applyInfo'
@@ -74,6 +75,7 @@ let cloud
 let centerModel
 let infoModel_Arr = []
 let particlesArr
+let showSourceInfo = false
 
 // 创建球点对象
 let sphereParticles = new THREE.Object3D()
@@ -88,7 +90,7 @@ let rocket_position = []
 let clickObjectArr = []
 
 function ProdPage () {
-
+	const [isShowSourceInfo, setIsShowSourceInfo] = useState(false)
 	useEffect(() => {
 		anime({
 			targets: ['#init1', '#init2', '#init3', '#init4', '#init5'],
@@ -99,6 +101,23 @@ function ProdPage () {
 		camera = new THREE.PerspectiveCamera(75, document.getElementById('content').offsetWidth / document.getElementById('content').offsetHeight, 0.1, 3000)
 		init()
 	}, [])
+
+	//创造星空
+	const createParticles = (size, transparent, opacity, vertexColors, sizeAttenuation, color, num) => {
+		let geometry = new THREE.Geometry()
+		let material = new THREE.PointsMaterial({ size: size, transparent: transparent, opacity: opacity, vertexColors: vertexColors, sizeAttenuation: sizeAttenuation, color: color })
+		let range = window.innerWidth
+		for (let i = 0; i < num; i++) {
+			//创建随机粒子并添加到geometry中
+			let particle = new THREE.Vector3(Math.random() *range - range / 4, Math.random() * range - range / 4, Math.random() * range - range / 4)
+			geometry.vertices.push(particle)
+
+			//创建颜色数组geometry.colors
+			let color = new THREE.Color(0xffffff)
+			geometry.colors.push(color)
+		}
+		return (new THREE.Points(geometry, material))
+	}
 
 	// 封装的一个 动画完成的函数 ----- promise函数
 	const animateHandle = (current, target, geometry, type, time, cameraTar) => {
@@ -165,6 +184,8 @@ function ProdPage () {
 
 	// 返回到初始化的处理函数
 	const backInitHandle = () => {
+		showSourceInfo = false
+		setIsShowSourceInfo(false)
 		animateHandle(camera.position, {
 			x: 650,
 			y: 850,
@@ -258,6 +279,8 @@ function ProdPage () {
 				})
 			})
 			.then(() => {
+				setIsShowSourceInfo(true)
+				showSourceInfo = true
 				return animateHandle(camera.position, {
 					x: 0,
 					y: 0,
@@ -354,6 +377,10 @@ function ProdPage () {
 			}
 		}, true)
 
+		// 背景星空 ----- 调用函数
+		let backgroundCloud = createParticles(2, true, 0.7, 0xffffff, false, 0xffffff, 1000)
+		scene.add(backgroundCloud)
+
 		// 相机所在位子
 		camera.position.set(650, 850, 350)
 
@@ -396,7 +423,7 @@ function ProdPage () {
 			let radians = (Math.PI / 180)
 			for (let i = 0; i < 3000; i++) {
 				//创建随机粒子并添加到geometry中
-				let particle = new THREE.Vector3(parseInt(Math.random()*(100 * Math.sin(radians * i) - (-100 * Math.sin(radians * i)) + 1) + (-100 * Math.sin(radians * i)), 10), parseInt(Math.random()*(100 * Math.cos(radians * i) - (-100 * Math.cos(radians * i)) + 1) + (-100 * Math.cos(radians * i)), 10), parseInt(Math.random()*(350 - 120 + 1) + 130, 10))
+				let particle = new THREE.Vector3(parseInt(Math.random()*(100 * Math.sin(radians * i) - (-100 * Math.sin(radians * i)) + 1) + (-100 * Math.sin(radians * i)), 10), parseInt(Math.random()*(100 * Math.cos(radians * i) - (-100 * Math.cos(radians * i)) + 1) + (-100 * Math.cos(radians * i)), 10), parseInt(Math.random()*(400 - 120 + 1) + 130, 10))
 				geometry.vertices.push(particle)
 			}
 			return (new THREE.Points(geometry, material))
@@ -460,7 +487,13 @@ function ProdPage () {
 			requestAnimationFrame(animate)
 			// 必须再此调用
 			TWEEN.update()
-			animateSource()
+			if (!showSourceInfo) {
+				console.log('!!!')
+				animateSource()
+			} else {
+				console.log('????')
+				animateSource2()
+			}
 			animateApply()
 			group_source_ring.rotation.z += Math.PI / 2 * 0.002
 			group_apply.rotation.y += 0.002
