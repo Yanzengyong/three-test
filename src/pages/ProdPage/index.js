@@ -16,6 +16,7 @@ import Positions from './getPosition'
 import BriefIntroduction from '../../components/BriefIntroduction'
 import LeftIntroduction from '../../components/LeftIntroduction'
 import DataSource from '../../components/DataSource'
+import Clock from '../../components/Clock'
 import { groupSource, animateSource } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
 import { groupCenter, animateCenter } from './centerChunk'
@@ -492,7 +493,7 @@ function ProdPage () {
 					</div>
 				</div>
 				<div className='prod_header_right'>
-          (先占位子，若没有内容可放就废弃)
+					<Clock></Clock>
 				</div>
 				<div className='prod_bottom_line'></div>
 			</div>
