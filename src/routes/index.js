@@ -6,7 +6,8 @@ import { Route, Redirect, Switch, HashRouter as Router } from 'react-router-dom'
 import {
 	Main,
 	Test,
-	Prod
+	Prod,
+	LearnPage
 } from './routes'
 // const { RouterHandler } = Router
 
@@ -19,6 +20,7 @@ const routes = () => (
 			<Route path='/main' component={Main}/>
 			<Route path='/Test' component={Test}/>
 			<Route path='/prod' component={Prod}/>
+			<Route path='/learn' component={LearnPage}/>
 			{/* <Route path='/standardDetail' component={StandardDetail}/> */}
 		</Switch>
 	</Router>

@@ -175,7 +175,7 @@ function ProdPage () {
 			left: 0
 		}).add({
 			targets: '#info2',
-			opacity: '1',
+			scale: 1,
 			delay: 250
 		}).add({
 			targets: '#backBtn',
@@ -213,7 +213,7 @@ function ProdPage () {
 			left: '-50%'
 		}).add({
 			targets: '#info2',
-			opacity: '0',
+			scale: 0,
 		}).add({
 			targets: '#backBtn',
 			opacity: '0'
@@ -461,7 +461,6 @@ function ProdPage () {
 			group_use_info.add(infoModel_Arr[i])
 		}
 
-
 		// 导入源头模型
 		group_source.add(groupSource)
 
@@ -553,9 +552,9 @@ function ProdPage () {
 				<div id='info1' className='prod_info_left'>
 					<DataSource></DataSource>
 				</div>
-				{/* <div id='info2' className='prod_info_rightBottom'>
+				<div id='info2' className='prod_info_rightBottom'>
           这里是单个详情时候的无框的表格统计图
-				</div> */}
+				</div>
 			</div>
 		</div>
 	)
