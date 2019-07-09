@@ -73,10 +73,17 @@ group_use_info.position.set(0, 0, -400)
 group_use_info.rotation.x = -0.5 * Math.PI
 scene.add(group_use_info)
 
+let group_source_info = new THREE.Group()
+group_source_info.position.set(0, 0, 600)
+group_source_info.rotation.x = -0.5 * Math.PI
+group_source_info.rotation.z = Math.PI
+scene.add(group_source_info)
+
 // 创建一个云层的变量 ---- 方便删除添加
 let cloud
 let centerModel
 let infoModel_Arr = []
+let infoSource_Arr = []
 let particlesArr
 let showSourceInfo = false
 
@@ -187,6 +194,12 @@ function ProdPage () {
 
 	// 返回到初始化的处理函数
 	const backInitHandle = () => {
+		for (let i = 0; i < infoSource_Arr.length; i++) {
+			group_source_info.remove(infoSource_Arr[i])
+		}
+		for (let i = 0; i < infoModel_Arr.length; i++) {
+			group_use_info.add(infoModel_Arr[i])
+		}
 		showSourceInfo = false
 		setIsShowSourceInfo(false)
 		animateHandle(camera.position, {
@@ -251,6 +264,9 @@ function ProdPage () {
 				centerModel = new ApplyInfo().createMoreCube()
 				group_apply.add(centerModel)
 			})
+		for (let i = 0; i < infoModel_Arr.length; i++) {
+			group_use_info.remove(infoModel_Arr[i])
+		}
 		scene.remove(group_source_ring)
 		scene.remove(group_source)
 		scene.remove(group_use)
@@ -284,6 +300,9 @@ function ProdPage () {
 			.then(() => {
 				setIsShowSourceInfo(true)
 				showSourceInfo = true
+				for (let i = 0; i < infoSource_Arr.length; i++) {
+					group_source_info.add(infoSource_Arr[i])
+				}
 				return animateHandle(camera.position, {
 					x: 0,
 					y: 0,
@@ -294,6 +313,9 @@ function ProdPage () {
 					z: 700
 				})
 			})
+		for (let i = 0; i < infoModel_Arr.length; i++) {
+			group_use_info.remove(infoModel_Arr[i])
+		}
 		scene.remove(group_source_ring)
 		scene.remove(group_apply)
 		scene.remove(group_use)
@@ -463,6 +485,33 @@ function ProdPage () {
 			group_use_info.add(infoModel_Arr[i])
 		}
 
+		// 数据源详情的模型
+		for (let i = 0; i < 8; i++) {
+			let souceDiv = document.createElement('div')
+			souceDiv.className = 'source_info'
+			souceDiv.style.backgroundColor = new THREE.Color('#c0ff00')
+			let symbol = document.createElement('img')
+			symbol.className = 'source_img_info'
+			symbol.src = 'assets/images/youku.jpg'
+			souceDiv.appendChild(symbol)
+			let details = document.createElement('div')
+			details.className = 'source_details_info'
+			details.innerHTML = '这是一段关于此应用伙伴的说明等'
+			souceDiv.appendChild(details)
+			let theta = i * (2 * Math.PI) / 6
+			let y = 100
+			let object = new CSS3DObject(souceDiv)
+			object.position.setFromCylindricalCoords(120, theta, y)
+			vector.x = object.position.x * -2
+			vector.y = object.position.y
+			vector.z = object.position.z * -2
+			object.lookAt(vector)
+			infoSource_Arr.push(object)
+		}
+		// for (let i = 0; i < infoSource_Arr.length; i++) {
+		// 	group_source_info.add(infoSource_Arr[i])
+		// }
+
 		// 导入源头模型
 		group_source.add(groupSource)
 
@@ -490,11 +539,11 @@ function ProdPage () {
 			// 必须再此调用
 			TWEEN.update()
 			if (!showSourceInfo) {
-				console.log('!!!')
 				animateSource()
+				group_source_info.rotation.y += 0
 			} else {
-				console.log('????')
 				animateSource2()
+				group_source_info.rotation.y += 0.002
 			}
 			animateApply()
 			group_source_ring.rotation.z += Math.PI / 2 * 0.002
