@@ -1,0 +1,68 @@
+.dataGovernance{
+  background: url('../../../assets/images/background.png') no-repeat;
+  background-size: 100% 100%;
+  padding-left: 30px;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  .ant-table{
+    color: #808080;
+  }
+  .ant-table-thead > tr > th{
+    background: none;
+    color: white;
+  }
+  .ant-table-thead > tr > th.ant-table-column-sort{
+    background: none;
+    color: white;
+  }
+  .anticon{
+    color: white
+  }
+  a{
+    background-color: white;
+  }
+}
+.dataRecourceTable{
+
+  width: 47%;
+  height: 100% !important;
+  margin-top: 35px;
+}
+.dataRecourceChart{
+  width: 50%;
+  height: 100% !important;
+  // background-color: red
+}
+.dataResourceGroup{
+  display: flex;
+  flex-direction: row;
+  // background-color: green;
+  height: 30%;
+}
+.dataModelGroup{
+  display: flex;
+  flex-direction: row;
+  // background-color: red;
+  height: 30%;
+}
+.dataModelTable{
+  margin-top: 15px;
+  width: 50%;
+  height: 90%;
+}
+.dataModelChart{
+  width: 48%;
+}
+.dataElement{
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  // background-color: blue;
+  height: 28%;
+}
+.wordCloudChart{
+  width: 50%;
+}

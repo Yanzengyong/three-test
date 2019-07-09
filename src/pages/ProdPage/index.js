@@ -16,8 +16,9 @@ import CreateCloud from './createCloud'
 import Positions from './getPosition'
 import BriefIntroduction from '../../components/BriefIntroduction'
 import LeftIntroduction from '../../components/LeftIntroduction'
-import DataSource from '../../components/DataSource'
-import DataSourceType from '../../components/DataSourceType'
+import DataSource from '../../components/DataSource'//数据源1
+import DataSourceType from '../../components/DataSourceType'//数据源2
+import DataGovernance from '../../components/DataGovernance'//数据加工1
 import Clock from '../../components/Clock'
 import { groupSource, animateSource, animateSource2 } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
@@ -551,10 +552,11 @@ function ProdPage () {
 					<LineChart></LineChart>
 				</div>
 				<div id='info1' className='prod_info_left'>
-					<DataSource></DataSource>
+					{/* <DataSource></DataSource> */}
+					<DataGovernance></DataGovernance>
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
-					<DataSourceType></DataSourceType>
+					{/* <DataSourceType></DataSourceType> */}
 				</div>
 			</div>
 		</div>
