@@ -484,7 +484,7 @@ function ProdPage () {
 		}
 
 		// 数据源详情的模型
-		for (let i = 0; i < 6; i++) {
+		for (let i = 0; i < 8; i++) {
 			let souceDiv = document.createElement('div')
 			souceDiv.className = 'source_info'
 			souceDiv.style.backgroundColor = new THREE.Color('#c0ff00')
