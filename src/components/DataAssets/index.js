@@ -1,14 +1,16 @@
 import React from 'react'
 import ReactEcharts from 'echarts-for-react'
 import './scss/pie.scss'
+import { Table } from 'antd'
+import 'antd/dist/antd.css'
 
 export default function DataAssets () {
 	var color=['#00ffd0', '#D8833D', '#1D87C4', '#fff700', '#6480DA']
 	const option = {
 		title: {
-			text: '政府数据资源',
+			text: '政府数据应用流向',
 			textStyle: {
-				color: '#ffffff'
+				color: '#4AFFFE'
 			}
 		},
 		color,
@@ -59,12 +61,12 @@ export default function DataAssets () {
 			}
 		]
 	}
-	var option2Color = ['#6480DA', '#1d87c4']
+	var option2Color = ['#4AFFFE', '#6480DA']
 	const option2 = {
 		title: {
 			text: '行业数据资源',
 			textStyle: {
-				color: '#ffffff'
+				color: '#4AFFFE'
 			}
 		},
 		color: option2Color,
@@ -129,7 +131,7 @@ export default function DataAssets () {
 				yAxisIndex: 1,
 				data: [89.3, 57.1, 74.4, 50.1, 89.7, 68.1],
 				itemStyle: {
-					color: '#1d87c4',
+					color: '#4AFFFE',
 					opacity: 0.6
 				}
 			}
@@ -139,9 +141,9 @@ export default function DataAssets () {
 	var colors = ['#00ffd0', '#D8833D']
 	const option3 = {
 		title: {
-			text: '政策公文数据资源',
+			text: '政策公文数据资产',
 			textStyle: {
-				color: '#ffffff'
+				color: '#4AFFFE'
 			}
 		},
 		color: colors,
@@ -153,7 +155,9 @@ export default function DataAssets () {
 			}
 		},
 		legend: {
-			data:['蒸发量', '平均温度']
+			textStyle :{
+				color:'#fff'
+			}
 		},
 		xAxis: [
 			{
@@ -188,8 +192,9 @@ export default function DataAssets () {
 				type: 'value',
 				name: '委办局(个)',
 				min: 0,
-				max: 25,
+				max: 40,
 				position: 'left',
+				interval: 10,
 				axisLine: {
 					lineStyle: {
 						color: colors[1]
@@ -220,13 +225,126 @@ export default function DataAssets () {
 			}
 		]
 	}
+
+
+	const columns = [
+		{
+			title: '区域',
+			dataIndex: 'area',
+			width:90
+		},
+		{
+			title: '委办局',
+			dataIndex: 'government',
+			defaultSortOrder: 'descend',
+			sorter: (a, b) => a.government - b.government,
+		},
+		{
+			title: 'API调用次数',
+			dataIndex: 'num',
+			defaultSortOrder: 'descend',
+			sorter: (a, b) => a.num - b.num,
+		},
+	]
+
+	const data = [
+		{
+			key: '1',
+			area: '成都市',
+			government: 53,
+			num: 2064,
+		},
+		{
+			key: '2',
+			area: '四川省',
+			government: 54,
+			num: 2850,
+		},
+		{
+			key: '3',
+			area: '中央',
+			government: 54,
+			num: 10237,
+		},
+		{
+			key: '4',
+			area: '北京市',
+			government: 34,
+			num: 5560,
+		},
+		{
+			key: '5',
+			area: '重庆市',
+			government: 32,
+			num: 1860,
+		}
+	]
+
 	return (
-		<div className="dataAssets" >
-			<div className="maintitle">平台数据资产概况</div>
+		<div className="dataApplication" >
+			<div className="maintitle">数据应用概况</div>
 			<div className='divider'/>
-			<ReactEcharts option={option}/>
-			<ReactEcharts option={option2} className='chart'/>
-			<ReactEcharts option={option3}/>
+			<div className='dataApplicationStatistics'>
+				<div className='dataOpen'>
+					<div className='dataInfo'>
+						<div className='data'>
+							<span className='num'>17325</span>
+							<span className='unit'>条</span>
+						</div>
+						<div className='info'>已开放数据</div>
+					</div>
+					<div className='dataInfo'>
+						<div className='data'>
+							<span className='num'>10328</span>
+							<span className='unit'>条</span>
+						</div>
+						<div className='info'>数据集</div>
+					</div>
+					<div className='dataInfo'>
+						<div className='data'>
+							<span className='num'>587</span>
+							<span className='unit'>个</span>
+						</div>
+						<div className='info'>API接口</div>
+					</div>
+					<div className='dataInfo2'>
+						<div className='data'>
+							<span className='num'>51</span>
+							<span className='description'>个市级部门</span>
+						</div>
+						<div className='data'>
+							<span className='num'>13</span>
+							<span className='description'>个区县</span>
+						</div>
+						<div className='data'>
+							<span className='num'>6</span>
+							<span className='description'>个行业</span>
+						</div>
+					</div>
+				</div>
+				
+				<div className='dataApply'>
+					<div className='industry-info'>
+						<ReactEcharts option={option2}/>
+					</div>
+					<div className='API-info'>
+						<Table 
+							size="small" 
+							columns={columns} 
+							dataSource={data}
+						/>
+					</div>
+				</div>
+
+				<div className='dataAssets'>
+					<div className='chart'>
+						<ReactEcharts option={option}/>
+					</div>
+					<div className='chart'>
+						<ReactEcharts option={option3}/>
+					</div>
+				</div>
+			</div>
 		</div>
 	)
 }
