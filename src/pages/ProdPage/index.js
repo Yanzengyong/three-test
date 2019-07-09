@@ -457,17 +457,37 @@ function ProdPage () {
 
 		// 相关使用详情的模型
 		// 环形的效果
-		for (let i = 0; i < 6; i++) {
+		let infoPlaneArr = [
+			{
+				img: 'assets/images/ly.png',
+				text: '这是一段关于此应用伙伴的说明等'
+			}, {
+				img: 'assets/images/jt.png',
+				text: '通过数据的采集、整合，让公众便利获得全面、准确的出行信息服务，让管理方能更及时地处理数据。'
+			}, {
+				img: 'assets/images/jy.png',
+				text: '这是一段关于此应用伙伴的说明等'
+			}, {
+				img: 'assets/images/hy.png',
+				text: '这是一段关于此应用伙伴的说明等'
+			}, {
+				img: 'assets/images/yl.png',
+				text: '这是一段关于此应用伙伴的说明等'
+			}, {
+				img: 'assets/images/sm.png',
+				text: '政府一般是提供办事的主体，通过采集、整合，提供网上办事、办事指南、进度查询、结果公布、网上评议、网上投诉功能等服务'
+			}]
+		for (let i = 0; i < infoPlaneArr.length; i++) {
 			let souceDiv = document.createElement('div')
 			souceDiv.className = 'element_info'
 			souceDiv.style.backgroundColor = new THREE.Color('#c0ff00')
 			let symbol = document.createElement('img')
 			symbol.className = 'img_info'
-			symbol.src = 'assets/images/youku.jpg'
+			symbol.src = infoPlaneArr[i].img
 			souceDiv.appendChild(symbol)
 			let details = document.createElement('div')
 			details.className = 'details_info'
-			details.innerHTML = '这是一段关于此应用伙伴的说明等'
+			details.innerHTML = infoPlaneArr[i].text
 			souceDiv.appendChild(details)
 			let theta = i * (2 * Math.PI) / 6
 			let y = 376
