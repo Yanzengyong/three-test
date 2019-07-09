@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactEcharts from 'echarts-for-react'
 import './scss/index.scss'
-import { maincolors } from '../../utils/colors'
+// import { maincolors } from '../../utils/colors'
 
 export default function DataAssets () {
 	const option = {
