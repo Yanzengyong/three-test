@@ -185,3 +185,32 @@
     color: rgb(110, 231, 247);
   }
 }
+.source_info{
+  width: 80px;
+  height: 90px;
+  color: #ffff00be;
+  border: 1px solid #ffff00be;
+  box-shadow: 0px 0px 12px #2bffb8cc;
+  box-sizing: border-box;
+  font-family: Helvetica, sans-serif;
+  text-align: left;
+  line-height: normal;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 8px;
+  background-color: #00ffff28;
+  .source_img_info{
+    width: 70px;
+    height: 30px;
+  }
+  .source_details_info {
+    width: 100%;
+    padding: 2px;
+    font-size: 6px;
+    font-weight: 100;
+    color: #ffff00be;
+  }
+}
