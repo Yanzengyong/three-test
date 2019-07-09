@@ -1,9 +1,11 @@
 import React from 'react'
 import ReactEcharts from 'echarts-for-react'
 import './scss/index.scss'
+import { maincolors } from '../../utils/colors'
 
 export default function DataAssets () {
 	const option = {
+		color:maincolors,
 		tooltip: {
 			trigger: 'item',
 			formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -11,7 +13,10 @@ export default function DataAssets () {
 		legend: {
 			orient: 'vertical',
 			x: 'left',
-			data:['信产中心', '贵阳市', '成都市', '重庆市', '信产中心', '其他']
+			data:['信产中心', '贵阳市', '成都市', '重庆市', '信产中心', '其他'],
+			textStyle:{
+				color:'#fff'
+			}
 		},
 		series: [
 			{
@@ -87,7 +92,7 @@ export default function DataAssets () {
 	const option2 = {
 		dataset: {
 			source: [
-				['score', 'amount', 'product'],
+				['数据增长速度', '总数', '行业'],
 				[89.3, 58212, '农业'],
 				[57.1, 78254, '餐饮业'],
 				[74.4, 41032, '航空'],
@@ -97,34 +102,50 @@ export default function DataAssets () {
 			]
 		},
 		grid: { containLabel: true },
-		xAxis: { name: 'amount' },
-		yAxis: { type: 'category' },
+		xAxis: {
+			name: '总数',
+			nameTextStyle:{
+				color:'#fff'
+			},
+			axisLabel:{
+				color:'#fff'
+			}
+		},
+		yAxis: {
+			type: 'category',
+			nameTextStyle:{
+				color:'#fff'
+			},
+			axisLabel:{
+				color:'#fff'
+			}
+		},
 		visualMap: {
 			orient: 'horizontal',
 			left: 'center',
 			min: 10,
 			max: 100,
-			text: ['High Score', 'Low Score'],
-			// Map the score column to color
+			text: ['High', 'Low'],
 			dimension: 0,
 			inRange: {
-				color: ['#D7DA8B', '#E15457']
+				color: ['#007265', '#92fff2']
+			},
+			textStyle:{
+				color:'#fff'
 			}
 		},
 		series: [
 			{
 				type: 'bar',
 				encode: {
-					// Map the "amount" column to X axis.
-					x: 'amount',
-					// Map the "product" column to Y axis
-					y: 'product'
+					x: '总数',
+					y: '行业'
 				}
 			}
 		]
 	}
 
-	var colors = ['#5793f3', '#d14a61', '#675bba']
+	var colors = ['#007265', '#92fff2']
 	const option3 = {
 		color: colors,
 
@@ -145,6 +166,9 @@ export default function DataAssets () {
 				type: 'category',
 				axisTick: {
 					alignWithLabel: true
+				},
+				axisLabel:{
+					color:'#fff'
 				},
 				data: ['成都市', '四川省', '中央', '北京市', '重庆市', '上海市', '贵州省', '贵阳市', '全国各级-科技口']
 			}

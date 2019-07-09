@@ -17,6 +17,7 @@ import Positions from './getPosition'
 import BriefIntroduction from '../../components/BriefIntroduction'
 import LeftIntroduction from '../../components/LeftIntroduction'
 import DataSource from '../../components/DataSource'
+import DataSourceType from '../../components/DataSourceType'
 import Clock from '../../components/Clock'
 import { groupSource, animateSource, animateSource2 } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
@@ -602,7 +603,7 @@ function ProdPage () {
 					<DataSource></DataSource>
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
-          这里是单个详情时候的无框的表格统计图
+					<DataSourceType></DataSourceType>
 				</div>
 			</div>
 		</div>
