@@ -21,6 +21,7 @@ import DataSourceType from '../../components/DataSourceType'//数据源2
 import DataGovernance from '../../components/DataGovernance'//数据加工1
 import DataGovernanceTree from '../../components/DataGovernanceTree'//数据加工2
 import DataAssets from '../../components/DataAssets'
+import DataAssetsInfo from '../../components/DataAssetsInfo'
 import Clock from '../../components/Clock'
 import { groupSource, animateSource, animateSource2 } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
@@ -635,7 +636,8 @@ function ProdPage () {
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
 					{/* <DataSourceType></DataSourceType> */}
-					<DataGovernanceTree></DataGovernanceTree>
+					{/* <DataGovernanceTree></DataGovernanceTree> */}
+					<DataAssetsInfo/>
 				</div>
 			</div>
 		</div>
