@@ -4,48 +4,41 @@ import './scss/index.scss'
 // import ''
 // import axios from 'axios'
 
-export default class DataGovernance extends React.Component {
+export default class DataGovernanceInfo extends React.Component {
 	constructor (props) {
 		super(props)
 	}
-	componentDidMount () {
-		// console.log('55555553335')
-		// axios.get('/api/dataSourceTree').then((res)=>{
-		// 	console.log(res)
-		// 	console.log('555')
-		// })
-	}
 	render () {
-		const option = {
-			tooltip: {
-				trigger: 'item',
-				triggerOn: 'mousemove'
-			},
-			series: [
-				{
-					type: 'tree',
-
-					// data: [data],
-
-					top: '18%',
-					bottom: '14%',
-
-					layout: 'radial',
-
-					symbol: 'emptyCircle',
-
-					symbolSize: 7,
-
-					initialTreeDepth: 3,
-
-					animationDurationUpdate: 750
-
-				}
-			]
-		}
 		return (
 			<div className="DataGovernance">
-				<ReactEcharts className="firstPie" option={option}/>
+				<div className='Introduction'>
+					<img src='assets/images/model.png' className='IntroductionImg'/>
+					<span className='IntroductionInfo'>
+						<div className='IntroductionName'>数据资源高效整合</div>
+						<div className='IntroductionDescription'>将原始数据高效接入平台，完成多元异构数据资源高性能整合</div>
+					</span>
+				</div>
+				<div className='Introduction'>
+					<img src='assets/images/model.png' className='IntroductionImg'/>
+					<span className='IntroductionInfo'>
+						<div className='IntroductionName'>数据元有效梳理</div>
+						<div className='IntroductionDescription'>针对原始数据资源进行数据处理，根据数据字段梳理所需数据元，并提供智能化数据元生成解决方案</div>
+					</span>
+				</div>
+				<div className='Introduction'>
+					<img src='assets/images/model.png' className='IntroductionImg'/>
+					<span className='IntroductionInfo'>
+						<div className='IntroductionName'>数据模型快速构建</div>
+						<div className='IntroductionDescription'>通过可视化操作界面，利用已通过审核数据元，快速构建数据模型，数据资产化提供良好基础</div>
+					</span>
+				</div>
+				<div className='Introduction'>
+					<img src='assets/images/model.png' className='IntroductionImg'/>
+					<span className='IntroductionInfo'>
+						<div className='IntroductionName'>完善的审核处理制度</div>
+						<div className='IntroductionDescription'>针对数据元与数据模型，提供完善的审核制度，实现对有效数据元、数据资源的管理</div>
+					</span>
+				</div>
 			</div>
 		)
 	}

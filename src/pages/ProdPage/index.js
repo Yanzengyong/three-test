@@ -19,7 +19,7 @@ import LeftIntroduction from '../../components/LeftIntroduction'
 import DataSource from '../../components/DataSource'//数据源1
 import DataSourceType from '../../components/DataSourceType'//数据源2
 import DataGovernance from '../../components/DataGovernance'//数据加工1
-import DataGovernanceTree from '../../components/DataGovernanceTree'//数据加工2
+import DataGovernanceInfo from '../../components/DataGovernanceTree'//数据加工2
 import DataAssets from '../../components/DataAssets'
 import DataAssetsInfo from '../../components/DataAssetsInfo'
 import Clock from '../../components/Clock'
@@ -631,13 +631,13 @@ function ProdPage () {
 				</div>
 				<div id='info1' className='prod_info_left'>
 					{/* <DataSource></DataSource> */}
-					{/* <DataGovernance></DataGovernance> */}
-					<DataAssets/>
+					<DataGovernance/>
+					{/* <DataAssets/> */}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
 					{/* <DataSourceType></DataSourceType> */}
-					{/* <DataGovernanceTree></DataGovernanceTree> */}
-					<DataAssetsInfo/>
+					<DataGovernanceInfo/>
+					{/* <DataAssetsInfo/> */}
 				</div>
 			</div>
 		</div>
