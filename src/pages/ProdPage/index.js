@@ -5,7 +5,7 @@ import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRe
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import anime from 'animejs'
 import TWEEN from '@tweenjs/tween.js'
-import Orbitcontrols from 'three-orbitcontrols'
+// import Orbitcontrols from 'three-orbitcontrols'
 import './index.scss'
 import News from '../../components/News'
 import Statistics from '../../components/Statistics'
@@ -23,7 +23,7 @@ import DataAssets from '../../components/DataAssets'
 import Clock from '../../components/Clock'
 import { groupSource, animateSource, animateSource2 } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
-import { groupCenter, animateCenter } from './centerChunk'
+import { groupCenter } from './centerChunk'
 import ApplyInfo from './applyInfo'
 
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
@@ -101,7 +101,7 @@ let rocket_position = []
 let clickObjectArr = []
 
 function ProdPage () {
-	const [isShowSourceInfo, setIsShowSourceInfo] = useState(false)
+	const [currentModel, setCurrentModel] = useState(null)
 	useEffect(() => {
 		anime({
 			targets: ['#init1', '#init2', '#init3', '#init4', '#init5'],
@@ -201,8 +201,8 @@ function ProdPage () {
 		for (let i = 0; i < infoModel_Arr.length; i++) {
 			group_use_info.add(infoModel_Arr[i])
 		}
+		setCurrentModel(null)
 		showSourceInfo = false
-		setIsShowSourceInfo(false)
 		animateHandle(camera.position, {
 			x: 650,
 			y: 850,
@@ -248,6 +248,7 @@ function ProdPage () {
 
 	// 查看中间模型详情的处理函数 ----- 视角切换、动画执行等
 	const checkOperateHandle = () => {
+		setCurrentModel('apply')
 		slideOutHandle()
 		animateHandle(camera.position, {
 			x: 0,
@@ -277,6 +278,7 @@ function ProdPage () {
 
 	// 查看源模型详情的处理函数 ----- 视角切换、动画执行等
 	const checkSourceHandle = () => {
+		setCurrentModel('source')
 		slideOutHandle()
 		animateHandle(camera.position, {
 			x: 0,
@@ -299,7 +301,6 @@ function ProdPage () {
 				})
 			})
 			.then(() => {
-				setIsShowSourceInfo(true)
 				showSourceInfo = true
 				for (let i = 0; i < infoSource_Arr.length; i++) {
 					group_source_info.add(infoSource_Arr[i])
@@ -326,7 +327,7 @@ function ProdPage () {
 
 	// 查看使用模型详情的处理函数 ----- 视角切换、动画执行等
 	const checkUseHandle = () => {
-
+		setCurrentModel('use')
 		slideOutHandle()
 		animateHandle(camera.position, {
 			x: 0,
@@ -377,10 +378,16 @@ function ProdPage () {
 		}
 	}
 
+	// 改变浏览器大小重置camera和renderer
+	window.addEventListener('resize', ()=>{
+		camera.aspect = document.getElementById('content').offsetWidth / document.getElementById('content').offsetHeight
+		camera.updateProjectionMatrix()
+		renderer.setSize(document.getElementById('content').offsetWidth, document.getElementById('content').offsetHeight)
+	}, false)
 	// 加载3d效果的初始函数
 	const init = () => {
-		let helper = new THREE.AxesHelper(1000)
-		scene.add(helper)
+		// let helper = new THREE.AxesHelper(1000)
+		// scene.add(helper)
 		// 获取盒子的dom元素
 		const container = document.getElementById('canvas')
 		// 监听点击模型事件
@@ -390,7 +397,6 @@ function ProdPage () {
 			mouse.y = (event.clientY / renderer.domElement.clientHeight) * 2 -1
 			raycaster.setFromCamera(mouse, camera)
 			let intersects = raycaster.intersectObjects(clickObjectArr)
-			console.log(intersects)
 			if (intersects.length > 0) {
 				// 说明存在被点击的模型
 				// 如果被点击的是中心圆球的话执行动画的切换
@@ -416,8 +422,8 @@ function ProdPage () {
 		scene.add(light)
 
 		// 相机作为orbitcontrol的参数，支持鼠标交互
-		let orbitControls = new Orbitcontrols(camera)
-		orbitControls.enableDamping = true
+		// let orbitControls = new Orbitcontrols(camera)
+		// orbitControls.enableDamping = true
 
 		// 创建光锥的位置
 		rocket_position = new Positions().getSpherePosition(150)
@@ -508,22 +514,48 @@ function ProdPage () {
 		}
 
 		// 数据源详情的模型
-		for (let i = 0; i < 8; i++) {
+		let infoSourceArr = [
+			{
+				img: 'assets/images/qysj.png',
+				text: '企业数据：如百度、阿里等公司对用户消费行为及社交行为的数据。'
+			}, {
+				img: 'assets/images/jqsbsj.png',
+				text: '机器设备数据：如行车记录仪、基站数据等通过设备收集的数据。'
+			}, {
+				img: 'assets/images/gryjsj.png',
+				text: '邮件数据：如公司、个人发送获取的邮件统计等数据。'
+			}, {
+				img: 'assets/images/grspsj.png',
+				text: '视频数据：如组织、个人拍摄的面向公众公开的数据。'
+			}, {
+				img: 'assets/images/grwdsj.png',
+				text: '文档数据：如公司、组织整理的文档数据。'
+			}, {
+				img: 'assets/images/gjsj.png',
+				text: '国家数据：如公开的GDP、CPI、固定资产投资等宏观经济数据等。'
+			}, {
+				img: 'assets/images/jysj.png',
+				text: '交易数据：如电子商务数据、销售统计数据、供应链数据。'
+			}, {
+				img: 'assets/images/ydtxsj.png',
+				text: '移动通信数据：如智能手机中APP传输的实时数据等。'
+			}]
+		for (let i = 0; i < infoSourceArr.length; i++) {
 			let souceDiv = document.createElement('div')
 			souceDiv.className = 'source_info'
 			souceDiv.style.backgroundColor = new THREE.Color('#c0ff00')
 			let symbol = document.createElement('img')
 			symbol.className = 'source_img_info'
-			symbol.src = 'assets/images/youku.jpg'
+			symbol.src = infoSourceArr[i].img
 			souceDiv.appendChild(symbol)
 			let details = document.createElement('div')
 			details.className = 'source_details_info'
-			details.innerHTML = '这是一段关于此应用伙伴的说明等'
+			details.innerHTML = infoSourceArr[i].text
 			souceDiv.appendChild(details)
-			let theta = i * (2 * Math.PI) / 6
+			let theta = i * (2 * Math.PI) / 8
 			let y = 100
 			let object = new CSS3DObject(souceDiv)
-			object.position.setFromCylindricalCoords(120, theta, y)
+			object.position.setFromCylindricalCoords(100, theta, y)
 			vector.x = object.position.x * -2
 			vector.y = object.position.y
 			vector.z = object.position.z * -2
@@ -555,6 +587,7 @@ function ProdPage () {
 		css3DRenderer.domElement.style.position = 'absolute'
 		css3DRenderer.domElement.style.top = 0 + 'px'
 		container.appendChild(css3DRenderer.domElement)
+
 		const animate = () => {
 			// 必须写的
 			requestAnimationFrame(animate)
@@ -623,11 +656,12 @@ function ProdPage () {
 					<LineChart></LineChart>
 				</div>
 				<div id='info1' className='prod_info_left'>
-					{/* <DataSource></DataSource> */}
-					<DataGovernance></DataGovernance>
+					{currentModel === 'source' ? (<DataSource/>) :
+						currentModel === 'apply' ? (<DataGovernance/>) : (<DataAssets/>)}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
-					{/* <DataSourceType></DataSourceType> */}
+					{currentModel === 'source' ? (<DataSourceType/>) :
+						currentModel === 'apply' ? (<DataGovernance/>) : (<DataAssets/>)}
 				</div>
 			</div>
 		</div>

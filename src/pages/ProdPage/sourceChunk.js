@@ -1,6 +1,7 @@
 import CreateModel from './createModel'
 import * as THREE from 'three'
 import Positions from './getPosition'
+// import { CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 
 let groupSource = new THREE.Group()
 let z = -80
@@ -96,18 +97,41 @@ let sg2_cube = new THREE.Group()
 let sg2_leftSlice = new THREE.Group()
 let sg2_rightSlice = new THREE.Group()
 // let labelGroup = new THREE.Group()
-new Positions().getRingPosition(120, 0, 0, z, 8).forEach(item => {
+// let vector = new THREE.Vector3()
+new Positions().getRingPosition(120, 0, 0, z, 8).forEach((item, i) => {
 	sg2_cube.add(new CreateModel().createCube(26, 33, 66, 0.8, item.x, item.y, item.z - 220, 0x4AFFFE))
 	sg2_leftSlice.add(new CreateModel().createCube(4, 33, 66, 0.8, item.x, item.y, item.z - 220, 0x4AFFFE))
 	sg2_rightSlice.add(new CreateModel().createCube(4, 33, 66, 0.8, item.x, item.y, item.z - 220, 0x4AFFFE))
 	// let labelPlane = new CreateModel().createText('test', item.x, item.y, item.z - 220)
 	// labelGroup.add(labelPlane)
+	// let souceDiv = document.createElement('div')
+	// souceDiv.className = 'source_info'
+	// souceDiv.style.backgroundColor = new THREE.Color('#c0ff00')
+	// let symbol = document.createElement('img')
+	// symbol.className = 'source_img_info'
+	// symbol.src = 'assets/images/youku.jpg'
+	// souceDiv.appendChild(symbol)
+	// let details = document.createElement('div')
+	// details.className = 'source_details_info'
+	// details.innerHTML = '这是一段关于此应用伙伴的说明等'
+	// souceDiv.appendChild(details)
+	// let theta = i * (2 * Math.PI) / 8
+	// let y = 0
+	// let object = new CSS3DObject(souceDiv)
+	// object.position.setFromCylindricalCoords(100, theta, y)
+
+	// vector.x = object.position.x * -2
+	// vector.y = object.position.y
+	// vector.z = object.position.z * -2
+	// object.lookAt(vector)
+	// labelGroup.add(object)
 })
 sg2_leftSlice.rotateOnAxis(new THREE.Vector3(0, 0, 250).normalize(), 30)
 sg2_rightSlice.rotateOnAxis(new THREE.Vector3(0, 0, 250).normalize(), 120)
 specialGroup2.add(sg2_cube)
 specialGroup2.add(sg2_leftSlice)
 specialGroup2.add(sg2_rightSlice)
+// labelGroup.rotation.x = 0.5 * Math.PI
 // specialGroup2.add(labelGroup)
 groupSource.add(specialGroup2)
 
