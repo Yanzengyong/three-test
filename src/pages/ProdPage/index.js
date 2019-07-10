@@ -572,9 +572,14 @@ function ProdPage () {
 			<div className='prod_header_box'>
 				<div className='prod_title_box'>
 					<div className='prod_title'>
-						<div className='prod_title_fill'></div>
-						<div className='prod_title_center'>国家工程实验室</div>
-						<div className='prod_title_fill'></div>
+						数据治理平台
+					</div>
+				</div>
+				<div className='prod_header_left'>
+					<img src='../../assets/images/logo.png' className='logoImg'/>
+					<div className='logoName'>
+						<p className='description'>提升政府治理能力大数据应用技术</p>
+						<p className='labName'>国家工程实验室</p>
 					</div>
 				</div>
 				<div className='prod_header_right'>
@@ -604,7 +609,8 @@ function ProdPage () {
 				</div>
 				<div id='info1' className='prod_info_left'>
 					{/* <DataSource></DataSource> */}
-					<DataGovernance></DataGovernance>
+					{/* <DataGovernance></DataGovernance> */}
+					<DataAssets/>
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
 					{/* <DataSourceType></DataSourceType> */}
