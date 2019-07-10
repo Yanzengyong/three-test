@@ -222,6 +222,8 @@ export default function DataAssets () {
 	}
 	return (
 		<div className="datasource">
+			<div className="maintitle">数据治理概况</div>
+  			<div className='divider'/>
 			<div className="title">政府数据</div>
 			<ReactEcharts className="firstPie" option={option}/>
 			<div className="title">行业数据</div>
