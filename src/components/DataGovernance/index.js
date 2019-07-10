@@ -236,7 +236,7 @@ export default class DataGovernance extends React.Component {
   		},
   		series: [
   			{
-  				radius: '90%',
+  				radius: '70%',
   				axisLine: { // 坐标轴线
   					lineStyle: { // 属性lineStyle控制线条样式
   						color: [[0.09, 'lime'], [0.82, '#1e90ff'], [1, '#ff4500']],
@@ -492,6 +492,8 @@ export default class DataGovernance extends React.Component {
   	]
   	return (
   		<div className="dataGovernance">
+  			<div className="maintitle">数据治理概况</div>
+  			<div className='divider'/>
   			<div className="title">数据资源</div>
   			<div className="dataResourceGroup">
         	<ReactEcharts className="dataRecourceChart" option={option}/>

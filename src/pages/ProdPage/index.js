@@ -19,7 +19,9 @@ import LeftIntroduction from '../../components/LeftIntroduction'
 import DataSource from '../../components/DataSource'//数据源1
 import DataSourceType from '../../components/DataSourceType'//数据源2
 import DataGovernance from '../../components/DataGovernance'//数据加工1
+import DataGovernanceInfo from '../../components/DataGovernanceTree'//数据加工2
 import DataAssets from '../../components/DataAssets'
+import DataAssetsInfo from '../../components/DataAssetsInfo'
 import Clock from '../../components/Clock'
 import { groupSource, animateSource, animateSource2 } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
@@ -625,9 +627,14 @@ function ProdPage () {
 			<div className='prod_header_box'>
 				<div className='prod_title_box'>
 					<div className='prod_title'>
-						<div className='prod_title_fill'></div>
-						<div className='prod_title_center'>国家工程实验室</div>
-						<div className='prod_title_fill'></div>
+						数据治理平台
+					</div>
+				</div>
+				<div className='prod_header_left'>
+					<img src='../../assets/images/logo.png' className='logoImg'/>
+					<div className='logoName'>
+						<p className='description'>提升政府治理能力大数据应用技术</p>
+						<p className='labName'>国家工程实验室</p>
 					</div>
 				</div>
 				<div className='prod_header_right'>
@@ -661,7 +668,7 @@ function ProdPage () {
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
 					{currentModel === 'source' ? (<DataSourceType/>) :
-						currentModel === 'apply' ? (<DataGovernance/>) : (<DataAssets/>)}
+						currentModel === 'apply' ? (<DataGovernanceInfo/>) : (<DataAssetsInfo/>)}
 				</div>
 			</div>
 		</div>
