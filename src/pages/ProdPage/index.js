@@ -624,8 +624,8 @@ function ProdPage () {
 					<LineChart></LineChart>
 				</div>
 				<div id='info1' className='prod_info_left'>
-					{/* <DataSource></DataSource> */}
-					<DataGovernance></DataGovernance>
+					<DataSource></DataSource>
+					{/* <DataGovernance></DataGovernance> */}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
 					{/* <DataSourceType></DataSourceType> */}

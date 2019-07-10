@@ -2,18 +2,18 @@ import React from 'react'
 import ReactEcharts from 'echarts-for-react'
 import './scss/index.scss'
 // import ''
-import axios from 'axios'
+// import axios from 'axios'
 
-export default class DataAssets extends React.Component {
+export default class DataGovernance extends React.Component {
 	constructor (props) {
 		super(props)
 	}
 	componentDidMount () {
-		console.log('55555553335')
-		axios.get('/api/dataSourceTree').then((res)=>{
-			console.log(res)
-			console.log('555')
-		})
+		// console.log('55555553335')
+		// axios.get('/api/dataSourceTree').then((res)=>{
+		// 	console.log(res)
+		// 	console.log('555')
+		// })
 	}
 	render () {
 		const option = {
@@ -44,7 +44,7 @@ export default class DataAssets extends React.Component {
 			]
 		}
 		return (
-			<div className="datasource">
+			<div className="DataGovernance">
 				<ReactEcharts className="firstPie" option={option}/>
 			</div>
 		)
