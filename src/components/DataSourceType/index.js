@@ -3,7 +3,7 @@ import ReactEcharts from 'echarts-for-react'
 import './scss/index.scss'
 // import { maincolors } from '../../utils/colors'
 
-export default function DataAssets () {
+export default function DataSourceType () {
 	const option = {
 		color:['#ffff34', '#007265'],
 		tooltip: {},
