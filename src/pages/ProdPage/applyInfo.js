@@ -100,7 +100,7 @@ export default class ApplyInfo {
 					let phi = Math.acos(- 1 + (2 * i) / this.init_field.length)
 					let theta = Math.sqrt(this.init_field.length * Math.PI) * phi
 					let object = new THREE.Object3D()
-					object.position.setFromSphericalCoords(100, phi, theta)
+					object.position.setFromSphericalCoords(110, phi, theta)
 					vector.copy(object.position).multiplyScalar(2)
 					object.lookAt(vector)
 					this.sphere_field.push(object)

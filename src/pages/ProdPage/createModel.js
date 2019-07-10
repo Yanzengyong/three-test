@@ -60,7 +60,24 @@ export default class createModel {
 		return cylinder
 	}
 	createTiltObj (width, depth, height, opacity, x, y, z, color) {
-		let material = new THREE.MeshToonMaterial({ color: color, opacity: opacity, transparent: true })
+		let map = new THREE.TextureLoader().load('assets/images/xp2.png')
+		map.wrapT = THREE.ClampToEdgeWrapping
+		map.wrapS = THREE.ClampToEdgeWrapping
+		// let material = new THREE.MeshToonMaterial({ color: color, opacity: opacity, transparent: true })
+		// let material = new THREE.MeshStandardMaterial({
+		// 	transparent: true,
+		// 	emissiveMap: map,
+		// 	color: color,
+		// 	emissive: new THREE.Color(0xffff00),
+		// 	emissiveIntensity: 1,
+		// 	opacity: opacity,
+		// })
+		let material = new THREE.MeshBasicMaterial({
+			transparent: false,
+			map: map,
+			color: color,
+			opacity: opacity,
+		})
 		let geometry = new THREE.BoxBufferGeometry(width, depth, height)
 		let cube = new THREE.Mesh(geometry, material)
 		cube.position.set(x, y, z)
