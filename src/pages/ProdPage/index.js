@@ -460,22 +460,22 @@ function ProdPage () {
 		let infoPlaneArr = [
 			{
 				img: 'assets/images/ly.png',
-				text: '这是一段关于此应用伙伴的说明等'
+				text: '通过数据的采集、整合，提供公共资源统一进场交易。'
 			}, {
 				img: 'assets/images/jt.png',
 				text: '通过数据的采集、整合，让公众便利获得全面、准确的出行信息服务，让管理方能更及时地处理数据。'
 			}, {
 				img: 'assets/images/jy.png',
-				text: '这是一段关于此应用伙伴的说明等'
+				text: '通过数据的采集、整合，让学校能更清楚的了解学生的成绩走向，为学生提供更优质、完善的资料。'
 			}, {
 				img: 'assets/images/hy.png',
-				text: '这是一段关于此应用伙伴的说明等'
+				text: '通过数据的采集、整合，为环境相关部门提供精准的人与环境、社会与环境等之间的关系。'
 			}, {
 				img: 'assets/images/yl.png',
-				text: '这是一段关于此应用伙伴的说明等'
+				text: '通过数据的采集、整合，为医院提供更疾病预防控制、计划免疫、急救、采血服务的精准数据查询。'
 			}, {
 				img: 'assets/images/sm.png',
-				text: '政府一般是提供办事的主体，通过采集、整合，提供网上办事、办事指南、进度查询、结果公布、网上评议、网上投诉功能等服务'
+				text: '政府一般是提供办事的主体，通过采集、整合，提供网上办事、办事指南、进度查询、结果公布、网上评议、网上投诉功能等服务。'
 			}]
 		for (let i = 0; i < infoPlaneArr.length; i++) {
 			let souceDiv = document.createElement('div')

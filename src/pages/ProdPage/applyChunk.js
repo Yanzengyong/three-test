@@ -54,7 +54,7 @@ new Positions().getRingPosition(170, 0, 0, z, 60).forEach(item => {
 // 19.章鱼脚
 let rightFooter = new THREE.Group()
 new Positions().getRingPosition(165, 0, 0, z, 6).forEach(item => {
-	rightFooter.add(new CreateModel().createTiltObj(3, 80, 180, 0.6, item.x, item.y, item.z - 325, 0x4AFFFE))
+	rightFooter.add(new CreateModel().createTiltObj(3, 150, 180, 1, item.x, item.y, item.z - 325, 0x4AFFFE))
 })
 
 
