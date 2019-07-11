@@ -5,7 +5,7 @@ import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRe
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import anime from 'animejs'
 import TWEEN from '@tweenjs/tween.js'
-// import Orbitcontrols from 'three-orbitcontrols'
+import Orbitcontrols from 'three-orbitcontrols'
 import './index.scss'
 import News from '../../components/News'
 import Statistics from '../../components/Statistics'
@@ -73,7 +73,7 @@ scene.add(group_use)
 // 创建一个查看使用详情的组 ---- 一个由片状组成的球体
 let group_use_info = new THREE.Group()
 group_use_info.position.set(0, 0, -400)
-group_use_info.rotation.x = -0.5 * Math.PI
+// group_use_info.rotation.x = -0.5 * Math.PI
 scene.add(group_use_info)
 
 let group_source_info = new THREE.Group()
@@ -89,6 +89,9 @@ let infoModel_Arr = []
 let infoSource_Arr = []
 let particlesArr
 let showSourceInfo = false
+let choiceUsePlane = false
+let choiceSourcePlane = false
+let D_value
 
 // 创建球点对象
 let sphereParticles = new THREE.Object3D()
@@ -306,6 +309,7 @@ function ProdPage () {
 				showSourceInfo = true
 				for (let i = 0; i < infoSource_Arr.length; i++) {
 					group_source_info.add(infoSource_Arr[i])
+					clickObjectArr.push(group_source_info)
 				}
 				return animateHandle(camera.position, {
 					x: 0,
@@ -395,11 +399,22 @@ function ProdPage () {
 		// 监听点击模型事件
 		container.addEventListener('click', (event) => {
 			event.preventDefault()
-			mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 -1
-			mouse.y = (event.clientY / renderer.domElement.clientHeight) * 2 -1
+			mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1
+			mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1
 			raycaster.setFromCamera(mouse, camera)
+			console.log(clickObjectArr)
 			let intersects = raycaster.intersectObjects(clickObjectArr)
+			console.log(intersects)
 			if (intersects.length > 0) {
+				console.log(intersects)
+				if (intersects.some((item) => (item.object.name === 'usePlane'))) {
+					console.log('????')
+					choiceUsePlane = !choiceUsePlane
+					// D_value = Math.abs(-180 - intersects[0].point.y)
+					D_value = intersects[0].uv.y
+					console.log(D_value)
+					// intersects[0].point.y =
+				}
 				// 说明存在被点击的模型
 				// 如果被点击的是中心圆球的话执行动画的切换
 				// console.log(currentFlyNum)
@@ -410,7 +425,7 @@ function ProdPage () {
 			} else {
 				// 不存在被点击的模型
 			}
-		}, true)
+		}, false)
 
 		// 背景星空 ----- 调用函数
 		let backgroundCloud = createParticles(2, true, 0.7, 0xffffff, false, 0xffffff, 1000)
@@ -513,12 +528,22 @@ function ProdPage () {
 		// 添加卡片到组内
 		for (let i = 0; i < infoModel_Arr.length; i++) {
 			group_use_info.add(infoModel_Arr[i])
+			let geometry = new THREE.PlaneGeometry(150, 220)
+			let material = new THREE.MeshBasicMaterial({ color: 0xffff00, visible:false })
+			let plane = new THREE.Mesh(geometry, material)
+			plane.position.set(infoModel_Arr[i].position.x, infoModel_Arr[i].position.y, infoModel_Arr[i].position.z)
+			vector.x = infoModel_Arr[i].position.x * -2
+			vector.y = infoModel_Arr[i].position.y
+			vector.z = infoModel_Arr[i].position.z * -2
+			plane.lookAt(vector)
+			plane.name = 'usePlane'
+			group_use_info.add(plane)
+			clickObjectArr.push(plane)
 		}
-
 		// 数据源详情的模型
 		let infoSourceArr = [
 			{
-				img: 'assets/images/qysj.png',
+				img: 'assets/images/gsj.png',
 				text: '企业数据：如百度、阿里等公司对用户消费行为及社交行为的数据。'
 			}, {
 				img: 'assets/images/jqsbsj.png',
@@ -563,16 +588,17 @@ function ProdPage () {
 			vector.z = object.position.z * -2
 			object.lookAt(vector)
 			infoSource_Arr.push(object)
+			object.name = 'soucePlane'
 		}
 		// for (let i = 0; i < infoSource_Arr.length; i++) {
 		// 	group_source_info.add(infoSource_Arr[i])
 		// }
 
 		// 导入源头模型
-		group_source.add(groupSource)
+		// group_source.add(groupSource)
 
 		// 导入应用模型
-		group_use.add(groupApply)
+		// group_use.add(groupApply)
 
 		// 像素点
 		renderer.setPixelRatio(window.devicePixelRatio)
@@ -605,7 +631,22 @@ function ProdPage () {
 			animateApply()
 			group_source_ring.rotation.z += Math.PI / 2 * 0.002
 			group_apply.rotation.y += 0.002
-			group_use_info.rotation.y += 0.002
+			// 是否点击了使用详情的纸片
+			if (!choiceUsePlane) {
+				group_use_info.rotation.y -= Math.PI / 2 * 0.002
+			} else {
+				if (D_value > 0) {
+					if ((D_value - 0.05) < 0) {
+						D_value -= 0.01
+						group_use_info.rotation.y -= 0.001
+					} else {
+						D_value -= 0.05
+						console.log(D_value)
+						group_use_info.rotation.y -= 0.005
+					}
+
+				}
+			}
 			let objects = sphereParticles.children
 			objects.forEach(obj => {
 				let material = obj.material
