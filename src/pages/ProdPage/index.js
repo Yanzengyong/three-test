@@ -22,6 +22,7 @@ import DataGovernance from '../../components/DataGovernance'//数据加工1
 import DataGovernanceInfo from '../../components/DataGovernanceTree'//数据加工2
 import DataAssets from '../../components/DataAssets'
 import DataAssetsInfo from '../../components/DataAssetsInfo'
+import Diagram from '../../components/Diagram'
 import Clock from '../../components/Clock'
 import { groupSource, animateSource, animateSource2 } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
@@ -708,8 +709,9 @@ function ProdPage () {
 						currentModel === 'apply' ? (<DataGovernance/>) : (<DataAssets/>)}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
-					{currentModel === 'source' ? (<DataSourceType/>) :
-						currentModel === 'apply' ? (<DataGovernanceInfo/>) : (<DataAssetsInfo/>)}
+					<Diagram></Diagram>
+					{/* {currentModel === 'source' ? (<DataSourceType/>) :
+						currentModel === 'apply' ? (<DataGovernanceInfo/>) : (<DataAssetsInfo/>)} */}
 				</div>
 			</div>
 		</div>
