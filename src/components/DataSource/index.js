@@ -11,23 +11,7 @@ export default class DataAssets extends React.Component {
 			dataXAxis: ['农业', '餐饮业', '航空', '酒店民宿', '房地产', '招聘'],
 			dataYAxis: [12.0, 12.2, 13.3, 14.5, 16.3, 10.2, 20.3, 23.4, 23.0]
 		}
-		console.log(this.props)
 	}
-
-	// changeDept = (title) => {
-	// 	console.log(title)
-	// 	switch (title) {
-	// 	case '工商局': this.setState({ dataSet: IndCommerceData }); this.getAxisList(IndCommerceData.dataHistory); break
-	// 	case '发改委': this.setState({ dataSet: revolutionDept }); this.getAxisList(revolutionDept.dataHistory); break
-	// 	case '安监局': this.setState({ dataSet: securityDept }); this.getAxisList(securityDept.dataHistory); break
-	// 	case '气象局': this.setState({ dataSet: meteorologyDept }); this.getAxisList(meteorologyDept.dataHistory); break
-	// 	case '旅发委': this.setState({ dataSet: travelDept }); this.getAxisList(travelDept.dataHistory); break
-	// 	case '住建局': this.setState({ dataSet: houseDept }); this.getAxisList(houseDept.dataHistory); break
-	// 	case '食药监局': this.setState({ dataSet: foodMedicalDept }); this.getAxisList(foodMedicalDept.dataHistory); break
-	// 	case '民政局': this.setState({ dataSet: marrigeDept }); this.getAxisList(marrigeDept.dataHistory); break
-	// 	default: break
-	// 	}
-	// }
 
 	getAxisList = (data) => {
 		if (data !== undefined) {
@@ -226,13 +210,17 @@ export default class DataAssets extends React.Component {
 				</div>
 				<ReactEcharts option={option_dataHistory} className='statisticsChart'/>
 				<div className='statisticsChart'>
-					<div className='qualityChart'>
-						<ReactEcharts option={option_dataQuality}/>
+					<div className='qualityScore'>
+						<div className='name'>数据安全指数</div>
+						<div className='score'>
+							<span className='num'>{this.props.dataSet.dataSecurity}</span>
+							<span className='unit'>分</span>
+						</div>
 					</div>
 					<div className='qualityScore'>
 						<div className='name'>数据质量指数</div>
 						<div className='score'>
-							<span className='num'>{this.getAverageScore(this.props.dataSet.dataQuality)}</span>
+							<span className='num'>{this.props.dataSet.dataQuality}</span>
 							<span className='unit'>分</span>
 						</div>
 					</div>
