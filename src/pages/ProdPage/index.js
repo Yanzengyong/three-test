@@ -28,7 +28,7 @@ import { groupSource, animateSource, animateSource2 } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
 import { groupCenter } from './centerChunk'
 import ApplyInfo from './applyInfo'
-import { IndCommerceData, revolutionDept, securityDept, meteorologyDept, travelDept, houseDept, foodMedicalDept, marrigeDept } from './dataSourceJson'
+import { allData, IndCommerceData, revolutionDept, securityDept, meteorologyDept, travelDept, houseDept, foodMedicalDept, marrigeDept } from './dataSourceJson'
 
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
 
@@ -108,7 +108,7 @@ let clickObjectArr = []
 
 function ProdPage () {
 	const [currentModel, setCurrentModel] = useState(null)
-	const [dataSourceData, setDataSourceData] = useState(IndCommerceData)
+	const [dataSourceData, setDataSourceData] = useState(allData)
 	useEffect(() => {
 		anime({
 			targets: ['#init1', '#init2', '#init3', '#init4', '#init5'],
@@ -442,6 +442,8 @@ function ProdPage () {
 	// 根据不同的委办局名称使用不同的数据
 	const getDepartmentInfoData = (name) => {
 		switch (name) {
+		case '全部': setDataSourceData(allData)
+			break
 		case '工商局': setDataSourceData(IndCommerceData)
 			break
 		case '发改委': setDataSourceData(revolutionDept)
@@ -475,25 +477,22 @@ function ProdPage () {
 			raycaster.setFromCamera(mouse, camera)
 			let intersects = raycaster.intersectObjects(clickObjectArr)
 			if (intersects.length > 0) {
+				// 说明存在被点击的模型
 				if (intersects.some((item) => (item.object.name === 'usePlane'))) {
 					choiceUsePlane = !choiceUsePlane
 				} else if (intersects.some((item) => (item.object.name === 'sourcePlane'))) {
-					let index = infoSourceArr.findIndex((item) => (item.keyword === intersects[0].object.keyword))
-					if (index + 1 === infoSourceArr.length) {
-						getDepartmentInfoData(infoSourceArr[0].keyword)
-						console.log(infoSourceArr[0].keyword)
-					} else {
-						getDepartmentInfoData(infoSourceArr[index + 1].keyword)
-					}
 					choiceSourcePlane = !choiceSourcePlane
+					if (choiceSourcePlane) {
+						let index = infoSourceArr.findIndex((item) => (item.keyword === intersects[0].object.keyword))
+						if (index + 1 === infoSourceArr.length) {
+							getDepartmentInfoData(infoSourceArr[0].keyword)
+						} else {
+							getDepartmentInfoData(infoSourceArr[index + 1].keyword)
+						}
+					} else {
+						getDepartmentInfoData('全部')
+					}
 				}
-				// 说明存在被点击的模型
-				// 如果被点击的是中心圆球的话执行动画的切换
-				// console.log(currentFlyNum)
-				// if (intersects.some((item) => (item.object.name === 'centerSphereModel')) && currentFlyNum === 0) {
-				// 	flyAndPush()
-				// 	setCurrentStep(1)
-				// }
 			} else {
 				// 不存在被点击的模型
 			}
