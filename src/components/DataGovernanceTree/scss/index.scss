@@ -18,11 +18,25 @@
     .proceedStep {
       width: 30%;
       height: 100%;
-      background: pink;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      .proceedStepTitle {
+        width: 80%;
+        height: 60px;
+        background:  url('../../../assets/images/stepButton.png') no-repeat;
+        background-size: 100% 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+      }
+      .proceedStepDescription {
+        width: 80%;
+        height: 250px;
+        margin-top: 10px;
+      }
     }
   }
   // .Introduction {
