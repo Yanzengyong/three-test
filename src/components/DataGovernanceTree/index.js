@@ -1,8 +1,5 @@
 import React from 'react'
-import ReactEcharts from 'echarts-for-react'
 import './scss/index.scss'
-// import ''
-// import axios from 'axios'
 
 export default class DataGovernanceInfo extends React.Component {
 	constructor (props) {
@@ -11,7 +8,40 @@ export default class DataGovernanceInfo extends React.Component {
 	render () {
 		return (
 			<div className="DataGovernance">
-				<div className='Introduction'>
+				<div className='title'>数据治理流程</div>
+				<div className='proceed'>
+					<div className='proceedStep'>
+						<div className='proceedStepTitle'>
+							STEP 1
+						</div>
+						<div className='proceedStepDescription'>
+							DES
+						</div>
+					</div>
+					<div className='arrow'>
+						arrow
+					</div>
+					<div className='proceedStep'>
+						<div className='proceedStepTitle'>
+							STEP 2
+						</div>
+						<div className='proceedStepDescription'>
+							DES 2
+						</div>
+					</div>
+					<div className='arrow'>
+						arrow
+					</div>
+					<div className='proceedStep'>
+						<div className='proceedStepTitle'>
+							STEP 3
+						</div>
+						<div className='proceedStepDescription'>
+							DES 3
+						</div>
+					</div>
+				</div>
+				{/* <div className='Introduction'>
 					<img src='assets/images/model.png' className='IntroductionImg'/>
 					<span className='IntroductionInfo'>
 						<div className='IntroductionName'>数据资源高效整合</div>
@@ -38,7 +68,7 @@ export default class DataGovernanceInfo extends React.Component {
 						<div className='IntroductionName'>完善的审核处理制度</div>
 						<div className='IntroductionDescription'>针对数据元与数据模型，提供完善的审核制度，实现对有效数据元、数据资源的管理</div>
 					</span>
-				</div>
+				</div> */}
 			</div>
 		)
 	}

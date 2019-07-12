@@ -38,7 +38,7 @@ export default class DataGovernance extends React.Component {
 	constructor (props) {
 		super(props)
 		this.state={
-			step: 3
+			step: 2
 		}
 	}
 	
@@ -550,14 +550,14 @@ export default class DataGovernance extends React.Component {
 		return (
 			<div className="dataGovernance">
 				<div className="maintitle">
-					{this.state.step === 1 ? (<span>数据治理概况 - 数据元</span>) : null} 
-					{this.state.step === 2 ? (<span>数据治理概况 - 数据模型</span>) : null} 
-					{this.state.step === 3 ? (<span>数据治理概况 - 数据资产</span>) : null} 
+					{this.props.step === 1 ? (<span>数据治理概况 - 数据元</span>) : null} 
+					{this.props.step === 2 ? (<span>数据治理概况 - 数据模型</span>) : null} 
+					{this.props.step === 3 ? (<span>数据治理概况 - 数据资产</span>) : null} 
 				</div>
 				<div className='divider'/>
-				{this.state.step === 1 ? stepOne : null}
-				{this.state.step === 2 ? stepTwo : null}
-				{this.state.step === 3 ? stepThree : null}
+				{this.props.step === 1 ? stepOne : null}
+				{this.props.step === 2 ? stepTwo : null}
+				{this.props.step === 3 ? stepThree : null}
 			</div>
 		)
 	}
