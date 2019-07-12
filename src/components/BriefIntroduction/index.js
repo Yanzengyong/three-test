@@ -13,7 +13,7 @@ export default class BriefIntroduction extends React.Component {
 	render () {
 		return(
 			<div className="briefIntroduciton">
-				<div className="textGroup">
+				{/* <div className="textGroup">
 					<BannerAnim autoPlay arrow={false} thumb={false} >
 						<Element
 							prefixCls=""
@@ -48,24 +48,24 @@ export default class BriefIntroduction extends React.Component {
 							</TweenOne>
 						</Element>
 					</BannerAnim>
-				</div>
+				</div> */}
 
 				<div className="leftIntroduction">
 					<div onClick={() => this.props.onClick('source')} className="introSourceBox">
-						<div className="mainbox">数据从哪来？</div>
+						<div className="mainbox">数据来源</div>
 					</div>
 					<div className="arrowGroup">
 						<img src='assets/images/arrowgroup.gif' className='arrow'/>
 					</div>
 					<div onClick={() => this.props.onClick('operate')} className="introSourceBox">
-						<div className="mainbox">数据怎么加工？</div>
+						<div className="mainbox">数据治理与加工</div>
 					</div>
 
 					<div className="arrowGroup">
 						<img src='assets/images/arrowgroup.gif' className='arrow'/>
 					</div>
 					<div onClick={() => this.props.onClick('apply')} className="introSourceBox">
-						<div className="mainbox"> 数据用到了哪儿？	</div>
+						<div className="mainbox"> 数据共享与应用</div>
 					</div>
 				</div>
 			</div>

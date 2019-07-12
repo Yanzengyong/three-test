@@ -711,7 +711,7 @@ function ProdPage () {
 			<div className='prod_header_box'>
 				<div className='prod_title_box'>
 					<div className='prod_title'>
-						数据治理平台
+						政务数据治理平台
 					</div>
 				</div>
 				<div className='prod_header_left'>
@@ -751,9 +751,9 @@ function ProdPage () {
 						currentModel === 'apply' ? (<DataGovernance/>) : (<DataAssets/>)}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
-					<Diagram></Diagram>
-					{/* {currentModel === 'source' ? (<DataSourceType/>) :
-						currentModel === 'apply' ? (<DataGovernanceInfo/>) : (<DataAssetsInfo/>)} */}
+					{/* <Diagram></Diagram> */}
+					{currentModel === 'source' ? (<DataSourceType/>) :
+						currentModel === 'apply' ? (<DataGovernanceInfo/>) : (<Diagram/>)}
 				</div>
 			</div>
 		</div>
