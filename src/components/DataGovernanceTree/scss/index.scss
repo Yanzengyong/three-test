@@ -18,34 +18,25 @@
     .proceedStep {
       width: 30%;
       height: 100%;
-      background: pink;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      .proceedStepTitle {
+        width: 80%;
+        height: 60px;
+        background:  url('../../../assets/images/stepButton.png') no-repeat;
+        background-size: 100% 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+      }
+      .proceedStepDescription {
+        width: 80%;
+        height: 250px;
+        margin-top: 10px;
+      }
     }
   }
-  // .Introduction {
-  //   display: flex;
-  //   width: 100%;
-  //   height: 23%;
-  //   margin-bottom: 10px;
-  //   .IntroductionImg {
-  //     width: 12%;
-  //   }
-  //   .IntroductionInfo {
-  //     height: 100%;
-  //     .IntroductionName {
-  //       line-height: 30px;
-  //       font-size: 20px;
-  //       color: #4AFFFE;
-  //       margin-top: 10px;
-  //     }
-  //     .IntroductionDescription {
-  //       font-size: 16px;
-  //       margin-bottom: 10px;
-  //       margin-top: 10px;
-  //     }
-  //   }
-  // }
 }
