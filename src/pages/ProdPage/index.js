@@ -687,7 +687,7 @@ function ProdPage () {
 			<div className='prod_header_box'>
 				<div className='prod_title_box'>
 					<div className='prod_title'>
-						数据治理平台
+						政务数据治理平台
 					</div>
 				</div>
 				<div className='prod_header_left'>

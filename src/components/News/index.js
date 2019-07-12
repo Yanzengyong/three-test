@@ -49,137 +49,86 @@ export default class News extends React.Component {
   render () {
   	const columns = [
   		{
-  			title: '区域',
+  			title: '系统名',
   			dataIndex: 'area',
-  			width:90
+  			width:180
   		},
   		{
-  			title: '委办局',
-  			dataIndex: 'government',
-  			defaultSortOrder: 'descend',
-  			sorter: (a, b) => a.government - b.government,
-  		},
-  		{
-  			title: '数据量',
-  			dataIndex: 'num',
-  			defaultSortOrder: 'descend',
-  			sorter: (a, b) => a.num - b.num,
-  		},
+  			title: '机构',
+  			dataIndex: 'government'
+  		}
   	]
   	const columnsStandard=[
   		{
-  			title: '数据源名称',
-  			dataIndex: 'datasourceName'
+  			title: '系统名',
+  			dataIndex: 'datasourceName',
+  			width:180
   		},
   		{
-  			title: '所属部门',
+  			title: '质量状况',
   			dataIndex: 'department'
   		},
   	]
   	const columnsProject=[
   		{
-  			title: '支撑项目',
+  			title: '应用',
   			dataIndex: 'project',
-  			width:90
+  			width:120
   		},
   		{
-  			title: '数据简介',
+  			title: '类型',
   			dataIndex: 'projectNum'
   		},
   	]
   	const dataProject=[
   		{
   			key: '1',
-  			project: '知文智用',
-  			projectNum: '北京、上海、重庆等委办局公文公告数据'
+  			project: '一网通办',
+  			projectNum: '政务'
   		},
   		{
   			key: '2',
-  			project: '一网通办',
-  			projectNum: '浪潮业务系统部分数据、高新区政务公开数据'
+  			project: '政务服务中心',
+  			projectNum: '政务'
   		},
   		{
   			key: '3',
-  			project: '智慧问答',
-  			projectNum: '贵阳市交管局在线互动数据、贵州省政务服务网办事指南'
-  		},
-  		{
-  			key: '4',
-  			project: '公安项目',
-  			projectNum: '新浪微博、百度贴吧、天涯论坛云南省上访相关数据'
-  		},
+  			project: '旅游一路通',
+  			projectNum: '行业'
+  		}
   	]
   	const dataStandard=[
   		{
   			key: '1',
-  			datasourceName: '图书馆演示数据源',
-  			department: '北京办事处'
+  			datasourceName: '物价管理系统',
+  			department: '发改委'
   		},
   		{
   			key: '2',
-  			datasourceName: '数据管理平台后台',
-  			department: '共性技术研究中心'
+  			datasourceName: '安全许可经营管理系统',
+  			department: '安监局'
   		},
   		{
   			key: '3',
-  			datasourceName: 'mysql204',
-  			department: '共性技术研究中心'
+  			datasourceName: '出入境游客大数据平台',
+  			department: '旅发委'
   		}
   	]
   	const data = [
   		{
   			key: '1',
-  			area: '成都市',
-  			government: 53,
-  			num: 34664,
+  			area: '安全许可经营管理系统',
+  			government: '优',
   		},
   		{
   			key: '2',
-  			area: '四川省',
-  			government: 54,
-  			num: 106486,
+  			area: '出入境游客大数据平台',
+  			government: '优'
   		},
   		{
   			key: '3',
-  			area: '中央',
-  			government: 54,
-  			num: 268724,
-  		},
-  		{
-  			key: '4',
-  			area: '北京市',
-  			government: 34,
-  			num: 64865,
-  		},
-  		{
-  			key: '5',
-  			area: '重庆市',
-  			government: 32,
-  			num: 59287,
-  		},
-  		{
-  			key: '6',
-  			area: '上海市',
-  			government: 41,
-  			num: 78762,
-  		},
-  		{
-  			key: '7',
-  			area: '贵州省',
-  			government: 56,
-  			num: 103024,
-  		},
-  		{
-  			key: '8',
-  			area: '贵阳市',
-  			government: 54,
-  			num: 19287,
-  		},
-  		{
-  			key: '9',
-  			area: '全国科技口',
-  			government: 38,
-  			num: 73975,
+  			area: '装修施工许可证登记系统',
+  			government: '良'
   		}
   	]
   	return(
@@ -190,51 +139,45 @@ export default class News extends React.Component {
   			<div className="newsMain" >
   			<Carousel dotPosition="left" autoplay autoplayInterval={500} dots={false} >
   					<div className="BOX">
-						1. 收到XX委办局XX相关数据XX条。
+						1. 2019年4月5日，水文监测站数据采集系统接入平台。
   					</div>
   					<div className="BOX">
-						2. 1-3月平台数据源新增XX条。
+						2. 2019年第一季度新增数据82GB。
   					</div>
   					<div className="BOX">
-					  3. 1-3月平台数据资源新增XX条。
+					  3. 2019年第一季度数据质量评估：优。
   					</div>
   					<div className="BOX">
-					  4. 1-3平台数据资源总量同比前期涨幅为3.5%
+					  4. 2019年第一季度数据安全评估：优。
   					</div>
   					<div className="BOX">
-            5. 2018年平台数据共支撑38个项目，其中包含全国一体化项目等...
+            5. 2019年第一季度提供共享数据205GB
   					</div>
   					<div className="BOX">
-					  6. 2018年平台共建有效数据模型189个。其中用于平台支撑的有80个，科研支撑有20个。
+					  6. 2019年第一季度新增数据应用12个。
   					</div>
   					<div className="BOX">
-						7. 2018年平台使用人数达1.5w。
-  					</div>
-  					<div className="BOX">
-					  8. 2019上半年平台新增数据量高达3.5G。
-  					</div>
-  					<div className="BOX">
-					  9. 2019上半年平台安全质量通过国家标准检测。
+						7. 2019年5月20日数据治理委员会全体会议召开
   					</div>
   			</Carousel>
   		</div>
   			<div className="newsTitleTwo">
-          平台数据源概览
+          数据提供排名
   			</div>
   			<div className="tableMain">
-  				<Table size="small" columns={columnsStandard} dataSource={dataStandard} pagination={{ defaultPageSize:3, onChange:this.pageonChange, current:this.state.currentPage }} />
+  				<Table size="small" columns={columnsStandard} dataSource={dataStandard} pagination={false}/>
   			</div>
   			<div className="newsTitleTwo">
-          平台政策公文数据概览
+          数据质量排名
   			</div>
   			<div className="tableMain">
-  				<Table size="small" columns={columns} dataSource={data} pagination={{ defaultPageSize:3, onChange:this.pageonChange, current:this.state.currentPage }} />
+  				<Table size="small" columns={columns} dataSource={data} pagination={false} />
   			</div>
   			<div className="newsTitleTwo">
-          平台项目支撑情况
+          数据使用数量排名
   			</div>
   			<div className="tableMain">
-  				<Table size="small" columns={columnsProject} dataSource={dataProject} pagination={{ defaultPageSize:2, onChange:this.projectPageonChange, current:this.state.projectCurrentPage }} />
+  				<Table size="small" columns={columnsProject} dataSource={dataProject} pagination={false} />
   			</div>
   		</div>
 
