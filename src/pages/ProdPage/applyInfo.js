@@ -237,6 +237,7 @@ export default class ApplyInfo {
 						}, this.group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
 						this.group_source_array[i].material.color = new THREE.Color('#007eff')
 						this.thunk_one.push(this.group_source_array[i])
+						this.init_field.push(this.group_source_array[i])
 					} else if (i < unit * 2) {
 						this.animateHandle(this.group_source_array[i].position, {
 							x: (2.0 * Math.random() - 1.0) * -30 - 50,
@@ -245,6 +246,7 @@ export default class ApplyInfo {
 						}, this.group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
 						this.group_source_array[i].material.color = new THREE.Color('#00ffd0')
 						this.thunk_two.push(this.group_source_array[i])
+						this.init_field.push(this.group_source_array[i])
 					} else if (i < unit * 3) {
 						this.animateHandle(this.group_source_array[i].position, {
 							x: (2.0 * Math.random() - 1.0) * -30 - 50,
@@ -253,6 +255,7 @@ export default class ApplyInfo {
 						}, this.group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
 						this.group_source_array[i].material.color = new THREE.Color('#ff8d00')
 						this.thunk_three.push(this.group_source_array[i])
+						this.init_field.push(this.group_source_array[i])
 					} else if (i < unit * 4) {
 						this.animateHandle(this.group_source_array[i].position, {
 							x: (2.0 * Math.random() - 1.0) * 30 + 50,
@@ -261,6 +264,7 @@ export default class ApplyInfo {
 						}, this.group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
 						this.group_source_array[i].material.color = new THREE.Color('#fff700')
 						this.thunk_four.push(this.group_source_array[i])
+						this.init_field.push(this.group_source_array[i])
 					} else if (i < unit * 5) {
 						this.animateHandle(this.group_source_array[i].position, {
 							x: (2.0 * Math.random() - 1.0) * 30,
@@ -268,6 +272,7 @@ export default class ApplyInfo {
 							z: Math.random() > 0.5 ? (2.0 * Math.random() - 1.0) * 30 + 50 : -1 * ((2.0 * Math.random() - 1.0) * 30 + 50)
 						}, this.group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
 						this.thunk_five.push(this.group_source_array[i])
+						this.init_field.push(this.group_source_array[i])
 					}
 				}
 				let timer = setTimeout(() => {

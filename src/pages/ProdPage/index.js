@@ -274,23 +274,38 @@ function ProdPage () {
 			.then(() => {
 				centerModel = new ApplyInfo(group_apply).createMoreCube()
 				// group_apply.add(centerModel)
-				const playLoop = () => {
-					centerModel.classifyDataHandle(3000, 3000)
-						.then(() => {
-							setDataModelStep(1)
-							return centerModel.shrinkDataHandle(3000, 3500)
-						})
-						.then(() => {
-							setDataModelStep(2)
-							return centerModel.changeCube(3000, 3500)
-						})
-						.then(() => {
-							setDataModelStep(3)
-							return centerModel.changeSphere(3000, 3500)
-						})
-						.then(() => {
-							playLoop()
-						})
+				const playLoop = async () => {
+					await centerModel.classifyDataHandle(3000, 3000)
+					console.log('分类')
+					setDataModelStep(1)
+					await centerModel.changeCube(3000, 3500)
+					console.log('变成矩形')
+					setDataModelStep(2)
+					await centerModel.changeSphere(3000, 5500)
+					console.log('变成球体')
+					setDataModelStep(3)
+					let timer = setTimeout(() => {
+						clearTimeout(timer)
+						playLoop()
+					}, 5500)
+					// .then(() => {
+					// 	console.log('现在是第1步')
+					// 	setDataModelStep(1)
+					// 	return centerModel.shrinkDataHandle(3000, 3500)
+					// })
+					// .then(() => {
+					// 	console.log('现在是第二步')
+					// 	setDataModelStep(2)
+					// 	return centerModel.changeCube(3000, 3500)
+					// })
+					// .then(() => {
+					// 	console.log('现在是第三步')
+					// 	setDataModelStep(3)
+					// 	return centerModel.changeSphere(3000, 3500)
+					// })
+					// .then(() => {
+					// 	playLoop()
+					// })
 				}
 				playLoop()
 			})
