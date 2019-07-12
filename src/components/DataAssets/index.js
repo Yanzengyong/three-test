@@ -6,43 +6,6 @@ import 'antd/dist/antd.css'
 import 'echarts-liquidfill'
 
 export default function DataAssets () {
-	var value = 0.78
-	var usedata = []
-	usedata.push(value)
-	usedata.push(value)
-	usedata.push(value)
-	usedata.push(value)
-	usedata.push(value)
-	var option = {
-		title: {
-			text: '接口使用率',
-			textStyle: {
-				fontWeight: 'normal',
-				fontSize: 25,
-				color: '#4AFFFE'
-			}
-		},
-		series: [{
-			type: 'liquidFill',
-			radius: '65%',
-			data: usedata,
-			backgroundStyle: {
-				borderWidth: 5,
-				borderColor: '#007265',
-				color: '#92fff2'
-			},
-			label: {
-				normal: {
-					formatter: (value * 100).toFixed(2) + '%',
-					textStyle: {
-						fontSize: 40
-					}
-				}
-			}
-		}]
-	}
-
-
 	var colors = ['#00ffd0', '#D8833D']
 	const option3 = {
 		title: {
@@ -134,54 +97,53 @@ export default function DataAssets () {
 
 	const columns = [
 		{
-			title: '区域',
+			title: '应用名称',
 			dataIndex: 'area',
-			width:90
-		},
-		{
-			title: '委办局',
-			dataIndex: 'government',
-			defaultSortOrder: 'descend',
-			sorter: (a, b) => a.government - b.government,
+			width:200,
+			align:'center'
 		},
 		{
 			title: 'API调用次数',
+			dataIndex: 'government',
+			align:'center'
+		},
+		{
+			title: '数据使用量',
 			dataIndex: 'num',
-			defaultSortOrder: 'descend',
-			sorter: (a, b) => a.num - b.num,
+			align:'center'
 		},
 	]
 
 	const data = [
 		{
 			key: '1',
-			area: '成都市',
+			area: '一网通办',
 			government: 53,
-			num: 2064,
+			num: '32GB',
 		},
 		{
 			key: '2',
-			area: '四川省',
-			government: 54,
-			num: 2850,
+			area: '政务服务中心',
+			government: 32,
+			num: '27GB',
 		},
 		{
 			key: '3',
-			area: '中央',
-			government: 54,
-			num: 10237,
+			area: '旅游一路通',
+			government: 42,
+			num: '30GB',
 		},
 		{
 			key: '4',
-			area: '北京市',
-			government: 34,
-			num: 5560,
+			area: '安监小精灵',
+			government: 18,
+			num: '19GB',
 		},
 		{
 			key: '5',
-			area: '重庆市',
-			government: 32,
-			num: 1860,
+			area: '出入境办理',
+			government: 25,
+			num: '23GB',
 		}
 	]
 
@@ -237,13 +199,18 @@ export default function DataAssets () {
 							size="small"
 							columns={columns}
 							dataSource={data}
+							pagination={false}
 						/>
 					</div>
 				</div>
 
 				<div className='dataAssets'>
-					<div className='chart'>
-						<ReactEcharts option={option}/>
+					<div className='dataInfo'>
+						<div className='data'>
+							<span className='num'>3</span>
+							<span className='unit'>次</span>
+						</div>
+						<div className='info'>API调用失败次数</div>
 					</div>
 					<div className='chart'>
 						<ReactEcharts option={option3}/>
