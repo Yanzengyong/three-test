@@ -7,80 +7,90 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  .ant-table{
-    color: #808080;
+  .divider {
+    height: 3px;
+    width: 100%;
+    background-image: url('../../../assets/images/line.png');
+    background-size:100% 100%;
+    background-repeat: no-repeat;
+    margin: 5px;
   }
-  .ant-table-thead > tr > th{
-    background: none;
-    color: white;
+  .maintitle{
+    width: 100%;
+    height: 50px;
+    font-size: 25px;
+    font-weight: bold;
+    color: #4AFFFE;
+    display:flex;
+    justify-content: center;
+    align-items: center;
   }
-  .ant-table-thead > tr > th.ant-table-column-sort{
-    background: none;
-    color: white;
-  }
-  .anticon{
-    color: white
-  }
-  a{
-    background-color: white;
-  }
-}
-.dataRecourceTable{
 
-  width: 47%;
-  height: 100% !important;
-  margin-top: 35px;
+  .stepContainer {
+    width: 100%;
+    height: 90%;
+    .chartsContainer {
+      width: 100%;
+      height: 32%;
+      margin-bottom: 15px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .metaDataTotalCount {
+        width: 48%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        .num {
+          border: 8px #4AFFFE solid;
+          width: 160px;
+          height: 160px;
+          border-radius: 80px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 45px;
+        }
+        .name {
+          font-size: 20px;
+          color: #4AFFFE;
+          margin-top: 15px;
+        }
+      }
+      .chart {
+        width: 48%;
+        height: 100%;
+      }
+      .dataQuality {
+        width: 30%;
+        height: 100%;
+      }
+      .dataQualityQuestion {
+        width: 30%;
+        height: 100%;
+        .title {
+          font-weight: 550;
+          margin-bottom: 10px;
+          font-size: 18px;
+          color: #4AFFFE;
+        }
+        .BOX {
+          color: #fff;
+          height: 50px;
+        }
+        .slick-list{
+          height: 220px !important;
+          color: #bdb8b8;
+        }
+      }
+      .dataSecurity {
+        width: 30%;
+        height: 100%;
+      }
+    }
+  }
 }
-.dataRecourceChart{
-  width: 50%;
-  height: 100% !important;
-  // background-color: red
-}
-.dataResourceGroup{
-  display: flex;
-  flex-direction: row;
-  // background-color: green;
-  height: 30%;
-}
-.dataModelGroup{
-  display: flex;
-  flex-direction: row;
-  // background-color: red;
-  height: 25%;
-}
-.dataModelTable{
-  margin-top: 15px;
-  width: 50%;
-  height: 88%;
-}
-.dataModelChart{
-  width: 48%;
-}
-.dataElement{
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-  // background-color: blue;
-  height: 28%;
-}
-.wordCloudChart{
-  width: 50%;
-}
-.divider {
-  height: 3px;
-  width: 100%;
-  background-image: url('../../../assets/images/line.png');
-  background-size:100% 100%;
-  background-repeat: no-repeat;
-  margin: 5px;
-}
-.maintitle{
-  width: 100%;
-  height: 50px;
-  font-size: 25px;
-  font-weight: bold;
-  color: #4AFFFE;
-  display:flex;
-  justify-content: center;
-  align-items: center;
-}
+

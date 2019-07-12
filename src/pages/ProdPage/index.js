@@ -28,6 +28,7 @@ import { groupSource, animateSource, animateSource2 } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
 import { groupCenter } from './centerChunk'
 import ApplyInfo from './applyInfo'
+import { IndCommerceData, revolutionDept, securityDept, meteorologyDept, travelDept, houseDept, foodMedicalDept, marrigeDept } from './dataSourceJson'
 
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
 
@@ -107,7 +108,7 @@ let clickObjectArr = []
 
 function ProdPage () {
 	const [currentModel, setCurrentModel] = useState(null)
-	const [dataSourceTitle, setDataSourceTitle] = useState('旅发委')
+	const [dataSourceData, setDataSourceData] = useState(IndCommerceData)
 	useEffect(() => {
 		anime({
 			targets: ['#init1', '#init2', '#init3', '#init4', '#init5'],
@@ -437,6 +438,29 @@ function ProdPage () {
 		camera.updateProjectionMatrix()
 		renderer.setSize(document.getElementById('content').offsetWidth, document.getElementById('content').offsetHeight)
 	}, false)
+
+	// 根据不同的委办局名称使用不同的数据
+	const getDepartmentInfoData = (name) => {
+		switch (name) {
+		case '工商局': setDataSourceData(IndCommerceData)
+			break
+		case '发改委': setDataSourceData(revolutionDept)
+			break
+		case '安监局': setDataSourceData(securityDept)
+			break
+		case '气象局': setDataSourceData(meteorologyDept)
+			break
+		case '旅发委': setDataSourceData(travelDept)
+			break
+		case '住建局': setDataSourceData(houseDept)
+			break
+		case '食药监局': setDataSourceData(foodMedicalDept)
+			break
+		case '民政局': setDataSourceData(marrigeDept)
+			break
+		}
+	}
+
 	// 加载3d效果的初始函数
 	const init = () => {
 		// let helper = new THREE.AxesHelper(1000)
@@ -456,10 +480,10 @@ function ProdPage () {
 				} else if (intersects.some((item) => (item.object.name === 'sourcePlane'))) {
 					let index = infoSourceArr.findIndex((item) => (item.keyword === intersects[0].object.keyword))
 					if (index + 1 === infoSourceArr.length) {
-						setDataSourceTitle(infoSourceArr[0].keyword)
+						getDepartmentInfoData(infoSourceArr[0].keyword)
 						console.log(infoSourceArr[0].keyword)
 					} else {
-						setDataSourceTitle(infoSourceArr[index + 1].keyword)
+						getDepartmentInfoData(infoSourceArr[index + 1].keyword)
 					}
 					choiceSourcePlane = !choiceSourcePlane
 				}
@@ -723,7 +747,7 @@ function ProdPage () {
 					<LineChart></LineChart>
 				</div>
 				<div id='info1' className='prod_info_left'>
-					{currentModel === 'source' ? (<DataSource title={dataSourceTitle}/>) :
+					{currentModel === 'source' ? (<DataSource dataSet={dataSourceData}/>) :
 						currentModel === 'apply' ? (<DataGovernance/>) : (<DataAssets/>)}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
