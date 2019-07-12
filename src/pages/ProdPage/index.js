@@ -109,6 +109,7 @@ let clickObjectArr = []
 function ProdPage () {
 	const [currentModel, setCurrentModel] = useState(null)
 	const [dataSourceData, setDataSourceData] = useState(allData)
+	const [dataModelStep, setDataModelStep] = useState(null)
 	useEffect(() => {
 		anime({
 			targets: ['#init1', '#init2', '#init3', '#init4', '#init5'],
@@ -257,6 +258,7 @@ function ProdPage () {
 	const checkOperateHandle = () => {
 		setCurrentModel('apply')
 		slideOutHandle()
+		setDataModelStep(1)
 		animateHandle(camera.position, {
 			x: 0,
 			y: 0,
@@ -270,8 +272,27 @@ function ProdPage () {
 				}, camera, TWEEN.Easing.Circular.InOut, 2400)
 			})
 			.then(() => {
-				centerModel = new ApplyInfo().createMoreCube()
-				group_apply.add(centerModel)
+				centerModel = new ApplyInfo(group_apply).createMoreCube()
+				// group_apply.add(centerModel)
+				const playLoop = () => {
+					centerModel.classifyDataHandle(3000, 3000)
+						.then(() => {
+							setDataModelStep(1)
+							return centerModel.shrinkDataHandle(3000, 3500)
+						})
+						.then(() => {
+							setDataModelStep(2)
+							return centerModel.changeCube(3000, 3500)
+						})
+						.then(() => {
+							setDataModelStep(3)
+							return centerModel.changeSphere(3000, 3500)
+						})
+						.then(() => {
+							playLoop()
+						})
+				}
+				playLoop()
 			})
 		for (let i = 0; i < infoModel_Arr.length; i++) {
 			group_use_info.remove(infoModel_Arr[i])
@@ -522,7 +543,7 @@ function ProdPage () {
 		group_apply.add(particles)
 
 		// 光锥
-		new CreateObject(rocket_position, group_apply).createObjects()
+		// new CreateObject(rocket_position, group_apply).createObjects()
 
 		// 外层 云层
 		cloud = new CreateCloud().createCloudGrid()
@@ -747,7 +768,7 @@ function ProdPage () {
 				</div>
 				<div id='info1' className='prod_info_left'>
 					{currentModel === 'source' ? (<DataSource dataSet={dataSourceData}/>) :
-						currentModel === 'apply' ? (<DataGovernance/>) : (<DataAssets/>)}
+						currentModel === 'apply' ? (<DataGovernance step={dataModelStep}/>) : (<DataAssets/>)}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
 					{/* <Diagram></Diagram> */}

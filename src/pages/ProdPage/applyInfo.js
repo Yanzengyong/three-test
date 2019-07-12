@@ -2,9 +2,10 @@ import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 
 export default class ApplyInfo {
-	constructor () {
+	constructor (group) {
 		this.group_source_array = []
-		this.group = new THREE.Group()
+		// this.group = new THREE.Group()
+		this.group = group
 		this.thunk_one = []
 		this.thunk_two = []
 		this.thunk_three = []
@@ -313,7 +314,8 @@ export default class ApplyInfo {
 			this.group_source_array.push(cube_model)
 			this.group.add(cube_model)
 		}
-		this.playLoop()
-		return this.group
+		// this.playLoop()
+		// return this.group
+		return this
 	}
 }
