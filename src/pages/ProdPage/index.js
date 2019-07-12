@@ -79,8 +79,8 @@ scene.add(group_use_info)
 
 let group_source_info = new THREE.Group()
 group_source_info.position.set(0, 0, 600)
-group_source_info.rotation.x = -0.5 * Math.PI
-group_source_info.rotation.z = Math.PI
+group_source_info.rotation.x = 0.5 * Math.PI
+// group_source_info.rotation.z = Math.PI
 scene.add(group_source_info)
 
 // 创建一个云层的变量 ---- 方便删除添加
@@ -107,6 +107,7 @@ let clickObjectArr = []
 
 function ProdPage () {
 	const [currentModel, setCurrentModel] = useState(null)
+	const [dataSourceTitle, setDataSourceTitle] = useState('旅发委')
 	useEffect(() => {
 		anime({
 			targets: ['#init1', '#init2', '#init3', '#init4', '#init5'],
@@ -309,7 +310,18 @@ function ProdPage () {
 				showSourceInfo = true
 				for (let i = 0; i < infoSource_Arr.length; i++) {
 					group_source_info.add(infoSource_Arr[i])
-					clickObjectArr.push(group_source_info)
+					let geometry = new THREE.PlaneGeometry(150, 220)
+					let material = new THREE.MeshBasicMaterial({ color: 0xffff00, visible:false })
+					let plane = new THREE.Mesh(geometry, material)
+					plane.position.set(infoSource_Arr[i].position.x, infoSource_Arr[i].position.y, infoSource_Arr[i].position.z)
+					vector.x = infoSource_Arr[i].position.x * -2
+					vector.y = infoSource_Arr[i].position.y
+					vector.z = infoSource_Arr[i].position.z * -2
+					plane.lookAt(vector)
+					plane.name = 'sourcePlane'
+					plane.keyword = infoSource_Arr[i].name
+					group_source_info.add(plane)
+					clickObjectArr.push(plane)
 				}
 				return animateHandle(camera.position, {
 					x: 0,
@@ -384,6 +396,41 @@ function ProdPage () {
 		}
 	}
 
+	let infoSourceArr = [
+		{
+			img: 'assets/images/gongshang.png',
+			text: '工商局',
+			keyword: '工商局'
+		}, {
+			img: 'assets/images/fagai.png',
+			text: '发改委',
+			keyword: '发改委'
+		}, {
+			img: 'assets/images/anjian.png',
+			text: '安监局',
+			keyword: '安监局'
+		}, {
+			img: 'assets/images/qixiang.png',
+			text: '气象局',
+			keyword: '气象局'
+		}, {
+			img: 'assets/images/lvfa.png',
+			text: '旅发委',
+			keyword: '旅发委'
+		}, {
+			img: 'assets/images/zhujian.png',
+			text: '住建局',
+			keyword: '住建局'
+		}, {
+			img: 'assets/images/shiyaojian.png',
+			text: '食药监局',
+			keyword: '食药监局'
+		}, {
+			img: 'assets/images/minzheng.png',
+			text: '民政局',
+			keyword: '民政局'
+		}]
+
 	// 改变浏览器大小重置camera和renderer
 	window.addEventListener('resize', ()=>{
 		camera.aspect = document.getElementById('content').offsetWidth / document.getElementById('content').offsetHeight
@@ -402,18 +449,19 @@ function ProdPage () {
 			mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1
 			mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1
 			raycaster.setFromCamera(mouse, camera)
-			console.log(clickObjectArr)
 			let intersects = raycaster.intersectObjects(clickObjectArr)
-			console.log(intersects)
 			if (intersects.length > 0) {
-				console.log(intersects)
 				if (intersects.some((item) => (item.object.name === 'usePlane'))) {
-					console.log('????')
 					choiceUsePlane = !choiceUsePlane
-					// D_value = Math.abs(-180 - intersects[0].point.y)
-					// D_value = intersects[0].uv.y
-					// console.log(D_value)
-					// intersects[0].point.y =
+				} else if (intersects.some((item) => (item.object.name === 'sourcePlane'))) {
+					let index = infoSourceArr.findIndex((item) => (item.keyword === intersects[0].object.keyword))
+					if (index + 1 === infoSourceArr.length) {
+						setDataSourceTitle(infoSourceArr[0].keyword)
+						console.log(infoSourceArr[0].keyword)
+					} else {
+						setDataSourceTitle(infoSourceArr[index + 1].keyword)
+					}
+					choiceSourcePlane = !choiceSourcePlane
 				}
 				// 说明存在被点击的模型
 				// 如果被点击的是中心圆球的话执行动画的切换
@@ -541,40 +589,6 @@ function ProdPage () {
 			clickObjectArr.push(plane)
 		}
 		// 数据源详情的模型
-		let infoSourceArr = [
-			{
-				img: 'assets/images/gsj.png',
-				text: '工商局',
-				keyword: '工商局'
-			}, {
-				img: 'assets/images/jqsbsj.png',
-				text: '发改委。',
-				keyword: '发改委'
-			}, {
-				img: 'assets/images/gryjsj.png',
-				text: '安监局。',
-				keyword: '安监局'
-			}, {
-				img: 'assets/images/grspsj.png',
-				text: '气象局。',
-				keyword: '气象局'
-			}, {
-				img: 'assets/images/grwdsj.png',
-				text: '旅发委。',
-				keyword: '旅发委'
-			}, {
-				img: 'assets/images/gjsj.png',
-				text: '住建局。',
-				keyword: '住建局'
-			}, {
-				img: 'assets/images/jysj.png',
-				text: '食药监局。',
-				keyword: '食药监局'
-			}, {
-				img: 'assets/images/ydtxsj.png',
-				text: '民政局。',
-				keyword: '民政局'
-			}]
 		for (let i = 0; i < infoSourceArr.length; i++) {
 			let souceDiv = document.createElement('div')
 			souceDiv.className = 'source_info'
@@ -595,18 +609,15 @@ function ProdPage () {
 			vector.y = object.position.y
 			vector.z = object.position.z * -2
 			object.lookAt(vector)
+			object.name = infoSourceArr[i].keyword
 			infoSource_Arr.push(object)
-			object.name = 'soucePlane'
 		}
-		// for (let i = 0; i < infoSource_Arr.length; i++) {
-		// 	group_source_info.add(infoSource_Arr[i])
-		// }
 
 		// 导入源头模型
-		// group_source.add(groupSource)
+		group_source.add(groupSource)
 
 		// 导入应用模型
-		// group_use.add(groupApply)
+		group_use.add(groupApply)
 
 		// 像素点
 		renderer.setPixelRatio(window.devicePixelRatio)
@@ -631,19 +642,20 @@ function ProdPage () {
 			TWEEN.update()
 			if (!showSourceInfo) {
 				animateSource()
-				group_source_info.rotation.y += 0
 			} else {
 				animateSource2()
-				group_source_info.rotation.y += 0.002
 			}
 			animateApply()
 			group_source_ring.rotation.z += Math.PI / 2 * 0.002
+			group_apply.rotation.y -= Math.PI / 2 * 0.002
 			// 是否点击了源详情的纸片
 			if (!choiceSourcePlane) {
-				group_apply.rotation.y -= Math.PI / 2 * 0.002
+				group_source_info.rotation.y -= 0.002
 			} else {
-				if (Math.abs(group_apply.rotation.y) % (Math.PI * 2 / infoSourceArr.length) > 0.01) {
-					group_apply.rotation.y -= 0.01
+				// console.log(Math.abs(group_source_info.rotation.y) % (Math.PI * 2 / infoSourceArr.length))
+				if (Math.abs(group_source_info.rotation.y) % (Math.PI * 2 / infoSourceArr.length) > 0.01) {
+					// Math.abs(group_source_info.rotation.y) % (Math.PI * 2 / infoSourceArr.length) - 0.01
+					group_source_info.rotation.y -= 0.01
 				}
 			}
 			// 是否点击了使用详情的纸片
@@ -711,7 +723,7 @@ function ProdPage () {
 					<LineChart></LineChart>
 				</div>
 				<div id='info1' className='prod_info_left'>
-					{currentModel === 'source' ? (<DataSource/>) :
+					{currentModel === 'source' ? (<DataSource title={dataSourceTitle}/>) :
 						currentModel === 'apply' ? (<DataGovernance/>) : (<DataAssets/>)}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
