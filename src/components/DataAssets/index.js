@@ -193,15 +193,15 @@ export default function DataAssets () {
 				<div className='dataOpen'>
 					<div className='dataInfo'>
 						<div className='data'>
-							<span className='num'>17325</span>
-							<span className='unit'>条</span>
+							<span className='num'>36</span>
+							<span className='unit'>GB</span>
 						</div>
 						<div className='info'>已开放数据</div>
 					</div>
 					<div className='dataInfo'>
 						<div className='data'>
-							<span className='num'>10328</span>
-							<span className='unit'>条</span>
+							<span className='num'>58</span>
+							<span className='unit'>GB</span>
 						</div>
 						<div className='info'>可共享数据</div>
 					</div>
@@ -210,9 +210,9 @@ export default function DataAssets () {
 							<span className='num'>587</span>
 							<span className='unit'>个</span>
 						</div>
-						<div className='info'>API接口</div>
+						<div className='info'>活跃API</div>
 					</div>
-					<div className='dataInfo2'>
+					{/* <div className='dataInfo2'>
 						<div className='data'>
 							<span className='num'>51</span>
 							<span className='description'>个市级部门</span>
@@ -225,7 +225,7 @@ export default function DataAssets () {
 							<span className='num'>6</span>
 							<span className='description'>个行业</span>
 						</div>
-					</div>
+					</div> */}
 				</div>
 
 				<div className='dataApply'>

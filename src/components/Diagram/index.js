@@ -56,12 +56,12 @@ export default class Diagram extends React.Component {
   		node.category = node.attributes.modularity_class
   	})
   	const option={
-  		title: {
-  			text: 'data',
-  			subtext: 'Default layout',
-  			top: 'bottom',
-  			left: 'right'
-  		},
+  		// title: {
+  		// 	// text: 'data',
+  		// 	// subtext: 'Default layout',
+  		// 	top: 'bottom',
+  		// 	left: 'right'
+  		// },
   		tooltip: {},
   		legend: [{
   			// selectedMode: 'single',

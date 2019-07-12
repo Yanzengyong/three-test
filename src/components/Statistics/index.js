@@ -6,15 +6,15 @@ export default class Statistics extends React.Component {
 		this.state={
 			data:[
 				{
-					name:'平台数据资源总数',
-					num:'5456184条'
+					name:'数据接入总量',
+					num:'540.6GB'
 				},
 				{
-					name:'平台数据总量',
-					num:'5TB'
+					name:'数据治理总量',
+					num:'103.0GB'
 				},
 				{
-					name:'平台标准文件个数',
+					name:'数据开放API总数',
 					num:'1586个'
 				}
 			]
