@@ -5,7 +5,7 @@ import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRe
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import anime from 'animejs'
 import TWEEN from '@tweenjs/tween.js'
-// import Orbitcontrols from 'three-orbitcontrols'
+import Orbitcontrols from 'three-orbitcontrols'
 import './index.scss'
 import News from '../../components/News'
 import Statistics from '../../components/Statistics'
@@ -79,8 +79,8 @@ scene.add(group_use_info)
 
 let group_source_info = new THREE.Group()
 group_source_info.position.set(0, 0, 600)
-group_source_info.rotation.x = -0.5 * Math.PI
-group_source_info.rotation.z = Math.PI
+group_source_info.rotation.x = 0.5 * Math.PI
+// group_source_info.rotation.z = Math.PI
 scene.add(group_source_info)
 
 // 创建一个云层的变量 ---- 方便删除添加
@@ -90,6 +90,8 @@ let infoModel_Arr = []
 let infoSource_Arr = []
 let particlesArr
 let showSourceInfo = false
+let choiceUsePlane = false
+let choiceSourcePlane = false
 
 // 创建球点对象
 let sphereParticles = new THREE.Object3D()
@@ -105,6 +107,7 @@ let clickObjectArr = []
 
 function ProdPage () {
 	const [currentModel, setCurrentModel] = useState(null)
+	const [dataSourceTitle, setDataSourceTitle] = useState('旅发委')
 	useEffect(() => {
 		anime({
 			targets: ['#init1', '#init2', '#init3', '#init4', '#init5'],
@@ -307,6 +310,18 @@ function ProdPage () {
 				showSourceInfo = true
 				for (let i = 0; i < infoSource_Arr.length; i++) {
 					group_source_info.add(infoSource_Arr[i])
+					let geometry = new THREE.PlaneGeometry(150, 220)
+					let material = new THREE.MeshBasicMaterial({ color: 0xffff00, visible:false })
+					let plane = new THREE.Mesh(geometry, material)
+					plane.position.set(infoSource_Arr[i].position.x, infoSource_Arr[i].position.y, infoSource_Arr[i].position.z)
+					vector.x = infoSource_Arr[i].position.x * -2
+					vector.y = infoSource_Arr[i].position.y
+					vector.z = infoSource_Arr[i].position.z * -2
+					plane.lookAt(vector)
+					plane.name = 'sourcePlane'
+					plane.keyword = infoSource_Arr[i].name
+					group_source_info.add(plane)
+					clickObjectArr.push(plane)
 				}
 				return animateHandle(camera.position, {
 					x: 0,
@@ -381,6 +396,41 @@ function ProdPage () {
 		}
 	}
 
+	let infoSourceArr = [
+		{
+			img: 'assets/images/gongshang.png',
+			text: '工商局',
+			keyword: '工商局'
+		}, {
+			img: 'assets/images/fagai.png',
+			text: '发改委',
+			keyword: '发改委'
+		}, {
+			img: 'assets/images/anjian.png',
+			text: '安监局',
+			keyword: '安监局'
+		}, {
+			img: 'assets/images/qixiang.png',
+			text: '气象局',
+			keyword: '气象局'
+		}, {
+			img: 'assets/images/lvfa.png',
+			text: '旅发委',
+			keyword: '旅发委'
+		}, {
+			img: 'assets/images/zhujian.png',
+			text: '住建局',
+			keyword: '住建局'
+		}, {
+			img: 'assets/images/shiyaojian.png',
+			text: '食药监局',
+			keyword: '食药监局'
+		}, {
+			img: 'assets/images/minzheng.png',
+			text: '民政局',
+			keyword: '民政局'
+		}]
+
 	// 改变浏览器大小重置camera和renderer
 	window.addEventListener('resize', ()=>{
 		camera.aspect = document.getElementById('content').offsetWidth / document.getElementById('content').offsetHeight
@@ -396,11 +446,23 @@ function ProdPage () {
 		// 监听点击模型事件
 		container.addEventListener('click', (event) => {
 			event.preventDefault()
-			mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 -1
-			mouse.y = (event.clientY / renderer.domElement.clientHeight) * 2 -1
+			mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1
+			mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1
 			raycaster.setFromCamera(mouse, camera)
 			let intersects = raycaster.intersectObjects(clickObjectArr)
 			if (intersects.length > 0) {
+				if (intersects.some((item) => (item.object.name === 'usePlane'))) {
+					choiceUsePlane = !choiceUsePlane
+				} else if (intersects.some((item) => (item.object.name === 'sourcePlane'))) {
+					let index = infoSourceArr.findIndex((item) => (item.keyword === intersects[0].object.keyword))
+					if (index + 1 === infoSourceArr.length) {
+						setDataSourceTitle(infoSourceArr[0].keyword)
+						console.log(infoSourceArr[0].keyword)
+					} else {
+						setDataSourceTitle(infoSourceArr[index + 1].keyword)
+					}
+					choiceSourcePlane = !choiceSourcePlane
+				}
 				// 说明存在被点击的模型
 				// 如果被点击的是中心圆球的话执行动画的切换
 				// console.log(currentFlyNum)
@@ -411,7 +473,7 @@ function ProdPage () {
 			} else {
 				// 不存在被点击的模型
 			}
-		}, true)
+		}, false)
 
 		// 背景星空 ----- 调用函数
 		let backgroundCloud = createParticles(2, true, 0.7, 0xffffff, false, 0xffffff, 1000)
@@ -514,35 +576,19 @@ function ProdPage () {
 		// 添加卡片到组内
 		for (let i = 0; i < infoModel_Arr.length; i++) {
 			group_use_info.add(infoModel_Arr[i])
+			let geometry = new THREE.PlaneGeometry(150, 220)
+			let material = new THREE.MeshBasicMaterial({ color: 0xffff00, visible:false })
+			let plane = new THREE.Mesh(geometry, material)
+			plane.position.set(infoModel_Arr[i].position.x, infoModel_Arr[i].position.y, infoModel_Arr[i].position.z)
+			vector.x = infoModel_Arr[i].position.x * -2
+			vector.y = infoModel_Arr[i].position.y
+			vector.z = infoModel_Arr[i].position.z * -2
+			plane.lookAt(vector)
+			plane.name = 'usePlane'
+			group_use_info.add(plane)
+			clickObjectArr.push(plane)
 		}
-
 		// 数据源详情的模型
-		let infoSourceArr = [
-			{
-				img: 'assets/images/qysj.png',
-				text: '企业数据：如百度、阿里等公司对用户消费行为及社交行为的数据。'
-			}, {
-				img: 'assets/images/jqsbsj.png',
-				text: '机器设备数据：如行车记录仪、基站数据等通过设备收集的数据。'
-			}, {
-				img: 'assets/images/gryjsj.png',
-				text: '邮件数据：如公司、个人发送获取的邮件统计等数据。'
-			}, {
-				img: 'assets/images/grspsj.png',
-				text: '视频数据：如组织、个人拍摄的面向公众公开的数据。'
-			}, {
-				img: 'assets/images/grwdsj.png',
-				text: '文档数据：如公司、组织整理的文档数据。'
-			}, {
-				img: 'assets/images/gjsj.png',
-				text: '国家数据：如公开的GDP、CPI、固定资产投资等宏观经济数据等。'
-			}, {
-				img: 'assets/images/jysj.png',
-				text: '交易数据：如电子商务数据、销售统计数据、供应链数据。'
-			}, {
-				img: 'assets/images/ydtxsj.png',
-				text: '移动通信数据：如智能手机中APP传输的实时数据等。'
-			}]
 		for (let i = 0; i < infoSourceArr.length; i++) {
 			let souceDiv = document.createElement('div')
 			souceDiv.className = 'source_info'
@@ -563,11 +609,9 @@ function ProdPage () {
 			vector.y = object.position.y
 			vector.z = object.position.z * -2
 			object.lookAt(vector)
+			object.name = infoSourceArr[i].keyword
 			infoSource_Arr.push(object)
 		}
-		// for (let i = 0; i < infoSource_Arr.length; i++) {
-		// 	group_source_info.add(infoSource_Arr[i])
-		// }
 
 		// 导入源头模型
 		group_source.add(groupSource)
@@ -598,15 +642,30 @@ function ProdPage () {
 			TWEEN.update()
 			if (!showSourceInfo) {
 				animateSource()
-				group_source_info.rotation.y += 0
 			} else {
 				animateSource2()
-				group_source_info.rotation.y += 0.002
 			}
 			animateApply()
 			group_source_ring.rotation.z += Math.PI / 2 * 0.002
-			group_apply.rotation.y += 0.002
-			group_use_info.rotation.y += 0.002
+			group_apply.rotation.y -= Math.PI / 2 * 0.002
+			// 是否点击了源详情的纸片
+			if (!choiceSourcePlane) {
+				group_source_info.rotation.y -= 0.002
+			} else {
+				// console.log(Math.abs(group_source_info.rotation.y) % (Math.PI * 2 / infoSourceArr.length))
+				if (Math.abs(group_source_info.rotation.y) % (Math.PI * 2 / infoSourceArr.length) > 0.01) {
+					// Math.abs(group_source_info.rotation.y) % (Math.PI * 2 / infoSourceArr.length) - 0.01
+					group_source_info.rotation.y -= 0.01
+				}
+			}
+			// 是否点击了使用详情的纸片
+			if (!choiceUsePlane) {
+				group_use_info.rotation.y -= Math.PI / 2 * 0.002
+			} else {
+				if (Math.abs(group_use_info.rotation.y) % (Math.PI * 2 / infoPlaneArr.length) > 0.01) {
+					group_use_info.rotation.y -= 0.01
+				}
+			}
 			let objects = sphereParticles.children
 			objects.forEach(obj => {
 				let material = obj.material
@@ -664,7 +723,7 @@ function ProdPage () {
 					<LineChart></LineChart>
 				</div>
 				<div id='info1' className='prod_info_left'>
-					{currentModel === 'source' ? (<DataSource/>) :
+					{currentModel === 'source' ? (<DataSource title={dataSourceTitle}/>) :
 						currentModel === 'apply' ? (<DataGovernance/>) : (<DataAssets/>)}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>

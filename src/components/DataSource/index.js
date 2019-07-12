@@ -374,7 +374,7 @@ export default class DataAssets extends React.Component {
 
 	getAxisList = (data) => {
 		if (data !== undefined) {
-			let dateList = [] 
+			let dateList = []
 			let valueList = []
 			data.forEach(item => {
 				dateList.push(item[0])
@@ -396,7 +396,7 @@ export default class DataAssets extends React.Component {
 			return sum/scores.length
 		}
 	}
-	
+
 	render () {
 		const option_dataConnect = {
 			title: {

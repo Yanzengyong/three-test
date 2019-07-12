@@ -63,7 +63,7 @@ groupApply.add(rightFooter)
 
 const animateApply = () => {
 	core.rotation.z += Math.PI / 2 * 0.01
-	rightFooter.rotation.z -= 0.002
+	rightFooter.rotation.z += Math.PI / 2 * 0.002
 }
 
 export {
