@@ -74,7 +74,7 @@ scene.add(group_use)
 // 创建一个查看使用详情的组 ---- 一个由片状组成的球体
 let group_use_info = new THREE.Group()
 group_use_info.position.set(0, 0, -400)
-// group_use_info.rotation.x = -0.5 * Math.PI
+group_use_info.rotation.x = -0.5 * Math.PI
 scene.add(group_use_info)
 
 let group_source_info = new THREE.Group()
@@ -92,7 +92,6 @@ let particlesArr
 let showSourceInfo = false
 let choiceUsePlane = false
 let choiceSourcePlane = false
-let D_value
 
 // 创建球点对象
 let sphereParticles = new THREE.Object3D()
@@ -412,8 +411,8 @@ function ProdPage () {
 					console.log('????')
 					choiceUsePlane = !choiceUsePlane
 					// D_value = Math.abs(-180 - intersects[0].point.y)
-					D_value = intersects[0].uv.y
-					console.log(D_value)
+					// D_value = intersects[0].uv.y
+					// console.log(D_value)
 					// intersects[0].point.y =
 				}
 				// 说明存在被点击的模型
@@ -545,28 +544,36 @@ function ProdPage () {
 		let infoSourceArr = [
 			{
 				img: 'assets/images/gsj.png',
-				text: '企业数据：如百度、阿里等公司对用户消费行为及社交行为的数据。'
+				text: '工商局',
+				keyword: '工商局'
 			}, {
 				img: 'assets/images/jqsbsj.png',
-				text: '机器设备数据：如行车记录仪、基站数据等通过设备收集的数据。'
+				text: '发改委。',
+				keyword: '发改委'
 			}, {
 				img: 'assets/images/gryjsj.png',
-				text: '邮件数据：如公司、个人发送获取的邮件统计等数据。'
+				text: '安监局。',
+				keyword: '安监局'
 			}, {
 				img: 'assets/images/grspsj.png',
-				text: '视频数据：如组织、个人拍摄的面向公众公开的数据。'
+				text: '气象局。',
+				keyword: '气象局'
 			}, {
 				img: 'assets/images/grwdsj.png',
-				text: '文档数据：如公司、组织整理的文档数据。'
+				text: '旅发委。',
+				keyword: '旅发委'
 			}, {
 				img: 'assets/images/gjsj.png',
-				text: '国家数据：如公开的GDP、CPI、固定资产投资等宏观经济数据等。'
+				text: '住建局。',
+				keyword: '住建局'
 			}, {
 				img: 'assets/images/jysj.png',
-				text: '交易数据：如电子商务数据、销售统计数据、供应链数据。'
+				text: '食药监局。',
+				keyword: '食药监局'
 			}, {
 				img: 'assets/images/ydtxsj.png',
-				text: '移动通信数据：如智能手机中APP传输的实时数据等。'
+				text: '民政局。',
+				keyword: '民政局'
 			}]
 		for (let i = 0; i < infoSourceArr.length; i++) {
 			let souceDiv = document.createElement('div')
@@ -631,21 +638,20 @@ function ProdPage () {
 			}
 			animateApply()
 			group_source_ring.rotation.z += Math.PI / 2 * 0.002
-			group_apply.rotation.y += 0.002
+			// 是否点击了源详情的纸片
+			if (!choiceSourcePlane) {
+				group_apply.rotation.y -= Math.PI / 2 * 0.002
+			} else {
+				if (Math.abs(group_apply.rotation.y) % (Math.PI * 2 / infoSourceArr.length) > 0.01) {
+					group_apply.rotation.y -= 0.01
+				}
+			}
 			// 是否点击了使用详情的纸片
 			if (!choiceUsePlane) {
 				group_use_info.rotation.y -= Math.PI / 2 * 0.002
 			} else {
-				if (D_value > 0) {
-					if ((D_value - 0.05) < 0) {
-						D_value -= 0.01
-						group_use_info.rotation.y -= 0.001
-					} else {
-						D_value -= 0.05
-						console.log(D_value)
-						group_use_info.rotation.y -= 0.005
-					}
-
+				if (Math.abs(group_use_info.rotation.y) % (Math.PI * 2 / infoPlaneArr.length) > 0.01) {
+					group_use_info.rotation.y -= 0.01
 				}
 			}
 			let objects = sphereParticles.children
