@@ -31,7 +31,7 @@
     height: 90%;
     .chartsContainer {
       width: 100%;
-      height: 32%;
+      height: 33%;
       margin-bottom: 15px;
       padding: 10px;
       display: flex;
@@ -53,19 +53,24 @@
           justify-content: center;
           align-items: center;
           font-size: 45px;
+          .unit {
+            margin-top: 20px;
+            font-size: 18px;
+          }
         }
         .name {
-          font-size: 20px;
+          font-size: 18px;
           color: #4AFFFE;
           margin-top: 15px;
+          font-weight: 550;
         }
       }
       .chart {
         width: 48%;
         height: 100%;
       }
-      .dataQuality {
-        width: 30%;
+      .chartModel {
+        width: 100%;
         height: 100%;
       }
       .dataQualityQuestion {
@@ -86,9 +91,36 @@
           color: #bdb8b8;
         }
       }
-      .dataSecurity {
+      .dataIndex {
         width: 30%;
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .name {
+          font-weight: 550;
+          margin-bottom: 10px;
+          font-size: 18px;
+          color: #4AFFFE;
+        }
+        .score {
+          width: 200px;
+          height: 200px;
+          border: #4AFFFE 18px solid;
+          border-radius: 100px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 20px;
+          .num {
+            font-size: 50px;
+          }
+          .unit {
+            margin-top: 20px;
+            font-size: 20px;
+          }
+        }
       }
     }
   }
