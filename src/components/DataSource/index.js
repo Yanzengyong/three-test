@@ -355,7 +355,11 @@ export default class DataAssets extends React.Component {
 	}
 
 	componentDidMount () {
-		switch (this.state.title) {
+		this.changeDept(this.props.title)
+	}
+
+	changeDept = (title) => {
+		switch (title) {
 		case '工商局': this.setState({ dataSet: IndCommerceData }); this.getAxisList(IndCommerceData.dataHistory); break
 		case '发改委': this.setState({ dataSet: revolutionDept }); this.getAxisList(revolutionDept.dataHistory); break
 		case '安监局': this.setState({ dataSet: securityDept }); this.getAxisList(securityDept.dataHistory); break
@@ -546,7 +550,7 @@ export default class DataAssets extends React.Component {
 
 		return (
 			<div className="datasource">
-				<div className="maintitle">数据来源概况 - {this.state.title}</div>
+				<div className="maintitle">数据来源概况 - {this.props.title}</div>
 				<div className='divider'/>
 				<div className='statisticsChartGroup'>
 					<div className='statistics'>
