@@ -227,7 +227,7 @@ function ProdPage () {
 		scene.add(particlesArr)
 		scene.add(group_use_info)
 		group_apply.add(cloud)
-		group_apply.remove(centerModel)
+		centerModel.deletedFn()
 		let tl = anime.timeline({
 			easing: 'easeOutExpo',
 			duration: 250
@@ -272,40 +272,22 @@ function ProdPage () {
 				}, camera, TWEEN.Easing.Circular.InOut, 2400)
 			})
 			.then(() => {
-				centerModel = new ApplyInfo(group_apply).createMoreCube()
-				// group_apply.add(centerModel)
 				const playLoop = async () => {
+					centerModel = new ApplyInfo(group_apply).createMoreCube()
+					setDataModelStep(1)
 					await centerModel.classifyDataHandle(3000, 3000)
 					console.log('分类')
-					setDataModelStep(1)
-					await centerModel.changeCube(3000, 3500)
+					await centerModel.changeCube(2000, 5000)
 					console.log('变成矩形')
 					setDataModelStep(2)
-					await centerModel.changeSphere(3000, 5500)
+					await centerModel.changeSphere(2000, 20000)
 					console.log('变成球体')
 					setDataModelStep(3)
 					let timer = setTimeout(() => {
 						clearTimeout(timer)
+						centerModel.deletedFn()
 						playLoop()
-					}, 5500)
-					// .then(() => {
-					// 	console.log('现在是第1步')
-					// 	setDataModelStep(1)
-					// 	return centerModel.shrinkDataHandle(3000, 3500)
-					// })
-					// .then(() => {
-					// 	console.log('现在是第二步')
-					// 	setDataModelStep(2)
-					// 	return centerModel.changeCube(3000, 3500)
-					// })
-					// .then(() => {
-					// 	console.log('现在是第三步')
-					// 	setDataModelStep(3)
-					// 	return centerModel.changeSphere(3000, 3500)
-					// })
-					// .then(() => {
-					// 	playLoop()
-					// })
+					}, 20000)
 				}
 				playLoop()
 			})
