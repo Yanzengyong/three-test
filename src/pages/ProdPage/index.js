@@ -93,6 +93,8 @@ let particlesArr
 let showSourceInfo = false
 let choiceUsePlane = false
 let choiceSourcePlane = false
+let isCenterModelCheck = false
+let hasCenterModel = false
 
 // 创建球点对象
 let sphereParticles = new THREE.Object3D()
@@ -227,7 +229,11 @@ function ProdPage () {
 		scene.add(particlesArr)
 		scene.add(group_use_info)
 		group_apply.add(cloud)
-		centerModel.deletedFn()
+		isCenterModelCheck = false
+		if (hasCenterModel) {
+			centerModel.deletedFn()
+			hasCenterModel = false
+		}
 		let tl = anime.timeline({
 			easing: 'easeOutExpo',
 			duration: 250
@@ -254,6 +260,28 @@ function ProdPage () {
 		})
 	}
 
+	// 中间动画执行的逻辑
+	const playLoop = async () => {
+		centerModel = new ApplyInfo(group_apply).createMoreCube()
+		hasCenterModel = true
+		setDataModelStep(1)
+		await centerModel.classifyDataHandle(3000, 3000)
+		console.log('分类')
+		await centerModel.changeCube(2000, 5000)
+		console.log('变成矩形')
+		setDataModelStep(2)
+		await centerModel.changeSphere(2000, 20000)
+		console.log('变成球体')
+		setDataModelStep(3)
+		let timer = setTimeout(() => {
+			clearTimeout(timer)
+			centerModel.deletedFn()
+			if (isCenterModelCheck) {
+				playLoop()
+			} return
+		}, 20000)
+	}
+
 	// 查看中间模型详情的处理函数 ----- 视角切换、动画执行等
 	const checkOperateHandle = () => {
 		setCurrentModel('apply')
@@ -272,23 +300,7 @@ function ProdPage () {
 				}, camera, TWEEN.Easing.Circular.InOut, 2400)
 			})
 			.then(() => {
-				const playLoop = async () => {
-					centerModel = new ApplyInfo(group_apply).createMoreCube()
-					setDataModelStep(1)
-					await centerModel.classifyDataHandle(3000, 3000)
-					console.log('分类')
-					await centerModel.changeCube(2000, 5000)
-					console.log('变成矩形')
-					setDataModelStep(2)
-					await centerModel.changeSphere(2000, 20000)
-					console.log('变成球体')
-					setDataModelStep(3)
-					let timer = setTimeout(() => {
-						clearTimeout(timer)
-						centerModel.deletedFn()
-						playLoop()
-					}, 20000)
-				}
+				isCenterModelCheck = true
 				playLoop()
 			})
 		for (let i = 0; i < infoModel_Arr.length; i++) {
@@ -656,6 +668,44 @@ function ProdPage () {
 
 		// 导入源头模型
 		group_source.add(groupSource)
+
+		// var curve = new THREE.QuadraticBezierCurve3(
+		// 	new THREE.Vector3(0, 130, -300),
+		// 	new THREE.Vector3(0, 0, -350),
+		// 	new THREE.Vector3(0, 0, -600)
+		// )
+
+		// let point = curve.getPoints(100)
+		// console.log(point)
+		// let geometry = new THREE.BufferGeometry().setFromPoints(point)
+		function CustomSinCurve (scale) {
+
+			THREE.Curve.call(this)
+
+			this.scale = (scale === undefined) ? 1 : scale
+
+		}
+
+		CustomSinCurve.prototype = Object.create(THREE.Curve.prototype)
+		CustomSinCurve.prototype.constructor = CustomSinCurve
+
+		CustomSinCurve.prototype.getPoint = function (t) {
+
+			var tx = 0
+			var ty = Math.sin(3 * Math.PI * t)
+			var tz = -300
+
+			return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale)
+
+		}
+
+		var path = new CustomSinCurve(10)
+		var geometry = new THREE.TubeGeometry(path, 64, 2, 20, false)
+
+		let material = new THREE.PointsMaterial({ size: 1, color : 0xfff00 })
+
+		let curveObject = new THREE.Points(geometry, material)
+		group_source.add(curveObject)
 
 		// 导入应用模型
 		group_use.add(groupApply)

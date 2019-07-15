@@ -325,6 +325,7 @@ export default class ApplyInfo {
 			this.group_source_array.push(cube_model)
 			this.group.add(cube_model)
 		}
+		console.log('我被执行了')
 		// this.playLoop()
 		// return this.group
 		return this

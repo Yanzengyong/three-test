@@ -20,7 +20,7 @@ export default class CreateParticle {
   		}
   		let mat = new THREE.PointsMaterial()
   		mat.size = 2
-  		mat.color = new THREE.Color(0x03d98e)
+  		mat.color = new THREE.Color(0xffff00)
   		mat.map = this.dotTexture
   		mat.depthWrite = false
   		mat.transparent = true
