@@ -22,13 +22,15 @@ import DataGovernance from '../../components/DataGovernance'//数据加工1
 import DataGovernanceInfo from '../../components/DataGovernanceTree'//数据加工2
 import DataAssets from '../../components/DataAssets'
 import DataAssetsInfo from '../../components/DataAssetsInfo'
-import Diagram from '../../components/Diagram'
+import NewDiagram from '../../components/NewDiagram'
 import Clock from '../../components/Clock'
 import { groupSource, animateSource, animateSource2 } from './sourceChunk'
 import { groupApply,	animateApply } from './applyChunk'
 import { groupCenter } from './centerChunk'
 import ApplyInfo from './applyInfo'
 import { allData, IndCommerceData, revolutionDept, securityDept, meteorologyDept, travelDept, houseDept, foodMedicalDept, marrigeDept } from './dataSourceJson'
+//一网通办，政务通，旅游一路通，安监小精灵，平安出入境，看天气
+import { ywtbdata, zwtdata, lyyltdata, ajxjldata, pacrjdata, ktqdata } from './diagramJson'
 
 // 把初始化需要定义的一些变量都写在此处（避免因为setState造成渲染问题）
 
@@ -768,9 +770,12 @@ function ProdPage () {
 						currentModel === 'apply' ? (<DataGovernance step={dataModelStep}/>) : (<DataAssets/>)}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
+
+					{/* {currentModel === 'source' ? (<DataSourceType/>) :
+						currentModel === 'apply' ? (<DataGovernanceInfo/>) : (<NewDiagram/>)} */}
 					{/* <Diagram></Diagram> */}
 					{currentModel === 'source' ? (<DataSourceType dept={dataSourceData.title}/>) :
-						currentModel === 'apply' ? (<DataGovernanceInfo step={dataModelStep}/>) : (<Diagram/>)}
+						currentModel === 'apply' ? (<DataGovernanceInfo step={dataModelStep}/>) : (<NewDiagram data={zwtdata}></NewDiagram>)}
 				</div>
 			</div>
 		</div>
