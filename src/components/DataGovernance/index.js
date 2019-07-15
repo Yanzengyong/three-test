@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactEcharts from 'echarts-for-react'
 import './scss/index.scss'
-import { Carousel } from 'antd'
+import { Carousel, Table } from 'antd'
 
 const assestHistory = [
 	['2017-02-01', 34],
@@ -43,6 +43,7 @@ export default class DataGovernance extends React.Component {
 	}
 	
 	render () {
+		
 		const option_standardMetaData = {
 			title: {
 				text: '标准数据元占比',
@@ -380,6 +381,46 @@ export default class DataGovernance extends React.Component {
 			}]
 		}
 
+		const elementColumns = [
+  		{
+  			title: '排名',
+				dataIndex: 'index',
+				align:'center'
+			},
+			{
+  			title: '数据元名称',
+				dataIndex: 'modelName',
+				width: 600,
+				align:'center'
+  		},
+  		{
+  			title: '使用次数',
+  			dataIndex: 'times',
+				align:'center'
+  		}
+		]
+
+		const elementData = [
+  		{
+				key: '1',
+				index: '1',
+  			modelName: 'internalOrganizationOfProvider',
+  			times: '89',
+  		},
+  		{
+				key: '2',
+				index: '2',
+  			modelName: 'sensitiveAttribute',
+  			times: '73'
+  		},
+  		{
+				key: '3',
+				index: '3',
+  			modelName: 'resourceName',
+  			times: '122'
+  		}
+  	]
+
 		const stepOne = (
 			<div className='stepContainer'>
 				<div className='chartsContainer'>
@@ -400,40 +441,53 @@ export default class DataGovernance extends React.Component {
 					</div>
 				</div>
 				<div className='chartsContainer'>
-					<div className='dataQualityQuestion'>
-						<div className='title'>数据质量主要问题</div>
-						<Carousel dotPosition="left" autoplay autoplayInterval={500} dots={false} style={{ height: '100%' }}>
-							<div className="BOX">
-							1. 非标准数据类型较多
-							</div>
-							<div className="BOX">
-							2. 数据不全面
-							</div>
-							<div className="BOX">
-							3. 数据不准确，存在错误数据
-							</div>
-							<div className="BOX">
-							4. 网报人员培训不足，网报数据过程出错，需多次更正
-							</div>
-						</Carousel>
-					</div>
-					<div className='dataIndex'>
-						<div className='name'>数据安全指数</div>
-						<div className='score'>
-							<span className='num'>54</span>
-							<span className='unit'>分</span>
-						</div>
-					</div>
-					<div className='dataIndex'>
-						<div className='name'>数据质量指数</div>
-						<div className='score'>
-							<span className='num'>58</span>
-							<span className='unit'>分</span>
-						</div>
+					<div className='rank'>
+						<p>数据元使用排名</p>
+						<Table columns={elementColumns} dataSource={elementData} pagination={false}/>
 					</div>
 				</div>
 			</div>
 		)
+
+		const modelColumn = [
+			{
+  			title: '排名',
+				dataIndex: 'index',
+				align:'center'
+			},
+  		{
+  			title: '数据模型名称',
+				dataIndex: 'modelName',
+				width: 600,
+				align:'center'
+  		},
+  		{
+  			title: '使用次数',
+  			dataIndex: 'times',
+				align:'center'
+  		}
+		]
+
+		const modelData = [
+  		{
+				key: '1',
+				index: '1',
+  			modelName: '国土资源利用率统计数据',
+  			times: '64',
+  		},
+  		{
+				key: '2',
+				index: '2',
+  			modelName: '房屋买卖成交价格与地区资源数据分析',
+  			times: '73'
+  		},
+  		{
+				key: '3',
+				index: '3',
+  			modelName: '食品卫生管理',
+  			times: '102'
+  		}
+  	]
 
 		const stepTwo = (
 			<div className='stepContainer'>
@@ -452,36 +506,9 @@ export default class DataGovernance extends React.Component {
 					</div>
 				</div>
 				<div className='chartsContainer'>
-					<div className='dataQualityQuestion'>
-						<div className='title'>数据质量主要问题</div>
-						<Carousel dotPosition="left" autoplay autoplayInterval={500} dots={false} style={{ height: '100%' }}>
-							<div className="BOX">
-							1. 非标准数据类型较多
-							</div>
-							<div className="BOX">
-							2. 数据不全面
-							</div>
-							<div className="BOX">
-							3. 数据不准确，存在错误数据
-							</div>
-							<div className="BOX">
-							4. 网报人员培训不足，网报数据过程出错，需多次更正
-							</div>
-						</Carousel>
-					</div>
-					<div className='dataIndex'>
-						<div className='name'>数据安全指数</div>
-						<div className='score'>
-							<span className='num'>72</span>
-							<span className='unit'>分</span>
-						</div>
-					</div>
-					<div className='dataIndex'>
-						<div className='name'>数据质量指数</div>
-						<div className='score'>
-							<span className='num'>69</span>
-							<span className='unit'>分</span>
-						</div>
+					<div className='rank'>
+						<p>数据模型使用排名</p>
+						<Table columns={modelColumn} dataSource={modelData} pagination={false}/>
 					</div>
 				</div>
 			</div>

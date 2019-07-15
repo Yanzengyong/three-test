@@ -37,6 +37,32 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      .rank {
+        p {
+          font-weight: 550;
+          margin-bottom: 10px;
+          font-size: 18px;
+          color: #4AFFFE;
+        }
+        .ant-table{
+          color: #808080;
+          width: 900px;
+        }
+        .ant-table-thead > tr > th{
+          background: none;
+          color: white;
+        }
+        .ant-table-thead > tr > th.ant-table-column-sort{
+          background: none;
+          color: white;
+        }
+        .anticon{
+          color: white
+        }
+        a{
+          background-color: white;
+        }
+      }
       .metaDataTotalCount {
         width: 48%;
         height: 100%;
