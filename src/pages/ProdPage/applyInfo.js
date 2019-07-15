@@ -2,9 +2,10 @@ import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 
 export default class ApplyInfo {
-	constructor () {
+	constructor (group) {
 		this.group_source_array = []
-		this.group = new THREE.Group()
+		// this.group = new THREE.Group()
+		this.group = group
 		this.thunk_one = []
 		this.thunk_two = []
 		this.thunk_three = []
@@ -106,9 +107,12 @@ export default class ApplyInfo {
 					this.sphere_field.push(object)
 				}
 				this.filedChangeTransform(this.sphere_field, time)
+				let animateTimer = setTimeout(() => {
+					clearTimeout(animateTimer)
+					resolve('success')
+				}, time)
 				// 删除定时器
 				let timer = setTimeout(() => {
-					resolve('success')
 					clearTimeout(timer)
 					clearTimeout(timer_delay)
 				}, time + (delay || 0) || 1100)
@@ -130,9 +134,12 @@ export default class ApplyInfo {
 					this.cube_field.push(cube)
 				}
 				this.filedChangeTransform(this.cube_field, time)
+				let animateTimer = setTimeout(() => {
+					clearTimeout(animateTimer)
+					resolve('success')
+				}, time)
 				// 删除定时器
 				let timer = setTimeout(() => {
-					resolve('success')
 					clearTimeout(timer)
 					clearTimeout(timer_delay)
 				}, time + (delay || 0) || 1100)
@@ -236,6 +243,7 @@ export default class ApplyInfo {
 						}, this.group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
 						this.group_source_array[i].material.color = new THREE.Color('#007eff')
 						this.thunk_one.push(this.group_source_array[i])
+						this.init_field.push(this.group_source_array[i])
 					} else if (i < unit * 2) {
 						this.animateHandle(this.group_source_array[i].position, {
 							x: (2.0 * Math.random() - 1.0) * -30 - 50,
@@ -244,6 +252,7 @@ export default class ApplyInfo {
 						}, this.group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
 						this.group_source_array[i].material.color = new THREE.Color('#00ffd0')
 						this.thunk_two.push(this.group_source_array[i])
+						this.init_field.push(this.group_source_array[i])
 					} else if (i < unit * 3) {
 						this.animateHandle(this.group_source_array[i].position, {
 							x: (2.0 * Math.random() - 1.0) * -30 - 50,
@@ -252,6 +261,7 @@ export default class ApplyInfo {
 						}, this.group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
 						this.group_source_array[i].material.color = new THREE.Color('#ff8d00')
 						this.thunk_three.push(this.group_source_array[i])
+						this.init_field.push(this.group_source_array[i])
 					} else if (i < unit * 4) {
 						this.animateHandle(this.group_source_array[i].position, {
 							x: (2.0 * Math.random() - 1.0) * 30 + 50,
@@ -260,6 +270,7 @@ export default class ApplyInfo {
 						}, this.group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
 						this.group_source_array[i].material.color = new THREE.Color('#fff700')
 						this.thunk_four.push(this.group_source_array[i])
+						this.init_field.push(this.group_source_array[i])
 					} else if (i < unit * 5) {
 						this.animateHandle(this.group_source_array[i].position, {
 							x: (2.0 * Math.random() - 1.0) * 30,
@@ -267,6 +278,7 @@ export default class ApplyInfo {
 							z: Math.random() > 0.5 ? (2.0 * Math.random() - 1.0) * 30 + 50 : -1 * ((2.0 * Math.random() - 1.0) * 30 + 50)
 						}, this.group_source_array[i], TWEEN.Easing.Linear.None, time || 1000)
 						this.thunk_five.push(this.group_source_array[i])
+						this.init_field.push(this.group_source_array[i])
 					}
 				}
 				let timer = setTimeout(() => {
@@ -313,7 +325,19 @@ export default class ApplyInfo {
 			this.group_source_array.push(cube_model)
 			this.group.add(cube_model)
 		}
-		this.playLoop()
-		return this.group
+		// this.playLoop()
+		// return this.group
+		return this
+	}
+	// 删除粒子
+	deletedFn () {
+		for (let i = 0; i < this.init_field.length; i++) {
+			this.group.remove(this.init_field[i])
+		}
+		for (let i = 0; i < this.group_source_array.length; i++) {
+			this.group.remove(this.group_source_array[i])
+		}
+		this.init_field = []
+		this.group_source_array = []
 	}
 }

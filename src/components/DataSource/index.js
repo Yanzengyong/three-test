@@ -123,7 +123,6 @@ export default class DataAssets extends React.Component {
 			}],
 			xAxis: {
 				type: 'category',
-				// data: this.state.dataXAxis,
 				axisLabel:{ color:'#fff' }
 			},
 			yAxis: {
@@ -132,7 +131,6 @@ export default class DataAssets extends React.Component {
 				axisLabel:{ color:'#fff' },
 			},
 			series: [{
-				// data: this.state.dataYAxis,
 				type: 'line',
 				lineStyle: {
 					color: '#70AFCE'
@@ -147,47 +145,6 @@ export default class DataAssets extends React.Component {
 				},
 				data: this.props.dataSet.dataHistory
 			}]
-		}
-		const option_dataQuality = {
-			title: {
-				text: '数据质量评估',
-				textStyle: {
-					color: '#4AFFFE'
-				}
-			},
-			tooltip: {
-				trigger: 'axis',
-				axisPointer: {
-					type: 'shadow'
-				}
-			},
-			xAxis: {
-				type: 'value',
-				boundaryGap: [0, 0.01],
-				axisLabel:{ color:'#fff' },
-				name: '分数',
-				max: 100,
-				axisLine: {
-					lineStyle: {
-						color: '#fff'
-					}
-				},
-			},
-			yAxis: {
-				type: 'category',
-				data: ['质检', '清洗', '融合', '特征提取'],
-				axisLabel:{ color:'#fff' }
-			},
-			series: [
-				{
-					name: '数据质量',
-					type: 'bar',
-					data: this.props.dataSet.dataQuality,
-					itemStyle: {
-						color: '#70AFCE'
-					}
-				}
-			]
 		}
 
 		return (

@@ -111,6 +111,7 @@ let clickObjectArr = []
 function ProdPage () {
 	const [currentModel, setCurrentModel] = useState(null)
 	const [dataSourceData, setDataSourceData] = useState(allData)
+	const [dataModelStep, setDataModelStep] = useState(null)
 	useEffect(() => {
 		anime({
 			targets: ['#init1', '#init2', '#init3', '#init4', '#init5'],
@@ -228,7 +229,7 @@ function ProdPage () {
 		scene.add(particlesArr)
 		scene.add(group_use_info)
 		group_apply.add(cloud)
-		group_apply.remove(centerModel)
+		centerModel.deletedFn()
 		let tl = anime.timeline({
 			easing: 'easeOutExpo',
 			duration: 250
@@ -259,6 +260,7 @@ function ProdPage () {
 	const checkOperateHandle = () => {
 		setCurrentModel('apply')
 		slideOutHandle()
+		setDataModelStep(1)
 		animateHandle(camera.position, {
 			x: 0,
 			y: 0,
@@ -272,8 +274,24 @@ function ProdPage () {
 				}, camera, TWEEN.Easing.Circular.InOut, 2400)
 			})
 			.then(() => {
-				centerModel = new ApplyInfo().createMoreCube()
-				group_apply.add(centerModel)
+				const playLoop = async () => {
+					centerModel = new ApplyInfo(group_apply).createMoreCube()
+					setDataModelStep(1)
+					await centerModel.classifyDataHandle(3000, 3000)
+					console.log('分类')
+					await centerModel.changeCube(2000, 5000)
+					console.log('变成矩形')
+					setDataModelStep(2)
+					await centerModel.changeSphere(2000, 20000)
+					console.log('变成球体')
+					setDataModelStep(3)
+					let timer = setTimeout(() => {
+						clearTimeout(timer)
+						centerModel.deletedFn()
+						playLoop()
+					}, 20000)
+				}
+				playLoop()
 			})
 		for (let i = 0; i < infoModel_Arr.length; i++) {
 			group_use_info.remove(infoModel_Arr[i])
@@ -524,7 +542,7 @@ function ProdPage () {
 		group_apply.add(particles)
 
 		// 光锥
-		new CreateObject(rocket_position, group_apply).createObjects()
+		// new CreateObject(rocket_position, group_apply).createObjects()
 
 		// 外层 云层
 		cloud = new CreateCloud().createCloudGrid()
@@ -749,7 +767,7 @@ function ProdPage () {
 				</div>
 				<div id='info1' className='prod_info_left'>
 					{currentModel === 'source' ? (<DataSource dataSet={dataSourceData}/>) :
-						currentModel === 'apply' ? (<DataGovernance/>) : (<DataAssets/>)}
+						currentModel === 'apply' ? (<DataGovernance step={dataModelStep}/>) : (<DataAssets/>)}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
 					<NewDiagram data={zwtdata}></NewDiagram>
