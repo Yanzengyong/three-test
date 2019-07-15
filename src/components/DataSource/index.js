@@ -100,7 +100,7 @@ export default class DataAssets extends React.Component {
 
 		const option_dataHistory = {
 			title: {
-				text: '数据规模历史变化',
+				text: '数据接入数量',
 				left: 'center',
 				top: 50,
 				textStyle: {
@@ -158,7 +158,7 @@ export default class DataAssets extends React.Component {
 								<span className='connectRateChartNum'>{(this.props.dataSet.dataConnectRate * 100).toFixed(0)}</span>
 								<span className='connectRateChartUnit'>%</span>
 							</div>
-							<div className='connectRateTitle'>数据资源接入率</div>
+							<div className='connectRateTitle'>数据接入比例</div>
 						</div>
 					</div>
 					<div className='statistics'>
