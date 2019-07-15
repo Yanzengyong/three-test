@@ -3,7 +3,7 @@ const IndCommerceData = {
 	dataConnectRate: 0.52,
 	sourceData: [
 		{ value:470, name:'安全许可经营管理系统' },
-		{ value:410, name:'威胁品生产企业管理系统' },
+		{ value:410, name:'企业信息管理系统' },
 		{ value:264, name:'人事系统' },
 		{ value:235, name:'财务系统' },
 		{ value:240, name:'OA办公系统' }
@@ -47,8 +47,8 @@ const revolutionDept = {
 	title: '发改委',
 	dataConnectRate: 0.56,
 	sourceData: [
-		{ value:470, name:'安全许可经营管理系统' },
-		{ value:410, name:'威胁品生产企业管理系统' },
+		{ value:470, name:'物价管理系统' },
+		{ value:410, name:'重大项目库管理系统' },
 		{ value:174, name:'人事系统' },
 		{ value:205, name:'财务系统' },
 	],
@@ -136,8 +136,8 @@ const meteorologyDept = {
 	title: '气象局',
 	dataConnectRate: 0.72,
 	sourceData: [
-		{ value:530, name:'物业管理企业管理系统' },
-		{ value:370, name:'装修施工许可证登记系统' },
+		{ value:530, name:'水文监测站数据采集系统' },
+		{ value:370, name:'空气质量监测设备管理系统' },
 		{ value:220, name:'人事系统' },
 		{ value:195, name:'财务系统' },
 	],
@@ -180,8 +180,8 @@ const travelDept = {
 	title: '旅发委',
 	dataConnectRate: 0.69,
 	sourceData: [
-		{ value:530, name:'物业管理企业管理系统' },
-		{ value:370, name:'装修施工许可证登记系统' },
+		{ value:530, name:'旅行社登记管理系统' },
+		{ value:370, name:'出入境游客大数据平台' },
 		{ value:510, name:'导游管理系统' },
 		{ value:224, name:'人事系统' },
 		{ value:139, name:'财务系统' },

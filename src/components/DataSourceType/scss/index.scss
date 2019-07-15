@@ -1,8 +1,15 @@
 .dataSourceType{
-  width: 100% !important;
-  height: 90% !important;
-}
-.dataSourceMain{
-  width: 100% !important;
-  height: 100% !important;
+  width: 100%;
+  margin-top: 20px;
+  .title {
+    font-size: 22px;
+    color: #4AFFFE;
+    font-weight: 550;
+  }
+  .content {
+    width: 100%;
+    height: 80%;
+    font-size: 18px;
+    margin-top: 20px;
+  }
 }

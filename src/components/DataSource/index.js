@@ -5,12 +5,6 @@ import './scss/index.scss'
 export default class DataAssets extends React.Component {
 	constructor (props) {
 		super(props)
-		this.state = {
-			title: '发改委',
-			dataSet: {},
-			dataXAxis: ['农业', '餐饮业', '航空', '酒店民宿', '房地产', '招聘'],
-			dataYAxis: [12.0, 12.2, 13.3, 14.5, 16.3, 10.2, 20.3, 23.4, 23.0]
-		}
 	}
 
 	getAxisList = (data) => {
