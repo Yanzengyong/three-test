@@ -107,9 +107,12 @@ export default class ApplyInfo {
 					this.sphere_field.push(object)
 				}
 				this.filedChangeTransform(this.sphere_field, time)
+				let animateTimer = setTimeout(() => {
+					clearTimeout(animateTimer)
+					resolve('success')
+				}, time)
 				// 删除定时器
 				let timer = setTimeout(() => {
-					resolve('success')
 					clearTimeout(timer)
 					clearTimeout(timer_delay)
 				}, time + (delay || 0) || 1100)
@@ -131,9 +134,12 @@ export default class ApplyInfo {
 					this.cube_field.push(cube)
 				}
 				this.filedChangeTransform(this.cube_field, time)
+				let animateTimer = setTimeout(() => {
+					clearTimeout(animateTimer)
+					resolve('success')
+				}, time)
 				// 删除定时器
 				let timer = setTimeout(() => {
-					resolve('success')
 					clearTimeout(timer)
 					clearTimeout(timer_delay)
 				}, time + (delay || 0) || 1100)
@@ -322,5 +328,16 @@ export default class ApplyInfo {
 		// this.playLoop()
 		// return this.group
 		return this
+	}
+	// 删除粒子
+	deletedFn () {
+		for (let i = 0; i < this.init_field.length; i++) {
+			this.group.remove(this.init_field[i])
+		}
+		for (let i = 0; i < this.group_source_array.length; i++) {
+			this.group.remove(this.group_source_array[i])
+		}
+		this.init_field = []
+		this.group_source_array = []
 	}
 }
