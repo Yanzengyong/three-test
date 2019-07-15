@@ -18,25 +18,36 @@
     .proceedStep {
       width: 30%;
       height: 100%;
-      padding: 20px;
+      padding-top: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       .proceedStepTitle {
-        width: 80%;
+        width: 100%;
         height: 60px;
         background:  url('../../../assets/images/stepButton.png') no-repeat;
         background-size: 100% 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 10px;
+        margin-top: 10px;
+        color: #4AFFFE;
+        font-size: 20px;
+        letter-spacing: 1px;
       }
       .proceedStepDescription {
         width: 80%;
         height: 250px;
         margin-top: 10px;
+        font-size: 16px;
       }
+    }
+
+    .arrow {
+      height: 60px;
+      width: 15%;
+      margin-top: 30px;
+      transform:rotate(270deg);
     }
   }
 }

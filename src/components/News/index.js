@@ -73,7 +73,7 @@ export default class News extends React.Component {
   		{
   			title: '应用',
   			dataIndex: 'project',
-  			width:120
+  			width:180
   		},
   		{
   			title: '类型',
@@ -134,7 +134,7 @@ export default class News extends React.Component {
   	return(
   		<div className="News">
   			<div className="newsTitle">
-          平台概况
+          平台要情
   			</div>
   			<div className="newsMain" >
   			<Carousel dotPosition="left" autoplay autoplayInterval={500} dots={false} >
