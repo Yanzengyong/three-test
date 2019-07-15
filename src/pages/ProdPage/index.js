@@ -770,15 +770,12 @@ function ProdPage () {
 						currentModel === 'apply' ? (<DataGovernance step={dataModelStep}/>) : (<DataAssets/>)}
 				</div>
 				<div id='info2' className='prod_info_rightBottom'>
-<<<<<<< HEAD
-					<NewDiagram data={zwtdata}></NewDiagram>
+
 					{/* {currentModel === 'source' ? (<DataSourceType/>) :
 						currentModel === 'apply' ? (<DataGovernanceInfo/>) : (<NewDiagram/>)} */}
-=======
 					{/* <Diagram></Diagram> */}
 					{currentModel === 'source' ? (<DataSourceType/>) :
-						currentModel === 'apply' ? (<DataGovernanceInfo step={dataModelStep}/>) : (<Diagram/>)}
->>>>>>> 028a5b4f0d329549d7fae3ec46bde9b223fbddcc
+						currentModel === 'apply' ? (<DataGovernanceInfo step={dataModelStep}/>) : (<NewDiagram data={zwtdata}></NewDiagram>)}
 				</div>
 			</div>
 		</div>
