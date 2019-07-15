@@ -788,7 +788,7 @@ function ProdPage () {
 				<div id='info2' className='prod_info_rightBottom'>
 					{/* <Diagram></Diagram> */}
 					{currentModel === 'source' ? (<DataSourceType/>) :
-						currentModel === 'apply' ? (<DataGovernanceInfo/>) : (<Diagram/>)}
+						currentModel === 'apply' ? (<DataGovernanceInfo step={dataModelStep}/>) : (<Diagram/>)}
 				</div>
 			</div>
 		</div>
