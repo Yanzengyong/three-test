@@ -123,7 +123,7 @@ export default function DataAssets () {
 		},
 		{
 			key: '2',
-			area: '政务服务中心',
+			area: '政务通',
 			government: 32,
 			num: '27GB',
 		},
@@ -141,9 +141,15 @@ export default function DataAssets () {
 		},
 		{
 			key: '5',
-			area: '出入境办理',
+			area: '平安出入境',
 			government: 25,
 			num: '23GB',
+		},
+		{
+			key: '6',
+			area: '看天气',
+			government: 22,
+			num: '15GB',
 		}
 	]
 
