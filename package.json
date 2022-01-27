@@ -42,7 +42,7 @@
     "node-sass": "^4.12.0",
     "rc-banner-anim": "^2.2.8",
     "react-three-fiber": "^2.2.4",
-    "three": "^0.105.2",
+    "three": "^0.137.0",
     "three-gltf-loader": "^1.105.0",
     "three-orbitcontrols": "^2.102.1",
     "three-pointer-lock-controls": "^1.0.0",
